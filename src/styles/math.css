@@ -1,0 +1,34 @@
+/**
+ * 数学公式版式
+ * 公式在构建期由 KaTeX 渲染成静态 HTML + MathML，浏览器不加载 KaTeX 的 JS。
+ * 本文件只处理放置方式：卡片内左对齐、正文内可横向滚动。
+ * 引入顺序必须在 katex.min.css 之后（见 BaseLayout），否则会被默认的居中样式盖掉。
+ */
+
+.katex {
+  font-size: 1.02em;
+}
+
+/* 资料中心公式卡：display 模式左对齐、去掉默认上下外边距 */
+.mf-formula .katex-display {
+  margin: 0;
+  text-align: left;
+}
+
+.mf-formula .katex-display > .katex {
+  display: inline-block;
+  text-align: left;
+}
+
+/* 变量符号表里的行内公式，不要被放大 */
+.mf-formula-sym .katex {
+  font-size: 1em;
+}
+
+/* 正文中的独立公式：超宽时滚动，不撑破 68ch 阅读栏 */
+.mf-prose .katex-display {
+  margin: 1.3em 0;
+  padding: 2px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}

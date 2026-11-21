@@ -1,0 +1,231 @@
+---
+/**
+ * 知识方向导读页（B 型：专题展览型）
+ *
+ * 由 taxonomy.json 生成，新增方向只需加数据，不新建页面文件。
+ * 「地下采矿方法」不在本路由内，直接指向 /methods/（见 astro.config 重定向）。
+ *
+ * 与上一版的区别：
+ * 1. 顶部从「标题 + 一行说明」升级为专题展示：英文分类名、中文大标题、
+ *    专题介绍、大型主视觉、内容数量与建设状态并置；
+ * 2. 知识要点不再排成四条横线，改为带编号与状态的模块，2×2 排布；
+ * 3. 页面状态只在顶部出现一次，底部重复的「本页状态」段落已删除。
+ *
+ * 主视觉素材纪律：目前只有露天开采有自绘台阶剖面，其余方向使用克制占位，
+ * 明确写「素材待补充」，不拿无关配图充数。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumb from "../../components/global/Breadcrumb.astro";
+import KnowledgeTree from "../../components/nav/KnowledgeTree.astro";
+import StatusDot from "../../components/content/StatusDot.astro";
+import {
+  domains,
+  domainHref,
+  engineeringHref,
+  relatedDomains,
+  relatedEngineering,
+} from "../../lib/taxonomy";
+
+export function getStaticPaths() {
+  return domains
+    .filter((domain) => domain.slug !== "underground-mining")
+    .map((domain) => ({
+      params: { domain: domain.slug },
+      props: { domain },
+    }));
+}
+
+const { domain } = Astro.props as { domain: (typeof domains)[number] };
+
+const related = relatedDomains(domain);
+const engineering = relatedEngineering(domain);
+const pendingCount = domain.topics.filter((t) => !t.href).length;
+
+const VISUALS: Record<string, { src: string; caption: string }> = {
+  "open-pit": {
+    src: "/assets/visuals/domain-open-pit.svg",
+    caption: "台阶剖面示意：最终边坡自地表逐级下降至坑底",
+  },
+};
+const visual = VISUALS[domain.slug];
+---
+
+<BaseLayout title={domain.name} description={domain.summary} activePath="/knowledge/">
+  <div class="mf-container pt-6">
+    <Breadcrumb
+      items={[
+        { label: "首页", href: "/" },
+        { label: "知识体系", href: "/knowledge/" },
+        { label: domain.name },
+      ]}
+    />
+  </div>
+
+  <section class="mf-container pb-12 pt-7 md:pb-14">
+    <div class="grid items-end gap-9 lg:grid-cols-12 lg:gap-12">
+      <div class="lg:col-span-4">
+        <p class="mf-eyebrow mf-rise">{domain.nameEn}</p>
+
+        <h1
+          class="mf-rise mt-4 text-[38px] leading-[1.06] tracking-[-0.02em] md:text-[46px]"
+          style="--d:60ms"
+        >
+          {domain.name}
+        </h1>
+
+        <p
+          class="mf-rise mt-5 max-w-[30em] text-[14.5px] leading-[1.85] text-ink-2"
+          style="--d:120ms"
+        >
+          {domain.summary}
+        </p>
+
+        <div
+          class="mf-rise mt-6 flex flex-wrap items-center gap-x-5 gap-y-2"
+          style="--d:180ms"
+        >
+          <StatusDot status={domain.status} />
+          <span class="text-[12px] text-ink-4">
+            {domain.topics.length} 个知识要点
+            {engineering.length > 0 && ` · ${engineering.length} 个对应工程专题`}
+          </span>
+        </div>
+      </div>
+
+      <div class="mf-plate-in lg:col-span-8" style="--d:140ms">
+        {
+          visual ? (
+            <figure class="overflow-hidden rounded-stage border border-line bg-surface">
+              <img
+                src={visual.src}
+                alt={`${domain.name}专题视觉：${visual.caption}`}
+                width="900"
+                height="390"
+                class="h-auto w-full"
+                decoding="async"
+              />
+            </figure>
+          ) : (
+            <div class="grid aspect-[900/390] place-items-center rounded-stage border border-dashed border-line-strong bg-panel px-8 text-center">
+              <p class="text-[12.5px] leading-6 text-ink-3">
+                本方向的专题视觉素材待补充
+                <br />
+                <span class="text-ink-4">不以无关图片替代工程图</span>
+              </p>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="border-t border-line">
+    <div class="mf-container grid gap-10 py-12 lg:grid-cols-12 lg:gap-14 md:py-14">
+      <aside class="lg:col-span-3">
+        <div class="lg:sticky lg:top-24">
+          <KnowledgeTree current={domain.slug} />
+        </div>
+      </aside>
+
+      <div class="lg:col-span-9">
+        <section aria-labelledby="sec-topics">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h2 id="sec-topics" class="text-[20px] leading-snug">知识要点</h2>
+            <span class="font-mono text-[11px] text-ink-4">
+              {domain.topics.length} 项 / {pendingCount} 项待补正文
+            </span>
+          </div>
+
+          <ul class="mt-6 grid gap-x-9 gap-y-8 sm:grid-cols-2">
+            {
+              domain.topics.map((topic, index) => (
+                <li class="border-t border-line pt-4">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <span class="font-mono text-[11px] tracking-[0.14em] text-accent">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span class="text-[11px] text-ink-4">
+                      {topic.href ? "已发布" : "正文待补充"}
+                    </span>
+                  </div>
+
+                  <h3 class="mt-2.5 text-[16px] leading-snug">
+                    {topic.href ? (
+                      <a
+                        href={topic.href}
+                        class="text-ink underline decoration-line-strong decoration-1 underline-offset-4 transition-colors duration-100 hover:text-accent hover:decoration-accent"
+                      >
+                        {topic.label}
+                      </a>
+                    ) : (
+                      <span class="text-ink">{topic.label}</span>
+                    )}
+                  </h3>
+
+                  <p class="mt-2 text-[12px] leading-6 text-ink-4">
+                    {topic.href ? "进入正文查看" : "条目已规划，正文待按来源核对后补充"}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        {
+          engineering.length > 0 && (
+            <section class="mt-14" aria-labelledby="sec-engineering">
+              <h2 id="sec-engineering" class="text-[20px] leading-snug">
+                对应的工程专题
+              </h2>
+              <p class="mt-2 text-[12.5px] leading-6 text-ink-3">
+                本方向的正文按工程工序归入以下专题，同一内容不在两处维护。
+              </p>
+
+              <ul class="mt-6 divide-y divide-line border-y border-line">
+                {engineering.map((topic) => (
+                  <li>
+                    <a
+                      href={engineeringHref(topic.slug)}
+                      class="group flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3.5"
+                    >
+                      <span class="text-[14px] text-ink transition-colors duration-100 group-hover:text-accent">
+                        {topic.name}
+                      </span>
+                      <span class="text-[12px] text-ink-4">{topic.summary}</span>
+                      <span class="ml-auto text-[12px] text-accent">进入 →</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          related.length > 0 && (
+            <section class="mt-14" aria-labelledby="sec-related">
+              <h2 id="sec-related" class="text-[20px] leading-snug">
+                相关知识方向
+              </h2>
+              <ul class="mt-5 flex flex-wrap gap-x-2.5 gap-y-2">
+                {related.map((item) => (
+                  <li>
+                    <a
+                      href={domainHref(item)}
+                      class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-[12.5px] text-ink-2 transition-colors duration-100 hover:border-accent/40 hover:text-accent"
+                    >
+                      <span class="font-mono text-[10.5px] text-ink-4">
+                        {String(item.order).padStart(2, "0")}
+                      </span>
+                      {item.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>

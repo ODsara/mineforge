@@ -1,0 +1,46 @@
+---
+/**
+ * 页面抬头：eyebrow + 标题 + 说明 + 可选操作槽
+ * 用于所有一级/二级页面的统一开头，避免各页面重复排版代码
+ */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: "left";
+  bordered?: boolean;
+}
+
+const { eyebrow, title, description, bordered = true } = Astro.props;
+const hasActions = Astro.slots.has("actions");
+---
+
+<section class:list={["bg-bg", bordered && "border-b border-line"]}>
+  <div class="mf-container pt-12 pb-10 md:pt-16 md:pb-14">
+    {
+      eyebrow && (
+        <p class="mf-sec mb-4">
+          {eyebrow}
+        </p>
+      )
+    }
+    <h1 class="max-w-4xl text-[30px] leading-[1.18] font-semibold tracking-[-0.015em] md:text-[42px]">
+      {title}
+    </h1>
+    {
+      description && (
+        <p class="mf-measure mt-4 text-[15.5px] leading-[1.8] text-ink-2 md:mt-5 md:text-[16.5px]">
+          {description}
+        </p>
+      )
+    }
+    {
+      hasActions && (
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <slot name="actions" />
+        </div>
+      )
+    }
+    <slot />
+  </div>
+</section>

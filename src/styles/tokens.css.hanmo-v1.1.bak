@@ -1,0 +1,79 @@
+/*
+ * MineForge 设计令牌 · 定稿「C2 翰墨」2026-11-14
+ * 学院海军蓝 + 黄铜金 + 暖纸底 ｜ 全部文字对比度 ≥ WCAG AA
+ * 唯一颜色事实源：本文件。组件只准引用令牌，新增色必须先回到这里定义。
+ * 同步自 MineForge/视觉资产/tokens.css，改动请两边一致。
+ */
+
+@theme {
+  /* ── 背景层（暖纸三档）──────────────── */
+  --color-bg: #FAF8F2; /* 页面底（v1.1 提温半档） */
+  --color-surface: #FFFEFA; /* 卡片/表格底 */
+  --color-panel: #F3F1E9; /* 分区底/表头 */
+
+  /* ── 线条 ──────────────────────────── */
+  --color-line: #E4E0D5;
+  --color-line-soft: #EDEAE1;
+  --color-line-strong: #CFC9BA;
+
+  /* ── 文字层（墨四级）────────────────── */
+  --color-ink: #1c2330; /* 正文/标题 11.7:1 */
+  --color-ink-2: #5a5f6a; /* 次级 5.5:1 */
+  --color-ink-3: #6a6f7a; /* 辅助/时间戳 4.7:1（v1.1 修正，旧值 3.7 不达标） */
+  --color-ink-4: #868c98; /* 占位/禁用 ≥3:1，仅大字号 */
+
+  /* ── 结构主色：墨蓝（导航/按钮/选中底）── */
+  --color-navy: #152a45;
+  --color-on-navy: #ffffff; /* 11.6:1 */
+  --color-navy-soft: #e3e9f2; /* 浅底强调区 */
+
+  /* ── 强调金（链接/高亮/左线/徽章）────── */
+  --color-accent: #9a6b15; /* 链接文字于卡底 5.3:1 */
+  --color-accent-strong: #8a5d10; /* 金底按钮用此（白字 ≥5:1） */
+  --color-on-accent: #fffef6;
+  --color-accent-soft: #f5ebd8; /* 金浅底 */
+
+  /* ── 展台（3D/视频区块专用深色）──────── */
+  --color-stage: #090f19;
+  --color-stage-2: #101a29; /* 展台内控件底 */
+  --color-stage-ink: #e2e8f0; /* 12.2:1 */
+  --color-stage-ink-dim: #93a2b3;
+  --color-stage-line: #223146;
+
+  /* ── 来源徽章四色（文字/底 均已 AA）──── */
+  --color-badge-jc: #52606f;
+  --color-badge-jc-bg: #eef0f3; /* 教材值 */
+  --color-badge-gf: #2a4a73;
+  --color-badge-gf-bg: #e9eef5; /* 规范值 */
+  --color-badge-sg: #2f6049;
+  --color-badge-sg-bg: #eaf2ee; /* 实测值 */
+  --color-badge-sj: #8a5d10;
+  --color-badge-sj-bg: #f5ebd8; /* 设计值 */
+
+  /* ── 功能色 ─────────────────────────── */
+  --color-warn: #a33d33; /* 危险/警示，不用于常规按钮 */
+
+  /* ── 字体 ───────────────────────────── */
+  --font-sans: "MiSans", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei",
+    system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: Georgia, "Songti SC", "SimSun", serif; /* h1/h2/方法卡标题/教材引用条 */
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* ── 圆角 ───────────────────────────── */
+  --radius-card: 14px; /* v1.1 软化：10→14 */
+  --radius-button: 10px; /* v1.1 新增 */
+  --radius-stage: 12px;
+}
+
+:root {
+  --mf-header-h: 64px;
+  --mf-container: 1200px;
+  --mf-measure: 68ch;
+  --mf-gutter: 20px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --mf-gutter: 32px;
+  }
+}

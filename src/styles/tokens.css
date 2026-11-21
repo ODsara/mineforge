@@ -1,0 +1,96 @@
+/*
+ * MineForge 设计令牌 · v2.1「赤陶」terracotta 2026-11-21（全站设计审查后微调）
+ * 日晒陶土编辑风：暖奶油纸底 + 深焙褐结构色 + 赤陶橙单强调（规格见 awesome-design/styles/terracotta/DESIGN.md）
+ * 全部文字对比度 ≥ WCAG AA（脚本校验通过）。v2.1 把 ink-4 由 #8C8170(3.4:1) 加深到
+ * #706656（对所有浅底 ≥4.55:1），根治小字号辅助文字不达标；色相与层级关系不变。
+ * 唯一颜色事实源：本文件。组件只准引用令牌，新增色必须先回到这里定义。
+ * 同步自 MineForge/视觉资产/tokens.css，改动请两边一致。
+ * 上一版「C2 翰墨 v1.1」备份：tokens.css.hanmo-v1.1.bak（回滚即改回文件名）
+ */
+
+@theme {
+  /* ── 背景层（日晒暖纸三档）────────────── */
+  --color-bg: #F7F1E6; /* 页面底（陶土系暖奶油） */
+  --color-surface: #FDFAF2; /* 卡片/表格底 */
+  --color-panel: #EFE6D4; /* 分区底/表头 */
+
+  /* ── 线条 ──────────────────────────── */
+  --color-line: #E3D8C3;
+  --color-line-soft: #EDE4D3;
+  --color-line-strong: #CBBB9F;
+
+  /* ── 文字层（暖褐墨四级）──────────────── */
+  --color-ink: #2A2118; /* 正文/标题 15.2:1（对 surface） */
+  --color-ink-2: #5C5243; /* 次级 7.3:1 */
+  --color-ink-3: #6F6454; /* 辅助/时间戳 5.5:1 */
+  --color-ink-4: #706656; /* 弱化/占位 4.55:1（v2.1 加深，小字号也达 AA） */
+
+  /* ── 结构主色：深焙褐（导航/按钮/选中底；令牌名沿用 navy 不改，改组件成本为零）── */
+  --color-navy: #3F2D1F;
+  --color-on-navy: #FFF6EA; /* 12.2:1 */
+  --color-navy-soft: #F2E7D5; /* 浅底强调区（陶土浅晕） */
+
+  /* ── 强调：赤陶橙（链接/高亮/左线/徽章）── */
+  --color-accent: #A6531F; /* 链接文字于卡底 5.2:1 */
+  --color-accent-strong: #96481B; /* 橙底按钮用此（白字 ≥6:1） */
+  --color-on-accent: #FFF8F0;
+  --color-accent-soft: #F7E6D4; /* 橙浅底 */
+
+  /* ── 展台（3D/视频区块专用暖深色，与陶土同温）── */
+  --color-stage: #191007;
+  --color-stage-2: #241A0F; /* 展台内控件底 */
+  --color-stage-ink: #F0E7D8; /* 15.3:1 */
+  --color-stage-ink-dim: #A89883;
+  --color-stage-line: #3C2D1B;
+
+  /* ── 来源徽章四色（文字/底 均已 AA；gf 保留冷灰蓝以维持四类区分度）──── */
+  --color-badge-jc: #66594A;
+  --color-badge-jc-bg: #F1EBE0; /* 教材值 */
+  --color-badge-gf: #3D5470;
+  --color-badge-gf-bg: #E9EDF2; /* 规范值 */
+  --color-badge-sg: #3F6138;
+  --color-badge-sg-bg: #EAF0E3; /* 实测值 */
+  --color-badge-sj: #A34B1F;
+  --color-badge-sj-bg: #F7E6D4; /* 设计值 */
+
+  /* ── 功能色 ─────────────────────────── */
+  --color-warn: #A3352B; /* 危险/警示，不用于常规按钮 */
+
+  /* ── 字体 ───────────────────────────── */
+  --font-sans: "MiSans", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei",
+    system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: Georgia, "Songti SC", "SimSun", serif; /* h1/h2/方法卡标题/教材引用条（陶土规格要求衬线标题） */
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* ── 圆角 ───────────────────────────── */
+  --radius-card: 14px;
+  --radius-button: 10px;
+  --radius-stage: 12px;
+}
+
+:root {
+  --mf-header-h: 64px;
+  --mf-container: 1200px;
+  --mf-container-wide: 1320px;
+  --mf-measure: 68ch;
+  --mf-gutter: 20px;
+
+  /* 区块节奏（v2.1）：_major 用于一级区块上下留白，_sub 用于次级 */
+  --mf-space-section: 88px;
+  --mf-space-section-sm: 56px;
+  --mf-space-block: 40px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --mf-gutter: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --mf-space-section: 56px;
+    --mf-space-section-sm: 40px;
+    --mf-space-block: 28px;
+  }
+}

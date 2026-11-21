@@ -1,0 +1,42 @@
+---
+/** 面包屑：由页面传入层级，当前页不带链接 */
+interface Item {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Item[];
+  class?: string;
+}
+
+const { items, class: className = "" } = Astro.props;
+---
+
+<nav aria-label="面包屑" class:list={["text-[12.5px] text-ink-3", className]}>
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+    {
+      items.map((item, index) => {
+        const isLast = index === items.length - 1;
+        return (
+          <li class="flex items-center gap-2">
+            {item.href && !isLast ? (
+              <a href={item.href} class="transition-colors duration-100 hover:text-accent">
+                {item.label}
+              </a>
+            ) : (
+              <span aria-current={isLast ? "page" : undefined} class="text-ink-2">
+                {item.label}
+              </span>
+            )}
+            {!isLast && (
+              <span aria-hidden="true" class="text-ink-4">
+                /
+              </span>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>

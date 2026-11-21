@@ -1,0 +1,73 @@
+---
+/**
+ * 大类切换条
+ * mode="anchor" 用于方法总览页内锚点跳转；mode="route" 用于大类页之间跳转。
+ * 两种模式共用同一套视觉与数据，避免两处维护分类顺序。
+ */
+import { methodCategories, categoryProgress, type MethodCategory } from "../../lib/taxonomy";
+
+interface Props {
+  mode: "anchor" | "route";
+  current?: string;
+}
+
+const { mode, current } = Astro.props;
+
+const hrefOf = (category: MethodCategory) =>
+  mode === "anchor" ? `#${category.slug}` : `/methods/${category.slug}/`;
+---
+
+<nav aria-label="采矿方法大类">
+  <ul class="flex flex-wrap items-stretch gap-x-1 md:min-w-max md:flex-nowrap">
+    <li>
+      <a
+        href="/methods/"
+        aria-current={!current ? "page" : undefined}
+        class:list={[
+          "flex h-11 items-center gap-2 border-b-2 px-3 text-[13px] transition-colors duration-100",
+          !current
+            ? "border-accent text-ink"
+            : "border-transparent text-ink-3 hover:text-ink",
+        ]}
+      >
+        全部方法
+      </a>
+    </li>
+    {
+      methodCategories.map((category) => {
+        const active = current === category.slug;
+        return (
+          <li>
+            <a
+              href={hrefOf(category)}
+              aria-current={active ? "page" : undefined}
+              class:list={[
+                "flex h-11 items-center gap-2 border-b-2 px-3 text-[13px] transition-colors duration-100",
+                active
+                  ? "border-accent text-ink"
+                  : "border-transparent text-ink-3 hover:text-ink",
+              ]}
+            >
+              {category.name}
+              <span class="font-mono text-[10.5px] text-ink-4">
+                {categoryProgress(category.slug)}
+              </span>
+            </a>
+          </li>
+        );
+      })
+    }
+    {
+      mode === "anchor" && (
+        <li>
+          <a
+            href="#compare"
+            class="flex h-11 items-center border-b-2 border-transparent px-3 text-[13px] text-ink-3 transition-colors duration-100 hover:text-ink"
+          >
+            速查对比
+          </a>
+        </li>
+      )
+    }
+  </ul>
+</nav>

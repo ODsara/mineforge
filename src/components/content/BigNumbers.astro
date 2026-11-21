@@ -1,0 +1,64 @@
+---
+/**
+ * 首屏四参数（30 秒层：给"扫一眼"的人一副骨架）
+ *
+ * 选哪四项是编辑决策，写在 methods.json → headline；
+ * 数值、单位、出处全部来自 data/engineering/{slug}.json，本组件不存任何数字。
+ * 四条参数刻意混排教材值与实测值——这正是本站的主张：同一指标不同来源要分开标。
+ */
+import SourceBadge from "./SourceBadge.astro";
+import {
+  headlineParams,
+  splitValue,
+  type HeadlinePick,
+} from "../../lib/engineering";
+
+interface Props {
+  slug: string;
+  picks: HeadlinePick[];
+  /** 3 = 首页三参数（去掉一项，让版面留白）；2 = 文章正文栏；4 = 通栏 */
+  cols?: 2 | 3 | 4;
+  class?: string;
+}
+
+const { slug, picks, cols = 4, class: className = "" } = Astro.props;
+
+const items = headlineParams(slug, picks).map((p) => ({ ...p, ...splitValue(p) }));
+---
+
+{
+  items.length > 0 && (
+    <dl
+      class:list={[
+        "not-prose grid grid-cols-2 gap-px overflow-hidden rounded-button border border-line bg-line",
+        cols === 3 && "sm:grid-cols-3",
+        cols === 4 && "md:grid-cols-4",
+        className,
+      ]}
+      data-reveal="stagger"
+    >
+      {items.map((item) => (
+        <div class="flex flex-col bg-bg px-4 py-3.5">
+          <dt class="order-2 mt-1.5 text-[12px] leading-5 text-ink-2">{item.name}</dt>
+          <dd class="order-1 flex items-baseline gap-1">
+            <span
+              class:list={[
+                "font-mono leading-none font-semibold text-navy",
+                item.main.length > 8 ? "text-[16px]" : "text-[27px]",
+              ]}
+              data-count
+            >
+              {item.main}
+            </span>
+            {item.unit && (
+              <span class="font-mono text-[12px] text-ink-3">{item.unit}</span>
+            )}
+          </dd>
+          <div class="order-3 mt-2.5 border-t border-line-soft pt-2">
+            <SourceBadge type={item.value_type} source={item.source} />
+          </div>
+        </div>
+      ))}
+    </dl>
+  )
+}

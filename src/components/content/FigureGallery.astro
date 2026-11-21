@@ -1,0 +1,50 @@
+---
+/**
+ * 工程示意图图区
+ * 每张图走 Plate 图版（卡纸衬边 + 展台内嵌 + 图纸标题栏），图号、图注、出处与图同框。
+ * 数据来自 figures.json，按方法 slug 过滤。右上角视图标签从图名末段取，不另存字段。
+ */
+import { figures } from "../../lib/taxonomy";
+import Plate from "./Plate.astro";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const list = figures.filter((figure) => figure.method === slug);
+
+/** 「分段凿岩阶段矿房法 · 等轴测」→ 拆成图名与视图标签，避免图名和右上角标签重复 */
+const splitView = (title: string) => {
+  const parts = title.split("·");
+  return parts.length > 1
+    ? { name: parts.slice(0, -1).join("·").trim(), view: parts[parts.length - 1].trim() }
+    : { name: title, view: undefined };
+};
+---
+
+{
+  list.length === 0 ? (
+    <p class="rounded-card border border-dashed border-line-strong bg-surface px-4 py-3 text-[12.5px] text-ink-4">
+      工程示意图待补充。
+    </p>
+  ) : (
+    <div class="not-prose grid gap-5">
+      {list.map((figure) => {
+        const { name, view } = splitView(figure.title);
+        return (
+          <Plate
+            src={figure.src}
+            width={figure.width}
+            height={figure.height}
+            alt={`${figure.figureNo} ${figure.title}：${figure.caption}`}
+            figureNo={figure.figureNo}
+            title={name}
+            source={figure.source}
+            meta={view}
+          />
+        );
+      })}
+    </div>
+  )
+}

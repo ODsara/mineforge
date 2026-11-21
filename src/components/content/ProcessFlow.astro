@@ -1,0 +1,61 @@
+---
+/**
+ * 工艺节点图（Process map）
+ *
+ * 四节点：开拓 → 采准 → 回采 → 出矿。
+ * 锚点从正文 headings 里按标题文本反查，找不到就不渲染该节点——不写死 id，避免改了章节名出现死链。
+ * 「开拓」是全矿性工程，方法页不讲，指向工程技术专题。
+ *
+ * 版式移植自外部模板的路线面板（网点底 + 虚线标尺 + 菱形节点），
+ * 但改用浅色 panel 底：本站 3D 已经是黑展台，两块深色相邻会把页面压沉。
+ * 纯锚点、无循环动画——虚线只作刻度，不做流动。
+ */
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  /** 回采里的出矿子标题，命中则直链到该小节 */
+  drawHeadingKeys?: string[];
+}
+
+const { headings, drawHeadingKeys = ["出矿"] } = Astro.props;
+
+const find = (name: string) => headings.find((h) => h.text === name);
+const findDraw = () => {
+  const hit = headings.find((h) => h.depth === 3 && drawHeadingKeys.some((k) => h.text.includes(k)));
+  return hit;
+};
+
+const prep = find("采准与切割工程");
+const stoping = find("回采工艺");
+const draw = findDraw();
+
+const nodes = [
+  { label: "开拓", href: "/engineering/development/", out: true },
+  prep && { label: "采准", href: `#${prep.slug}` },
+  stoping && { label: "回采", href: `#${stoping.slug}` },
+  (draw || stoping) && { label: "出矿", href: `#${(draw ?? stoping)!.slug}` },
+].filter(Boolean) as { label: string; href: string; out?: boolean }[];
+---
+
+{
+  nodes.length > 0 && (
+    <nav aria-label="工艺节点" class="mf-flow not-prose mt-4">
+      <div class="mf-flow__head">
+        <span>Process map · 工序链</span>
+      </div>
+      <div class="mf-flow__rail">
+        {nodes.map((n, i) => (
+          <a href={n.href} class="mf-flow__node">
+            <span class="mf-flow__no">{String(i + 1).padStart(2, "0")}</span>
+            <span class="mf-flow__label">{n.label}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+  )
+}

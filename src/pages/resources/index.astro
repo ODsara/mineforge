@@ -1,0 +1,157 @@
+---
+/**
+ * 资料中心总览
+ * 六类资料全部由数据推导：条目数、状态、分类页地址都取自 resources.json 与各方法数据。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import SectionHeader from "../../components/layout/SectionHeader.astro";
+import SubNav from "../../components/nav/SubNav.astro";
+import StatusDot from "../../components/content/StatusDot.astro";
+import { resourceTypes, resourceHref, resourceCount, tierMeta, resourcesUpdated } from "../../lib/resources";
+
+const count = resourceCount();
+const unitOf = (slug: string) =>
+  slug === "drawings" ? "幅" : slug === "references" ? "篇" : slug === "textbooks" ? "本" : "条";
+
+const navItems = [
+  { label: "全部资料", href: "/resources/", active: true },
+  ...resourceTypes.map((t) => ({ label: t.name, href: resourceHref(t.slug) })),
+];
+
+const totalRefs = count.references;
+const totalParams = count.formulas;
+---
+
+<BaseLayout
+  title="资料中心"
+  description="采矿工程专业资料：术语库、公式与参数、工程图纸、参考文献、标准规范与推荐教材。每条资料标注来源，可追溯到页码或条号。"
+  activePath="/resources/"
+>
+  <PageHero
+    eyebrow="资料中心"
+    title="专业资料"
+    description="术语、参数、图纸与文献集中在这里。每条资料都带出处：条文标条号，参数标页码，图片标建模依据。来源可追溯是本站的基本要求，不是附加功能。"
+  >
+    <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[15px] font-medium text-ink">{resourceTypes.length}</dd>
+        <dt class="text-ink-4">类资料</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[15px] font-medium text-ink">{count.glossary}</dd>
+        <dt class="text-ink-4">条术语</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[15px] font-medium text-ink">{totalParams}</dd>
+        <dt class="text-ink-4">条参数与公式</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[15px] font-medium text-ink">{totalRefs}</dd>
+        <dt class="text-ink-4">篇文献</dt>
+      </div>
+    </dl>
+  </PageHero>
+
+  <div class="border-b border-line bg-bg md:sticky md:top-16 md:z-30">
+    <div class="mf-container">
+      <SubNav label="资料类型" items={navItems} />
+    </div>
+  </div>
+
+  <section aria-labelledby="sec-types">
+    <div class="mf-container py-12 md:py-16">
+      <SectionHeader
+        id="sec-types"
+        index="01 / 资料类型"
+        title="六类资料"
+        description="术语与方法正文共用一份数据；参数按性质分组；规范只摘条文不替代原文。"
+      />
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {
+          resourceTypes.map((type) => (
+            <a
+              href={resourceHref(type.slug)}
+              class="group flex h-full flex-col rounded-button border border-line bg-bg p-5 transition-colors duration-100 hover:border-line-strong"
+            >
+              <div class="flex items-start justify-between gap-3">
+                <span class="font-mono text-[11px] tracking-wider text-ink-4">
+                  {String(type.order).padStart(2, "0")}
+                </span>
+                <StatusDot status={type.status} />
+              </div>
+
+              <h3 class="mt-3 flex items-baseline gap-2 text-[15px] leading-6 font-medium text-ink transition-colors duration-100 group-hover:text-accent">
+                {type.name}
+                <span class="font-mono text-[10.5px] font-normal text-ink-4">{type.nameEn}</span>
+              </h3>
+
+              <p class="mt-2 flex-1 text-[12.5px] leading-6 text-ink-3">{type.summary}</p>
+
+              <div class="mt-4 flex items-center justify-between border-t border-line-soft pt-3">
+                <span class="font-mono text-[12px] text-ink-2">
+                  {count[type.slug] ?? 0}
+                  <span class="ml-1 font-sans text-[11px] text-ink-4">{unitOf(type.slug)}</span>
+                </span>
+                <span class="text-[11.5px] text-ink-4 transition-colors duration-100 group-hover:text-accent">
+                  查看 →
+                </span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-tier" class="border-t border-line">
+    <div class="mf-container py-12 md:py-16">
+      <SectionHeader
+        id="sec-tier"
+        index="02 / 来源分级"
+        title="每条资料都有级别"
+        description="级别不代表文字好坏，而是说明这条信息离一手来源有多远。引用时按级别判断能不能用。"
+        action={{ label: "完整引用原则", href: "/about/#principles" }}
+      />
+
+      <ul class="mt-8 divide-y divide-line border-y border-line">
+        {
+          Object.entries(tierMeta).map(([tier, meta]) => (
+            <li class="grid gap-x-8 gap-y-1 py-4 md:grid-cols-12">
+              <span class="font-mono text-[11px] text-ink-4 md:col-span-1">T{tier}</span>
+              <span class="text-[13.5px] text-ink md:col-span-3">{meta.label}</span>
+              <span class="text-[12px] leading-6 text-ink-4 md:col-span-8">{meta.desc}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        {
+          [
+            {
+              title: "参数分性质",
+              text: "教材值、规范值、实测值与国际实践值分开列，来源不同不混排，避免把教学值当矿山实测值。",
+            },
+            {
+              title: "条文不替代原文",
+              text: "规范条文按条号摘录，用于理解与检索；设计取值与验收认定以现行版本原文为准。",
+            },
+            {
+              title: "图片不转载",
+              text: "外部图集只标来源不转载；本站图解均为自产渲染，并注明建模依据。",
+            },
+          ].map((item) => (
+            <div class="rounded-card border border-line bg-surface p-4">
+              <h3 class="text-[13px] font-medium text-ink">{item.title}</h3>
+              <p class="mt-1.5 text-[11.5px] leading-6 text-ink-3">{item.text}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="mt-6 font-mono text-[11px] text-ink-4">资料库更新：{resourcesUpdated}</p>
+    </div>
+  </section>
+</BaseLayout>

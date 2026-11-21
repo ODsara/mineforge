@@ -1,0 +1,33 @@
+---
+/**
+ * 来源徽章（全站唯一实现）
+ * 四色语义固定在令牌里：教材 badge-jc ／ 规范 badge-gf ／ 实测 badge-sg ／ 设计 badge-sj。
+ * 颜色只区分「这条数字的性质」，不作装饰；新增来源类型必须先回 tokens.css 定义色值。
+ */
+interface Props {
+  /** 教材值 / 规范值 / 实测值 / 设计值 / 国际实践值 */
+  type: string;
+  /** 可选出处，如 R0 p292 */
+  source?: string;
+  class?: string;
+}
+
+const { type, source, class: className = "" } = Astro.props;
+
+const tone: Record<string, string> = {
+  教材值: "border-badge-jc/25 bg-badge-jc-bg text-badge-jc",
+  规范值: "border-badge-gf/25 bg-badge-gf-bg text-badge-gf",
+  实测值: "border-badge-sg/25 bg-badge-sg-bg text-badge-sg",
+  设计值: "border-badge-sj/25 bg-badge-sj-bg text-badge-sj",
+  国际实践值: "border-line bg-surface text-ink-3",
+};
+
+const cls = tone[type] ?? "border-line bg-surface text-ink-3";
+---
+
+<span class:list={["inline-flex items-center gap-1.5 align-baseline", className]}>
+  <span class:list={["rounded-full border px-2 py-[1.5px] text-[11px] leading-4", cls]}>
+    {type}
+  </span>
+  {source && <span class="font-mono text-[11px] text-ink-4">{source}</span>}
+</span>

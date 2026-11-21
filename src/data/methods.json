@@ -1,0 +1,1179 @@
+{
+  "updated": "2026-11-21",
+  "methods": [
+    {
+      "slug": "comprehensive",
+      "category": "open-stope",
+      "order": 1,
+      "name": "全面采矿法",
+      "nameEn": "Comprehensive Mining Method",
+      "status": "complete",
+      "summary": "在矿房内全面回采，依靠矿柱与围岩自身稳固性维护采空区，适用于厚度较小的缓倾斜矿体。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "矿柱",
+          "采准巷道",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与上山首先掘进，建立运输、通风与行人通道。"
+          },
+          {
+            "label": "切割工程",
+            "note": "切割巷道与放矿漏斗/硐室形成，切割自由面准备完毕。"
+          },
+          {
+            "label": "回采落矿",
+            "note": "矿房内回采推进，矿体逐步崩落并运出，不规则矿柱支撑顶板。"
+          },
+          {
+            "label": "出矿与运搬",
+            "note": "崩落矿石经漏斗、电耙运搬下放至运输巷道装车。"
+          },
+          {
+            "label": "顶板管理",
+            "note": "矿柱与顶板保持稳定，空区按设计留存或处理。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "room-pillar",
+      "category": "open-stope",
+      "order": 2,
+      "name": "房柱采矿法",
+      "nameEn": "Room and Pillar Method",
+      "status": "complete",
+      "summary": "矿房与矿柱交错布置，以规则矿柱支撑顶板，适用于倾角平缓、顶板较稳固的矿体。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "plan",
+            "label": "俯视平面",
+            "az": 0,
+            "el": 84,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 6,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 6,
+            "variant": "cross"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "矿柱",
+          "采准巷道",
+          "出矿系统",
+          "设备",
+          "通风",
+          "围岩"
+        ],
+        "updated": "2026-11-21",
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与联络横巷首先掘进，建立矿房的运输、通风与行人通道。"
+          },
+          {
+            "label": "切割工程",
+            "note": "掘进切割平巷与上山、放矿溜井与电耙硐室，形成拉底自由面和出矿系统。"
+          },
+          {
+            "label": "拉底回采",
+            "note": "沿矿房全长拉底 3m，矿体失去底脚支撑，规则矿柱开始承顶。"
+          },
+          {
+            "label": "挑顶落矿",
+            "note": "挑顶前锋沿倾向推进，上部矿体分层崩落，锚杆支护跟随顶板推进。"
+          },
+          {
+            "label": "出矿与顶板管理",
+            "note": "崩落矿石经电耙扒入溜井下放运输巷；空区靠规则矿柱与顶板自稳维护。"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "shrinkage",
+      "category": "open-stope",
+      "order": 3,
+      "name": "留矿采矿法",
+      "nameEn": "Shrinkage Stoping",
+      "status": "complete",
+      "summary": "崩落矿石暂留矿房内作为作业平台并支撑两帮，回采结束后集中放矿。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "暂留矿",
+          "采准巷道",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与上山首先掘进，建立运输、通风与行人通道。"
+          },
+          {
+            "label": "切割与拉底",
+            "note": "切割巷道与放矿漏斗/硐室形成，切割自由面准备完毕。"
+          },
+          {
+            "label": "回采落矿（堆升）",
+            "note": "矿房内回采推进，矿体逐步崩落并运出，不规则矿柱支撑顶板。"
+          },
+          {
+            "label": "大量放矿（堆降）",
+            "note": "崩落矿石经漏斗、电耙运搬下放至运输巷道装车。"
+          },
+          {
+            "label": "清底与空区",
+            "note": "矿柱与顶板保持稳定，空区按设计留存或处理。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "stage-room",
+      "category": "open-stope",
+      "order": 4,
+      "name": "阶段矿房法",
+      "nameEn": "Stage Room Stoping",
+      "status": "complete",
+      "summary": "以阶段为单位划分矿房，在矿房内进行中深孔落矿，矿柱随后单独回采。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "矿柱",
+          "采准巷道",
+          "深孔与药包",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与上山首先掘进，建立运输、通风与行人通道。"
+          },
+          {
+            "label": "切割与拉底",
+            "note": "切割巷道与放矿漏斗/硐室形成，切割自由面准备完毕。"
+          },
+          {
+            "label": "凿岩（深孔布阵）",
+            "note": "矿房内回采推进，矿体逐步崩落并运出，不规则矿柱支撑顶板。"
+          },
+          {
+            "label": "分层崩落",
+            "note": "崩落矿石经漏斗、电耙运搬下放至运输巷道装车。"
+          },
+          {
+            "label": "出矿与清底",
+            "note": "矿柱与顶板保持稳定，空区按设计留存或处理。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "sublevel-room",
+      "category": "open-stope",
+      "order": 5,
+      "name": "分段矿房法",
+      "nameEn": "Sublevel Room Stoping",
+      "status": "complete",
+      "summary": "沿阶段划分分段，各分段独立凿岩与出矿，以独立出矿为与阶段矿房法的判别界线。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "矿柱",
+          "采准巷道",
+          "回采巷道",
+          "深孔",
+          "出矿系统",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与上山首先掘进，建立运输、通风与行人通道。"
+          },
+          {
+            "label": "切割工程",
+            "note": "切割巷道与放矿漏斗/硐室形成，切割自由面准备完毕。"
+          },
+          {
+            "label": "凿岩（环形深孔）",
+            "note": "矿房内回采推进，矿体逐步崩落并运出，不规则矿柱支撑顶板。"
+          },
+          {
+            "label": "分段回采",
+            "note": "崩落矿石经漏斗、电耙运搬下放至运输巷道装车。"
+          },
+          {
+            "label": "矿柱回采与空区处理",
+            "note": "矿柱与顶板保持稳定，空区按设计留存或处理。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "sublevel-drilling-stage-room",
+      "category": "open-stope",
+      "order": 6,
+      "name": "分段凿岩阶段矿房法",
+      "nameEn": "Sublevel Drilling Stage Room Stoping",
+      "status": "complete",
+      "variantOf": "stage-room",
+      "summary": "分段仅布置凿岩巷道，中深孔落矿后矿石下移至阶段底部集中出矿，是阶段矿房法的主要变体。",
+      "updated": "2026-11-21",
+      "variantNote": "分段只布置凿岩巷道、不独立出矿，崩落矿石下移至阶段底部集中放出。",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "矿柱",
+          "采准巷道",
+          "深孔",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与上山首先掘进，建立运输、通风与行人通道。"
+          },
+          {
+            "label": "切割工程",
+            "note": "切割巷道与放矿漏斗/硐室形成，切割自由面准备完毕。"
+          },
+          {
+            "label": "分段凿岩",
+            "note": "矿房内回采推进，矿体逐步崩落并运出，不规则矿柱支撑顶板。"
+          },
+          {
+            "label": "崩落与放矿",
+            "note": "崩落矿石经漏斗、电耙运搬下放至运输巷道装车。"
+          },
+          {
+            "label": "底部集中出矿",
+            "note": "矿柱与顶板保持稳定，空区按设计留存或处理。"
+          }
+        ],
+        "updated": "2026-11-21"
+      },
+      "flagship": true,
+      "headline": [
+        {
+          "name": "分段高度",
+          "type": "教材值"
+        },
+        {
+          "name": "矿房长度",
+          "type": "实测值"
+        },
+        {
+          "name": "矿块生产能力",
+          "type": "实测值"
+        },
+        {
+          "name": "阶段高度",
+          "type": "教材值"
+        }
+      ],
+      "conditions": {
+        "dip": [
+          "steep"
+        ],
+        "thickness": [
+          "medium",
+          "thick"
+        ],
+        "rock": [
+          "stable",
+          "moderate"
+        ],
+        "source": "据 engineering_data.json → applicability 逐条对照"
+      }
+    },
+    {
+      "slug": "single-layer",
+      "category": "backfill",
+      "order": 1,
+      "name": "单层充填采矿法",
+      "nameEn": "Single Layer Backfilling",
+      "status": "complete",
+      "summary": "一次充填形成单层，用于薄矿体或分层回采后即时充填的场合。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "采准巷道",
+          "充填体",
+          "支护",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与切割上山首先掘进，建立充填与回采通道。"
+          },
+          {
+            "label": "切割工程",
+            "note": "切割巷道与自由面形成，充填管路/滤水设施准备完毕。"
+          },
+          {
+            "label": "回采与充填",
+            "note": "矿体按分层/进路逐步回采，采后空间随即充填接顶。"
+          },
+          {
+            "label": "接顶充填",
+            "note": "崩落或已回采矿石运搬下放，充填体承载顶板。"
+          },
+          {
+            "label": "下一循环推进",
+            "note": "充填接顶质量核查，下一分层/循环继续推进。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "upward-horizontal-slice",
+      "category": "backfill",
+      "order": 2,
+      "name": "上向水平分层充填法",
+      "nameEn": "Upward Horizontal Slice Backfilling",
+      "status": "complete",
+      "summary": "自下而上分层回采，每层回采后充填，充填体作为上一分层的作业平台。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "矿柱",
+          "采准巷道",
+          "充填体",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与切割上山首先掘进，建立充填与回采通道。"
+          },
+          {
+            "label": "拉底与假底",
+            "note": "切割巷道与自由面形成，充填管路/滤水设施准备完毕。"
+          },
+          {
+            "label": "分层回采充填（1~3 层）",
+            "note": "矿体按分层/进路逐步回采，采后空间随即充填接顶。"
+          },
+          {
+            "label": "继续上采（4~6 层）",
+            "note": "崩落或已回采矿石运搬下放，充填体承载顶板。"
+          },
+          {
+            "label": "接顶",
+            "note": "充填接顶质量核查，下一分层/循环继续推进。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "downward-slice",
+      "category": "backfill",
+      "order": 3,
+      "name": "下向分层充填法",
+      "nameEn": "Downward Slice Backfilling",
+      "status": "complete",
+      "summary": "自上而下分层回采，充填体作为下一分层的顶板，适用于矿岩不稳固的矿体。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "采准巷道",
+          "充填体",
+          "回采巷道",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与切割上山首先掘进，建立充填与回采通道。"
+          },
+          {
+            "label": "首分层回采与假顶",
+            "note": "切割巷道与自由面形成，充填管路/滤水设施准备完毕。"
+          },
+          {
+            "label": "向下分层（2~3）",
+            "note": "矿体按分层/进路逐步回采，采后空间随即充填接顶。"
+          },
+          {
+            "label": "深部分层（4~6）",
+            "note": "崩落或已回采矿石运搬下放，充填体承载顶板。"
+          },
+          {
+            "label": "接顶",
+            "note": "充填接顶质量核查，下一分层/循环继续推进。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "sublevel-backfill",
+      "category": "backfill",
+      "order": 4,
+      "name": "分段充填采矿法",
+      "nameEn": "Sublevel Backfilling",
+      "status": "complete",
+      "summary": "以分段为单位回采并充填，兼顾分层充填的适应性与分段采矿的效率。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "采准巷道",
+          "回采进路",
+          "充填体",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与切割上山首先掘进，建立充填与回采通道。"
+          },
+          {
+            "label": "切割工程",
+            "note": "切割巷道与自由面形成，充填管路/滤水设施准备完毕。"
+          },
+          {
+            "label": "单进路回采充填",
+            "note": "矿体按分层/进路逐步回采，采后空间随即充填接顶。"
+          },
+          {
+            "label": "双进路间隔回采",
+            "note": "崩落或已回采矿石运搬下放，充填体承载顶板。"
+          },
+          {
+            "label": "接顶充填",
+            "note": "充填接顶质量核查，下一分层/循环继续推进。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "single-layer-caving",
+      "category": "caving",
+      "order": 1,
+      "name": "单层崩落法",
+      "nameEn": "Single Layer Caving",
+      "status": "complete",
+      "summary": "单层回采后强制或自然崩落顶板岩层，以崩落围岩充填采空区。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "崩落岩",
+          "采准巷道",
+          "支护",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道、底部结构（漏斗/电耙道/放矿口）与天井首先掘进。"
+          },
+          {
+            "label": "切割工程",
+            "note": "堑沟/拉底/切割槽形成，为崩落提供自由面与补偿空间。"
+          },
+          {
+            "label": "正常推进（三段式）",
+            "note": "深孔崩落矿石，上部覆岩随之垮落形成覆盖垫层。"
+          },
+          {
+            "label": "放顶",
+            "note": "崩落矿石在覆盖岩下放矿，经底部结构运搬至溜井。"
+          },
+          {
+            "label": "二次来压管理",
+            "note": "覆盖岩下持续退采，崩落与放矿交替推进至采完矿块。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "sublevel-caving-bottom-pillar",
+      "category": "caving",
+      "order": 2,
+      "name": "有底柱分段崩落法",
+      "nameEn": "Sublevel Caving with Bottom Pillar",
+      "status": "complete",
+      "summary": "分段回采并保留底柱，出矿结构布置在底柱内，矿石经底部集中放出。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "崩落岩",
+          "采准巷道",
+          "出矿系统",
+          "深孔",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道、底部结构（漏斗/电耙道/放矿口）与天井首先掘进。"
+          },
+          {
+            "label": "切割工程",
+            "note": "堑沟/拉底/切割槽形成，为崩落提供自由面与补偿空间。"
+          },
+          {
+            "label": "分段崩落",
+            "note": "深孔崩落矿石，上部覆岩随之垮落形成覆盖垫层。"
+          },
+          {
+            "label": "放矿（漏斗→电耙道→溜井）",
+            "note": "崩落矿石在覆盖岩下放矿，经底部结构运搬至溜井。"
+          },
+          {
+            "label": "覆盖层下退采",
+            "note": "覆盖岩下持续退采，崩落与放矿交替推进至采完矿块。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "sublevel-caving-no-pillar",
+      "category": "caving",
+      "order": 3,
+      "name": "无底柱分段崩落法",
+      "nameEn": "Non-pillar Sublevel Caving",
+      "status": "complete",
+      "summary": "取消底柱，各分段以凿岩巷与出矿进路直接出矿，结构简单、机械化程度高。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "俯视",
+            "az": 0,
+            "el": 84,
+            "variant": "iso"
+          },
+          {
+            "id": "zoom",
+            "label": "细部进路端",
+            "az": 28,
+            "el": 10,
+            "variant": "iso",
+            "focus": "进路端"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "崩落岩",
+          "采准巷道",
+          "回采进路",
+          "深孔",
+          "出矿系统",
+          "围岩"
+        ],
+        "updated": "2026-11-21",
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道与溜井、设备井、风井先行掘进，构成矿块的运输通风骨架。"
+          },
+          {
+            "label": "切割工程",
+            "note": "掘进各分段运输平巷、联络道与切割平巷/天井，形成分段回采通道。"
+          },
+          {
+            "label": "崩落",
+            "note": "进路端部上向扇形深孔挤压爆破，顶层矿石崩落，上部围岩随之垮落形成垫层。"
+          },
+          {
+            "label": "放矿",
+            "note": "铲运机进入进路端部装矿，崩落矿石沿进路运至溜井下放阶段运输巷。"
+          },
+          {
+            "label": "覆盖层下回采",
+            "note": "各分段自上而下退采，崩落岩石垫层随矿石放出不断下移补充，直至采完全部分段。"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "stage-forced-caving",
+      "category": "caving",
+      "order": 4,
+      "name": "阶段强制崩落法",
+      "nameEn": "Forced Stage Caving",
+      "status": "complete",
+      "summary": "以阶段为单位用大爆破强制崩落矿石，在覆盖岩下集中放出。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "崩落岩",
+          "采准巷道",
+          "出矿系统",
+          "深孔",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道、底部结构（漏斗/电耙道/放矿口）与天井首先掘进。"
+          },
+          {
+            "label": "切割（补偿空间）",
+            "note": "堑沟/拉底/切割槽形成，为崩落提供自由面与补偿空间。"
+          },
+          {
+            "label": "深孔大爆破",
+            "note": "深孔崩落矿石，上部覆岩随之垮落形成覆盖垫层。"
+          },
+          {
+            "label": "放矿",
+            "note": "崩落矿石在覆盖岩下放矿，经底部结构运搬至溜井。"
+          },
+          {
+            "label": "覆盖岩下放矿",
+            "note": "覆盖岩下持续退采，崩落与放矿交替推进至采完矿块。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    },
+    {
+      "slug": "stage-natural-caving",
+      "category": "caving",
+      "order": 5,
+      "name": "阶段自然崩落法",
+      "nameEn": "Natural Stage Caving",
+      "status": "complete",
+      "summary": "利用矿体自身节理与应力条件使矿石自然崩落，在底部集中出矿。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 90,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 0,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "崩落岩",
+          "平衡拱面",
+          "采准巷道",
+          "出矿系统",
+          "通风",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "采准工程",
+            "note": "阶段运输巷道、底部结构（漏斗/电耙道/放矿口）与天井首先掘进。"
+          },
+          {
+            "label": "切割拉底",
+            "note": "堑沟/拉底/切割槽形成，为崩落提供自由面与补偿空间。"
+          },
+          {
+            "label": "自然崩落（拱形成）",
+            "note": "深孔崩落矿石，上部覆岩随之垮落形成覆盖垫层。"
+          },
+          {
+            "label": "放矿（拱上移）",
+            "note": "崩落矿石在覆盖岩下放矿，经底部结构运搬至溜井。"
+          },
+          {
+            "label": "覆盖岩下持续崩落",
+            "note": "覆盖岩下持续退采，崩落与放矿交替推进至采完矿块。"
+          }
+        ],
+        "updated": "2026-11-21"
+      }
+    }
+  ]
+}

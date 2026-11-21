@@ -1,0 +1,177 @@
+---
+/**
+ * 采矿方法大类页（v2.1 重设计）
+ * 由 taxonomy.json 的 methodCategories 生成，三个大类共用同一模板。
+ * v2.1：导读栏（分类号/适用条件/代表剖面）+ 方法图集（真实工程图缩略，2 列大卡），
+ * 与总览页同一套设计语言；本类图解与其它大类入口保留。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import Breadcrumb from "../../components/global/Breadcrumb.astro";
+import CategoryTabs from "../../components/nav/CategoryTabs.astro";
+import MethodCard from "../../components/cards/MethodCard.astro";
+import FigureCard from "../../components/cards/FigureCard.astro";
+import Plate from "../../components/content/Plate.astro";
+import StatusDot from "../../components/content/StatusDot.astro";
+import {
+  methodCategories,
+  methodsOfCategory,
+  methodHref,
+  categoryProgress,
+  figures,
+} from "../../lib/taxonomy";
+
+export function getStaticPaths() {
+  return methodCategories.map((category) => ({
+    params: { category: category.slug },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props as { category: (typeof methodCategories)[number] };
+const list = methodsOfCategory(category.slug);
+const categoryFigures = figures.filter((figure) =>
+  list.some((method) => method.slug === figure.method)
+);
+const others = methodCategories.filter((item) => item.slug !== category.slug);
+const signature =
+  categoryFigures.find((f) => f.kind === "render") ?? categoryFigures[0] ?? null;
+---
+
+<BaseLayout
+  title={category.name}
+  description={category.summary}
+  activePath="/methods/"
+>
+  <div class="mf-container pt-6">
+    <Breadcrumb
+      items={[
+        { label: "首页", href: "/" },
+        { label: "采矿方法", href: "/methods/" },
+        { label: category.name },
+      ]}
+    />
+  </div>
+
+  <PageHero
+    eyebrow={category.nameEn}
+    title={category.name}
+    description={category.summary}
+  >
+    <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[13px]">
+      <div>
+        <dt class="text-ink-3">适用范围</dt>
+        <dd class="mt-1 max-w-md leading-6 text-ink-2">{category.applicability}</dd>
+      </div>
+      <div>
+        <dt class="text-ink-3">方法数量</dt>
+        <dd class="mt-1 font-mono text-[16px] text-ink">{list.length} 项</dd>
+      </div>
+      <div>
+        <dt class="text-ink-3">正文进度</dt>
+        <dd class="mt-1 font-mono text-[16px] text-ink">
+          {categoryProgress(category.slug)}
+        </dd>
+      </div>
+    </dl>
+  </PageHero>
+
+  <div class="border-b border-line bg-bg md:sticky md:top-16 md:z-30">
+    <div class="mf-container">
+      <CategoryTabs mode="route" current={category.slug} />
+    </div>
+  </div>
+
+  <div class="mf-container py-14 md:py-20">
+    <div class="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+      <!-- 导读栏 -->
+      <div class="lg:col-span-4 xl:col-span-3">
+        <div class="lg:sticky lg:top-28">
+          <p class="mf-sec mb-3">
+            <span class="mf-sec__no">{String(category.order).padStart(2, "0")}</span>
+            本类方法
+          </p>
+          <h2 class="text-[24px] leading-tight font-semibold">{category.name}</h2>
+          <p class="mt-3 text-[13.5px] leading-7 text-ink-2">{category.applicability}</p>
+          <p class="mt-4 font-mono text-[12px] text-ink-3">{list.length} 项方法 · {categoryProgress(category.slug)} 已完成</p>
+
+          {signature && (
+            <div class="mt-7 hidden lg:block" data-reveal="media">
+              <Plate
+                src={signature.src}
+                width={signature.width}
+                height={signature.height}
+                alt={`${category.name}代表工程图：${signature.title}`}
+                figureNo={signature.figureNo}
+                title={signature.title.split("·")[0].trim()}
+                source={signature.source}
+                meta={signature.kind === "render" ? "三维渲染" : "剖面"}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- 方法图集 -->
+      <div class="lg:col-span-8 xl:col-span-9">
+        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-reveal="stagger">
+          {list.map((method) => <MethodCard method={method} href={methodHref(method)} />)}
+        </div>
+        <p class="mt-6 text-[12.5px] leading-6 text-ink-3">
+          每项方法使用同一套详情模板（基本信息、原理、适用条件、采准与切割、回采工艺、工程结构、三维模型、优缺点、案例、示意图、相关知识、参考文献）。
+          正文完成并通过来源核对后，状态由「建设中」变为「已完成」。
+        </p>
+      </div>
+    </div>
+
+    {
+      categoryFigures.length > 0 && (
+        <section class="mt-16 border-t border-line pt-12" aria-labelledby="sec-figs">
+          <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p class="mf-sec mb-2.5"><span class="mf-sec__no">图解</span>本类工程图解</p>
+              <h2 id="sec-figs" class="text-[22px] font-semibold">剖面与平面</h2>
+            </div>
+            <a href="/resources/drawings/" class="mf-more">查看全部图解
+              <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </a>
+          </div>
+          <div class="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-reveal="stagger">
+            {categoryFigures.map((figure) => (
+              <FigureCard figure={figure} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="mt-16 border-t border-line pt-12" aria-labelledby="sec-others">
+      <p class="mf-sec mb-2.5"><span class="mf-sec__no">对照</span>其它大类</p>
+      <h2 id="sec-others" class="text-[22px] font-semibold">三大类按地压管理方式区分</h2>
+      <p class="mt-2 text-[13px] leading-6 text-ink-3">
+        是否依靠矿柱自稳、是否充填、是否崩落围岩——这是三条不同的地压管理路线。
+      </p>
+      <div class="mt-7 grid gap-5 md:grid-cols-2" data-reveal="stagger">
+        {
+          others.map((item) => (
+            <a
+              href={`/methods/${item.slug}/`}
+              class="mf-card group rounded-card border border-line bg-surface p-5"
+            >
+              <div class="flex items-baseline justify-between gap-3">
+                <h3 class="mf-card-title text-[17px] font-semibold text-navy transition-colors duration-150 group-hover:text-accent">
+                  {item.name}
+                </h3>
+                <StatusDot status={item.status} />
+              </div>
+              <p class="mt-2 text-[13px] leading-6 text-ink-2">{item.summary}</p>
+              <p class="mt-3 font-mono text-[12px] text-ink-3">
+                {methodsOfCategory(item.slug).length} 项方法
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>

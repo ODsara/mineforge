@@ -1,0 +1,80 @@
+---
+/**
+ * 工程图纸索引
+ * 图与来源同框：每张图都标出建模依据与图号，避免出现「网上找的图」。
+ */
+import FigureCard from "../cards/FigureCard.astro";
+import { figures, methodBySlug, methodHref } from "../../lib/taxonomy";
+
+const rows = figures.map((f) => ({ figure: f, method: methodBySlug(f.method) }));
+---
+
+<div class="space-y-10">
+  <div class="grid gap-5 md:grid-cols-2">
+    {
+      rows.map(({ figure }) => (
+        <FigureCard figure={figure} size="lg" />
+      ))
+    }
+  </div>
+
+  <section>
+    <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+      <h2 class="text-[14px] font-medium text-ink">图纸信息</h2>
+      <span class="font-mono text-[11px] text-ink-4">{figures.length} 幅</span>
+    </div>
+
+    <div class="mt-4 overflow-x-auto rounded-card border border-line">
+      <table class="w-full min-w-[760px] border-collapse text-left">
+        <caption class="sr-only">工程图纸索引表</caption>
+        <thead>
+          <tr class="bg-surface text-[11px] tracking-wide text-ink-4">
+            <th scope="col" class="border-b border-line px-3 py-2 font-normal">图号</th>
+            <th scope="col" class="border-b border-line px-3 py-2 font-normal">图名</th>
+            <th scope="col" class="border-b border-line px-3 py-2 font-normal">视图</th>
+            <th scope="col" class="border-b border-line px-3 py-2 font-normal">所属方法</th>
+            <th scope="col" class="border-b border-line px-3 py-2 font-normal">尺寸</th>
+            <th scope="col" class="border-b border-line px-3 py-2 font-normal">来源</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map(({ figure, method }) => (
+              <tr class="border-b border-line-soft align-top last:border-b-0 hover:bg-surface">
+                <th
+                  scope="row"
+                  class="px-3 py-2.5 text-left font-mono text-[11px] font-normal whitespace-nowrap text-ink-4"
+                >
+                  {figure.figureNo}
+                </th>
+                <td class="px-3 py-2.5 text-[12.5px] text-ink">{figure.title}</td>
+                <td class="px-3 py-2.5 text-[11.5px] text-ink-3">{figure.kind}</td>
+                <td class="px-3 py-2.5 text-[11.5px]">
+                  {method ? (
+                    <a
+                      href={methodHref(method)}
+                      class="text-ink-3 transition-colors duration-100 hover:text-accent"
+                    >
+                      {method.name}
+                    </a>
+                  ) : (
+                    <span class="text-ink-4">—</span>
+                  )}
+                </td>
+                <td class="px-3 py-2.5 font-mono text-[10.5px] whitespace-nowrap text-ink-4">
+                  {figure.width}×{figure.height}
+                </td>
+                <td class="px-3 py-2.5 text-[11px] leading-5 text-ink-4">{figure.source}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-4 text-[12px] leading-6 text-ink-4">
+      现有图解均为自产渲染，按教材对结构的文字描述与参数表重建，用于理解空间关系，不作为施工依据，
+      也不替代教材原图。图集类外部资源涉及版权，只标来源、不转载。
+    </p>
+  </section>
+</div>

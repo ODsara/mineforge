@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 60 900 390" width="900" height="390" role="img" aria-labelledby="opTitle opDesc">
+  <title id="opTitle">露天开采台阶剖面示意</title>
+  <desc id="opDesc">露天矿最终边坡自地表逐级下降至坑底、再逐级上升的台阶剖面示意，标注台阶、最终边坡与坑底，非按比例。</desc>
+  <defs>
+    <pattern id="opGrid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" fill="none" stroke="#E4E0D5" stroke-width="0.7"/>
+    </pattern>
+    <pattern id="opHatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+      <line x1="0" y1="0" x2="0" y2="9" stroke="#9a6b15" stroke-width="1.1" opacity="0.35"/>
+    </pattern>
+  </defs>
+
+  <rect width="900" height="480" fill="#FFFEFA"/>
+  <rect y="100" width="900" height="380" fill="#F3F1E9"/>
+  <rect y="100" width="900" height="380" fill="url(#opGrid)"/>
+
+  <path d="M0 100H900" stroke="#152a45" stroke-width="2.6" stroke-linecap="square"/>
+  <text x="26" y="88" font-family="Consolas, ui-monospace, monospace" font-size="11" fill="#6a6f7a">地表</text>
+
+  <path
+    d="M100 100L140 100L164 140L204 140L228 180L268 180L292 220L332 220L356 260L396 260L420 300L480 300L504 260L544 260L568 220L608 220L632 180L672 180L696 140L736 140L760 100L800 100"
+    fill="none" stroke="#152a45" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <path
+    d="M100 100L140 100L164 140L204 140L228 180L268 180L292 220L332 220L356 260L396 260L420 300L480 300L504 260L544 260L568 220L608 220L632 180L672 180L696 140L736 140L760 100L800 100V480H100Z"
+    fill="url(#opHatch)" opacity="0.5"/>
+
+  <path d="M420 300H480V316H420Z" fill="#FFFEFA" stroke="#152a45" stroke-width="2.2"/>
+
+  <g stroke="#9a6b15" stroke-width="1" stroke-dasharray="4 5" opacity="0.7">
+    <path d="M100 100L420 300"/>
+    <path d="M800 100L480 300"/>
+  </g>
+
+  <g stroke="#868c98" stroke-width="0.9" stroke-dasharray="3 3" fill="none">
+    <path d="M268 180L268 150H330"/>
+    <path d="M420 300L360 330H300"/>
+    <path d="M150 322L112 250"/>
+    <path d="M150 322L112 250"/>
+  </g>
+  <text x="336" y="150" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#5a5f6a">台阶平台</text>
+  <text x="294" y="334" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#5a5f6a">坑底</text>
+  <text x="60" y="332" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#9a6b15">最终边坡</text>
+
+  <text x="874" y="432" text-anchor="end" font-family="Consolas, ui-monospace, monospace" font-size="10.5" fill="#868c98">台阶剖面示意 · 非按比例</text>
+</svg>

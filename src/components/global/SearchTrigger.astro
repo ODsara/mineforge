@@ -1,0 +1,25 @@
+---
+/**
+ * 全局搜索入口
+ * 第一版为指向 /search/ 的链接（样式做成检索框），后续在此替换为覆盖层面板，
+ * 外部调用方无需改动。
+ */
+import site from "../../data/site.json";
+---
+
+<a
+  href={site.search.href}
+  class="group flex h-9 items-center gap-2 rounded-button border border-line bg-surface px-2.5 text-ink-3 transition-colors duration-100 hover:border-line-strong hover:text-ink-2 sm:pr-2"
+  aria-label={site.search.label}
+>
+  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <circle cx="7" cy="7" r="4.75" stroke="currentColor" stroke-width="1.4"></circle>
+    <path d="M10.6 10.6L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+    ></path>
+  </svg>
+  <span class="hidden text-[13px] md:inline">{site.search.label}</span>
+  <kbd
+    class="hidden h-5 min-w-5 items-center justify-center rounded-card border border-line bg-bg px-1 text-[11px] leading-none text-ink-4 md:flex"
+    aria-hidden="true">{site.search.shortcut}</kbd
+  >
+</a>

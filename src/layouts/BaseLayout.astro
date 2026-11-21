@@ -1,0 +1,68 @@
+---
+/**
+ * 全站基础布局
+ * 职责：文档头、跳过链接、Header、main、Footer。
+ * 不含任何页面级排版，页面通过 <slot /> 注入内容。
+ */
+// KaTeX 排版与字体：公式在构建期渲染成静态 HTML，这里只补样式与字形。
+// 必须早于 global.css 引入，styles/math.css 的覆盖才会生效。
+import "katex/dist/katex.min.css";
+import "../styles/global.css";
+import site from "../data/site.json";
+import SkipLink from "../components/global/SkipLink.astro";
+import Header from "../components/global/Header.astro";
+import Footer from "../components/global/Footer.astro";
+import Motion from "../components/layout/Motion.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  activePath?: string;
+}
+
+const {
+  title,
+  description = site.description,
+  activePath = Astro.url.pathname,
+} = Astro.props;
+
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.tagline}`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#F7F1E6" />
+    {/*
+      揭示动效的「上锁」脚本。
+      必须在首帧之前同步执行：先由 CSS 把 [data-reveal] 置于初始态，再由脚本
+      在进入视口时加 .is-in 放行。若推迟到 defer 模块里执行，元素会先以终态
+      绘制一帧再被隐藏，出现闪烁。is:inline 保证不被 Astro 打包成外部模块。
+      减弱动效时不上锁，内容直接是终态。
+    */}
+    <script is:inline>
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.documentElement.classList.add("mf-anim");
+      }
+    </script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <SkipLink />
+    <Header activePath={activePath} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    {/* 揭示调度器：零依赖，只给 [data-reveal] 加类，不加载任何外部库 */}
+    <Motion />
+  </body>
+</html>

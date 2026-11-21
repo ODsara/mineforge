@@ -1,0 +1,136 @@
+{
+  "name": "MineForge",
+  "nameZh": "矿山知识工场",
+  "tagline": "探索地下矿山工程的知识与技术",
+  "description": "MineForge 是面向采矿工程专业的知识平台，以知识体系为骨架、以工程图解为载体，系统整理地下开采方法、开拓采准、通风安全等专业内容。",
+  "version": "1.1.0",
+  "nav": [
+    {
+      "label": "首页",
+      "href": "/"
+    },
+    {
+      "label": "知识体系",
+      "href": "/knowledge/"
+    },
+    {
+      "label": "采矿方法",
+      "href": "/methods/"
+    },
+    {
+      "label": "工程技术",
+      "href": "/engineering/"
+    },
+    {
+      "label": "资料中心",
+      "href": "/resources/"
+    },
+    {
+      "label": "关于",
+      "href": "/about/"
+    }
+  ],
+  "search": {
+    "href": "/search/",
+    "label": "搜索知识库",
+    "shortcut": "/"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "浏览",
+        "links": [
+          {
+            "label": "知识体系",
+            "href": "/knowledge/"
+          },
+          {
+            "label": "采矿方法",
+            "href": "/methods/"
+          },
+          {
+            "label": "工程技术",
+            "href": "/engineering/"
+          },
+          {
+            "label": "资料中心",
+            "href": "/resources/"
+          },
+          {
+            "label": "搜索知识库",
+            "href": "/search/"
+          }
+        ]
+      },
+      {
+        "title": "采矿方法",
+        "links": [
+          {
+            "label": "空场采矿法",
+            "href": "/methods/open-stope/"
+          },
+          {
+            "label": "充填采矿法",
+            "href": "/methods/backfill/"
+          },
+          {
+            "label": "崩落采矿法",
+            "href": "/methods/caving/"
+          },
+          {
+            "label": "速查对比表",
+            "href": "/methods/#compare"
+          }
+        ]
+      },
+      {
+        "title": "资料中心",
+        "links": [
+          {
+            "label": "专业术语库",
+            "href": "/resources/glossary/"
+          },
+          {
+            "label": "公式与参数",
+            "href": "/resources/formulas/"
+          },
+          {
+            "label": "工程图纸与示意图",
+            "href": "/resources/drawings/"
+          },
+          {
+            "label": "参考文献",
+            "href": "/resources/references/"
+          },
+          {
+            "label": "标准与规范",
+            "href": "/resources/standards/"
+          },
+          {
+            "label": "推荐教材",
+            "href": "/resources/textbooks/"
+          }
+        ]
+      },
+      {
+        "title": "项目",
+        "links": [
+          {
+            "label": "关于 MineForge",
+            "href": "/about/"
+          },
+          {
+            "label": "内容来源与引用原则",
+            "href": "/about/#principles"
+          },
+          {
+            "label": "后续发展方向",
+            "href": "/about/#roadmap"
+          }
+        ]
+      }
+    ],
+    "note": "本站专业内容依据公开出版教材、国家标准与公开发表文献整理。参数与工程数据均标注来源类型，未经核实的内容一律标注「待补充」，不作为工程设计依据。",
+    "copyright": "MineForge · 采矿工程知识平台"
+  }
+}

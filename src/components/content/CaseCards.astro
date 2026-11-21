@@ -1,0 +1,85 @@
+---
+/**
+ * 案例卡（M-08 件 4）
+ *
+ * 数据全部来自 data/engineering/{slug}.json → case_studies，字段名即技术项，
+ * 不做「成功案例/优秀」这类评价性措辞。失效过程单独用警示色，不淡化。
+ */
+import SourceBadge from "./SourceBadge.astro";
+import { engineeringRecord } from "../../lib/engineering";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const cases = engineeringRecord(slug)?.case_studies ?? [];
+
+const splitName = (raw: string) => {
+  const m = raw.match(/^(.+?)（(.+)）$/);
+  return m ? { title: m[1], place: m[2] } : { title: raw, place: "" };
+};
+
+const ROWS = [
+  ["geology", "地质条件"],
+  ["scale", "规模"],
+  ["structure", "结构参数"],
+  ["process", "凿岩与爆破"],
+  ["draw", "出矿"],
+  ["pillar", "矿柱与空区"],
+] as const;
+---
+
+{
+  cases.length > 0 ? (
+    <div class="not-prose space-y-4">
+      {cases.map((item) => {
+        const { title, place } = splitName(item.name);
+        return (
+          <article class="rounded-card border border-line bg-surface p-4">
+            <header class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1.5">
+              <h4 class="mf-card-title text-[14.5px] font-semibold text-ink">{title}</h4>
+              <SourceBadge type={item.value_type} source={item.source} />
+            </header>
+            {place && <p class="mt-1 text-[11.5px] text-ink-4">{place}</p>}
+
+            <dl class="mt-3 space-y-2">
+              {ROWS.map(([key, label]) =>
+                item[key] ? (
+                  <div class="grid gap-1 sm:grid-cols-[76px_1fr] sm:gap-3">
+                    <dt class="text-[11.5px] leading-6 text-ink-4">{label}</dt>
+                    <dd class="text-[12.5px] leading-6 text-ink-2">{item[key]}</dd>
+                  </div>
+                ) : null
+              )}
+            </dl>
+
+            {item.failure && (
+              <div class="mt-3 border-l-2 border-warn bg-warn/5 px-3 py-2">
+                <p class="text-[11px] font-medium text-warn">失效过程</p>
+                <p class="mt-1 text-[12.5px] leading-6 text-ink-2">{item.failure}</p>
+              </div>
+            )}
+
+            {item.lesson && (
+              <p class="mt-3 border-t border-line-soft pt-2.5 text-[12.5px] leading-6 text-ink">
+                <span class="text-ink-4">可迁移的结论　</span>
+                {item.lesson}
+              </p>
+            )}
+
+            {item.representativeness && (
+              <p class="mt-1.5 text-[11.5px] leading-5 text-ink-4">
+                代表性：{item.representativeness}
+              </p>
+            )}
+          </article>
+        );
+      })}
+    </div>
+  ) : (
+    <p class="rounded-button border border-dashed border-line-strong bg-bg px-3.5 py-3 text-[12.5px] text-ink-4">
+      本条目的工程案例尚未核对入库。
+    </p>
+  )
+}

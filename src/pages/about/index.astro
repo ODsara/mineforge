@@ -1,0 +1,375 @@
+---
+/**
+ * 关于 MineForge
+ * 这一页承担三件事：说清项目定位、公开引用原则、交代后续方向与当前限制。
+ * 所有统计数字由数据推导，不手写。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import SectionHeader from "../../components/layout/SectionHeader.astro";
+import StatusDot from "../../components/content/StatusDot.astro";
+import { domains, methods, figures, siteStats, statusMeta, type ContentStatus } from "../../lib/taxonomy";
+import { resourceTypes, resourceCount, tierMeta, references, standardDocs, clauses } from "../../lib/resources";
+
+const stats = siteStats();
+const count = resourceCount();
+const statuses = Object.keys(statusMeta) as ContentStatus[];
+const version = "1.1.0";
+---
+
+<BaseLayout
+  title="关于"
+  description="关于 MineForge：项目定位、建设目标、内容来源与引用原则，以及三维工程模型与数字矿山的后续发展方向。"
+  activePath="/about/"
+>
+  <PageHero
+    eyebrow="关于项目"
+    title="关于 MineForge"
+    description="面向采矿工程专业学生的知识平台。以知识体系为基础，以工程图解为载体，以三维交互模型为扩展方向。目标不是把课程资料搬到网页上，而是建立一套能长期往里加内容的组织方式。"
+  >
+    <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
+      {
+        stats.map((s) => (
+          <div class="flex items-baseline gap-1.5">
+            <dd class="font-mono text-[15px] font-medium text-ink">{s.value}</dd>
+            <dt class="text-ink-4">
+              {s.unit}
+              {s.label}
+            </dt>
+          </div>
+        ))
+      }
+    </dl>
+  </PageHero>
+
+  <div class="mf-container py-12 md:py-16">
+    <div class="grid gap-x-12 gap-y-14 lg:grid-cols-12">
+      <div class="lg:col-span-8">
+        <section aria-labelledby="sec-intro">
+          <h2 id="sec-intro" class="text-[22px] font-semibold tracking-[-0.01em] md:text-[26px]">
+            项目介绍
+          </h2>
+          <div class="mf-prose mt-5">
+            <p>
+              采矿工程的知识有个特点：它同时是<strong>体系化的</strong>和<strong>图纸化的</strong>。
+              一方面，采矿方法、开拓、通风安全之间有明确的先后依赖，跳着学一定会卡住；
+              另一方面，任何一条技术结论最后都要落到一张剖面图上——采准巷道在哪、切割槽怎么拉、矿石从哪里放出。
+              只看文字不看图，很容易背下名词却想不清空间关系。
+            </p>
+            <p>
+              MineForge 按这两条特点组织内容。<strong>知识体系</strong>负责回答「学什么、按什么顺序学」；
+              <strong>采矿方法</strong>与<strong>工程技术</strong>负责回答「这类工程具体怎么做」；
+              <strong>资料中心</strong>负责回答「这句话、这个数字出自哪里」。
+              三个层次各司其职，同一条技术内容全站只写一次，其余位置只做交叉引用。
+            </p>
+            <p>
+              目前 {methods.length} 项采矿方法的正文已全部依《采矿学》（第 2 版）逐页核对完成，
+              参数逐条标注出处；其中房柱采矿法与无底柱分段崩落法已接入程序化三维模型，
+              可在详情页旋转、分层、切换剖面视角。
+              <a href="/methods/open-stope/sublevel-drilling-stage-room/">分段凿岩阶段矿房法</a>
+              是结构最完整的样板页：13 段结构、带出处的参数表、工程图解、参考文献全部就位。
+            </p>
+          </div>
+        </section>
+
+        <section aria-labelledby="sec-goal" class="mt-14 border-t border-line pt-10">
+          <h2 id="sec-goal" class="text-[22px] font-semibold tracking-[-0.01em] md:text-[26px]">
+            建设目标
+          </h2>
+          <div class="mt-6 grid gap-4 sm:grid-cols-3">
+            {
+              [
+                {
+                  n: "01",
+                  title: "结构先于内容",
+                  text: `分类树、13 段文章模板、资料字段都是先定好的。${methods.length} 项方法共用一套模板，新增一篇只需加一条 JSON 与一个正文文件。`,
+                },
+                {
+                  n: "02",
+                  title: "来源可追溯",
+                  text: `${count.formulas} 条参数逐条标出处，${clauses.length} 条规范条文带条号。没有核对过的数字不写进页面，宁可留空并标注待补充。`,
+                },
+                {
+                  n: "03",
+                  title: "三维可交互",
+                  text: "方法页接入程序化三维模型（Three.js 由教材参数现场生成），支持旋转缩放、结构分层与剖面视角切换；容器尺寸恒定，接入模型不会引起布局跳动。",
+                },
+              ].map((goal) => (
+                <div class="rounded-card border border-line bg-bg p-5">
+                  <p class="font-mono text-[11px] tracking-widest text-ink-4">{goal.n}</p>
+                  <h3 class="mt-2 text-[14px] font-medium text-ink">{goal.title}</h3>
+                  <p class="mt-2 text-[12px] leading-6 text-ink-3">{goal.text}</p>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+
+        <section id="principles" aria-labelledby="sec-principles" class="mt-14 scroll-mt-24 border-t border-line pt-10">
+          <h2 id="sec-principles" class="text-[22px] font-semibold tracking-[-0.01em] md:text-[26px]">
+            内容来源与引用原则
+          </h2>
+          <p class="mf-measure mt-3 text-[13.5px] leading-7 text-ink-2">
+            这一节是本站对外的承诺，也是内容取舍的依据。凡是与这里冲突的写法，都以这里为准。
+          </p>
+
+          <h3 class="mt-8 text-[15px] font-medium text-ink">一、来源分四级</h3>
+          <ul class="mt-3 divide-y divide-line border-y border-line">
+            {
+              Object.entries(tierMeta).map(([tier, meta]) => (
+                <li class="grid gap-x-6 gap-y-1 py-3 md:grid-cols-12">
+                  <span class="font-mono text-[11px] text-ink-4 md:col-span-1">T{tier}</span>
+                  <span class="text-[13px] text-ink md:col-span-3">{meta.label}</span>
+                  <span class="text-[12px] leading-6 text-ink-4 md:col-span-8">{meta.desc}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-3 text-[12px] leading-6 text-ink-4">
+            目前共收录 {references.length} 篇文献、{standardDocs.length} 部规范、{count.textbooks} 本教材。
+            四级来源（百科、行业媒体）只用于术语旁证，不作为参数或结论的依据。
+          </p>
+
+          <h3 class="mt-8 text-[15px] font-medium text-ink">二、数字必须分性质</h3>
+          <div class="mf-prose mt-3">
+            <p>
+              教材给的是<strong>教学典型值</strong>，设计院用的是<strong>规范取值</strong>，
+              矿山实测的是<strong>运行数据</strong>，三者不能混在一起比较。所以参数表按来源类型分组，
+              每行带页码或文献编号；同一张表里出现两类数字，一定分组显示。
+            </p>
+            <p>
+              没有核对过的数字不写。「大致」「一般为」这类模糊表述也不用来顶替具体数值——
+              要么给出有出处的区间，要么明确标注待补充。
+            </p>
+          </div>
+
+          <h3 class="mt-8 text-[15px] font-medium text-ink">三、规范条文不替代原文</h3>
+          <div class="mf-prose mt-3">
+            <p>
+              引用国家标准时标注条号并照录条文，用于理解与检索。涉及设计取值、验收判定与处罚认定时，
+              必须以现行版本原文为准。摘录本身不构成法律或设计依据。
+            </p>
+          </div>
+
+          <h3 class="mt-8 text-[15px] font-medium text-ink">四、图片与模型</h3>
+          <div class="mf-prose mt-3">
+            <p>
+              现有 {figures.length} 幅工程图解均为自产渲染，依据教材对结构的文字描述与参数表重建，
+              用于理解空间关系，不作为施工依据，也不替代教材原图。外部图集只标来源、不转载。
+            </p>
+          </div>
+
+          <h3 class="mt-8 text-[15px] font-medium text-ink">五、内容状态四态</h3>
+          <p class="mt-2 text-[13px] leading-6 text-ink-3">
+            每个页面、每个分类、每项方法都带状态标记，读者一眼能看出哪些能看、哪些还在建。
+          </p>
+          <ul class="mt-4 divide-y divide-line border-y border-line">
+            {
+              statuses.map((s) => (
+                <li class="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-2.5">
+                  <span class="w-20 shrink-0"><StatusDot status={s} /></span>
+                  <span class="text-[12px] text-ink-4">
+                    {s === "complete" && "正文已写完并通过来源核对，可直接阅读"}
+                    {s === "draft" && "正文已成形，仍有条目待核对或待补充"}
+                    {s === "stub" && "结构已就位，正文尚未写入"}
+                    {s === "planned" && "仅有分类与入口，内容在规划中"}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="sec-tech" class="mt-14 border-t border-line pt-10">
+          <h2 id="sec-tech" class="text-[22px] font-semibold tracking-[-0.01em] md:text-[26px]">
+            技术说明
+          </h2>
+          <div class="mf-prose mt-5">
+            <p>
+              站点用 Astro 构建为纯静态页面，不依赖服务端与数据库，可以离线打开，也方便长期托管。
+              内容与页面分离：分类、方法名称、状态集中在 JSON，正文用 Markdown / MDX 写，
+              页面只负责取数据和拼装。新增内容不需要改模板。
+            </p>
+            <p>
+              公式用 LaTeX 书写、在构建期由 KaTeX 渲染成静态 HTML 与 MathML。浏览器不加载公式排版脚本，
+              所以公式不会出现「先出源码、再跳成公式」的过程，也便于屏幕阅读器朗读。
+            </p>
+            <p>
+              三维部分走 <strong>Three.js 程序化建模</strong>：每个方法一个 builder，由《采矿学》参数现场生成几何，
+              共享原语库与坐标约定（Y 向上、倾斜统一）。查看器支持预设视角、结构图层显隐与工程锚点标注，
+              离屏自动暂停渲染。已接入房柱采矿法与无底柱分段崩落法，其余方法按计划逐个建模。
+            </p>
+          </div>
+        </section>
+
+        <section id="roadmap" aria-labelledby="sec-roadmap" class="mt-14 scroll-mt-24 border-t border-line pt-10">
+          <h2 id="sec-roadmap" class="text-[22px] font-semibold tracking-[-0.01em] md:text-[26px]">
+            后续发展方向
+          </h2>
+
+          <ol class="mt-6 space-y-6">
+            {
+              [
+                {
+                  stage: "现在",
+                  title: "骨架与样板页",
+                  done: true,
+                  items: [
+                    `${domains.length} 个知识方向的分类树与导读`,
+                    `${methods.length} 项采矿方法的数据与模板，正文全部依教材核对完成`,
+                    "13 段文章模板、目录、参数表、工程图区、三维查看器",
+                    `${figures.length} 幅工程图解（自产渲染与线稿）上图`,
+                    "房柱采矿法、无底柱分段崩落法接入程序化三维模型",
+                    "资料中心六类资料与四级来源标记",
+                  ],
+                },
+                {
+                  stage: "下一步",
+                  title: "内容填充与对照阅读",
+                  done: false,
+                  items: [
+                    "逐矿案例卡与示意图按标注补齐，深化工程对照",
+                    "方法之间的参数级对比表（阶段高、矿房尺寸、损失贫化）",
+                    "术语库与正文术语解释打通，点击即释义",
+                  ],
+                },
+                {
+                  stage: "之后",
+                  title: "三维工程模型",
+                  done: false,
+                  items: [
+                    "按采矿方法逐个建立程序化模型（空场法 5 项优先）",
+                    "支持旋转缩放、工程结构分层显示",
+                    "模型部件点击与知识点联动，图上直接标注结构名称",
+                  ],
+                },
+                {
+                  stage: "远期",
+                  title: "交互式学习与数字矿山",
+                  done: false,
+                  items: [
+                    "按学习路径组织练习与自测",
+                    "采场参数调整后的空间关系即时反馈",
+                    "接入真实矿山数据做数字矿山展示",
+                  ],
+                },
+              ].map((phase) => (
+                <li class="grid gap-x-8 gap-y-3 md:grid-cols-12">
+                  <div class="md:col-span-3">
+                    <p class="font-mono text-[10.5px] tracking-widest text-ink-4">{phase.stage}</p>
+                    <h3 class="mt-1 text-[14.5px] font-medium text-ink">{phase.title}</h3>
+                    <p class="mt-1 text-[11px] text-ink-4">{phase.done ? "进行中" : "未开始"}</p>
+                  </div>
+                  <ul class="md:col-span-9">
+                    {phase.items.map((item) => (
+                      <li class="flex items-start gap-2 py-1 text-[13px] leading-6 text-ink-2">
+                        <span
+                          class:list={[
+                            "mt-2.5 inline-block h-[3px] w-[3px] shrink-0 rounded-full",
+                            phase.done ? "bg-accent" : "bg-ink-4",
+                          ]}
+                          aria-hidden="true"
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+
+        <section aria-labelledby="sec-limits" class="mt-14 border-t border-line pt-10">
+          <h2 id="sec-limits" class="text-[22px] font-semibold tracking-[-0.01em] md:text-[26px]">
+            当前限制
+          </h2>
+          <ul class="mt-5 divide-y divide-line border-y border-line">
+            {
+              [
+                ["案例与图解仍在补齐", "方法正文与参数已核对完成，但逐矿案例卡与部分示意图按标注陆续补齐，未核对前不出现具体数值。"],
+                ["公式只收定义式", "含经验系数的公式（矿柱强度、爆破参数、风量计算）只列名称不写系数，核对原文后入库。"],
+                ["没有参数级对比", "方法之间的阶段高度、矿房尺寸、损失贫化对比需要逐条核对，核实前不进表。"],
+                ["三维覆盖有限", "已接入 2 项程序化模型，其余 13 项方法仍在建模计划中，详情页暂以工程图解呈现。"],
+                ["检索范围有限", "搜索在构建期生成静态索引，覆盖标题、摘要、术语与文献，不检索正文全文。"],
+              ].map(([title, text]) => (
+                <li class="grid gap-x-8 gap-y-1 py-3.5 md:grid-cols-12">
+                  <span class="text-[13px] text-ink md:col-span-3">{title}</span>
+                  <span class="text-[12.5px] leading-6 text-ink-3 md:col-span-9">{text}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </div>
+
+      <aside class="lg:col-span-4">
+        <div class="lg:sticky lg:top-24 space-y-6">
+          <section class="border-t border-line pt-4">
+            <h2 class="font-mono text-[10.5px] tracking-widest text-ink-4">版本信息</h2>
+            <dl class="mt-3 space-y-2.5 text-[12.5px]">
+              <div class="flex items-baseline justify-between gap-4">
+                <dt class="text-ink-4">版本</dt>
+                <dd class="font-mono text-ink-2">v{version}</dd>
+              </div>
+              <div class="flex items-baseline justify-between gap-4">
+                <dt class="text-ink-4">知识方向</dt>
+                <dd class="font-mono text-ink-2">{domains.length}</dd>
+              </div>
+              <div class="flex items-baseline justify-between gap-4">
+                <dt class="text-ink-4">采矿方法</dt>
+                <dd class="font-mono text-ink-2">{methods.length}</dd>
+              </div>
+              <div class="flex items-baseline justify-between gap-4">
+                <dt class="text-ink-4">资料类型</dt>
+                <dd class="font-mono text-ink-2">{resourceTypes.length}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="border-t border-line pt-4">
+            <h2 class="font-mono text-[10.5px] tracking-widest text-ink-4">本页目录</h2>
+            <ul class="mt-3 space-y-1 text-[12.5px]">
+              {
+                [
+                  ["项目介绍", "#sec-intro"],
+                  ["建设目标", "#sec-goal"],
+                  ["来源与引用原则", "#principles"],
+                  ["技术说明", "#sec-tech"],
+                  ["后续发展方向", "#roadmap"],
+                  ["当前限制", "#sec-limits"],
+                ].map(([label, href]) => (
+                  <li>
+                    <a
+                      href={href}
+                      class="block border-l-2 border-line-soft py-1.5 pl-3 text-ink-3 transition-colors duration-100 hover:border-accent hover:text-accent"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <section class="border-t border-line pt-4">
+            <h2 class="font-mono text-[10.5px] tracking-widest text-ink-4">从这里开始</h2>
+            <ul class="mt-3 space-y-2 text-[12.5px]">
+              <li>
+                <a href="/methods/open-stope/sublevel-drilling-stage-room/" class="text-accent hover:text-accent-strong">
+                  样板页：分段凿岩阶段矿房法 →
+                </a>
+              </li>
+              <li>
+                <a href="/knowledge/" class="text-accent hover:text-accent-strong">知识体系分类树 →</a>
+              </li>
+              <li>
+                <a href="/resources/" class="text-accent hover:text-accent-strong">资料中心 →</a>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

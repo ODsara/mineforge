@@ -1,0 +1,102 @@
+---
+/**
+ * 参数表
+ * 数据来自 src/data/engineering/{slug}.json（由资料线核对后冻结的文件）。
+ * 按 value_type 分组：教材值 / 实测值 / 国际实践值 —— 不同性质的数字不混排，
+ * 避免"教材教学值与矿山实测值"被当成同一件事比较。
+ */
+import SourceBadge from "./SourceBadge.astro";
+
+interface Param {
+  name: string;
+  value: string;
+  unit: string;
+  value_type: string;
+  source: string;
+  condition?: string;
+  note?: string;
+}
+
+interface Props {
+  slug: string;
+  title?: string;
+}
+
+const { slug, title = "主要参数" } = Astro.props;
+
+const modules = import.meta.glob<{ default: { parameters?: Param[] } }>(
+  "../../data/engineering/*.json",
+  { eager: true }
+);
+
+const entry = Object.entries(modules).find(([path]) => path.endsWith(`/${slug}.json`));
+const params = entry?.[1].default.parameters ?? [];
+
+const order = ["教材值", "规范值", "设计值", "实测值", "国际实践值"];
+const groups = order
+  .map((type) => ({ type, items: params.filter((p) => p.value_type === type) }))
+  .filter((group) => group.items.length > 0);
+
+const value = (p: Param) => (p.unit && p.unit !== "—" ? `${p.value} ${p.unit}` : p.value);
+---
+
+{
+  params.length === 0 ? (
+    <p class="rounded-card border border-dashed border-line-strong bg-surface px-4 py-3 text-[12.5px] text-ink-4">
+      本方法的参数尚未核对入库，核实后按来源类型分组列出。
+    </p>
+  ) : (
+    <div class="not-prose space-y-8">
+      {groups.map((group) => (
+        <section>
+          <div class="mb-2 flex items-baseline justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <SourceBadge type={group.type} />
+              <span class="font-mono text-[11px] text-ink-4">{group.items.length} 项</span>
+            </div>
+            <span class="font-mono text-[10.5px] text-ink-4">{title}</span>
+          </div>
+
+          <div class="overflow-x-auto rounded-card border border-line">
+            <table data-ui class="w-full min-w-[480px] border-collapse text-left text-[12.5px]">
+              <thead>
+                <tr class="bg-surface text-[11px] text-ink-4">
+                  <th scope="col" class="border-b border-line px-3 py-2 font-normal">参数</th>
+                  <th scope="col" class="border-b border-line px-3 py-2 font-normal">典型值</th>
+                  <th scope="col" class="border-b border-line px-3 py-2 text-right font-normal">出处</th>
+                </tr>
+              </thead>
+              <tbody>
+                {group.items.map((p) => (
+                  <tr class="border-b border-line-soft last:border-b-0 align-top">
+                    <td class="px-3 py-2">
+                      <span class="text-ink">{p.name}</span>
+                      {(p.condition || p.note) && (
+                        <span class="mt-0.5 block text-[11px] leading-5 text-ink-4">
+                          {p.condition}
+                          {p.condition && p.note ? "；" : ""}
+                          {p.note}
+                        </span>
+                      )}
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-2 font-mono text-[12px] text-ink-2">
+                      {value(p)}
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-2 text-right font-mono text-[10.5px] text-ink-4">
+                      {p.source}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))}
+
+      <p class="text-[11.5px] leading-6 text-ink-4">
+        出处编号对应文末参考文献（R0 为《采矿学》第 2 版，R4 为大新锰矿实例文献）。
+        教材值是教学典型值，不能直接当设计取值；实测值来自具体矿山，换条件即失效。
+      </p>
+    </div>
+  )
+}

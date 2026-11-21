@@ -1,0 +1,61 @@
+---
+/** 采矿方法大类卡片：适用于方法总览与首页方法入口 */
+import { methodsOfCategory, type MethodCategory } from "../../lib/taxonomy";
+
+interface Props {
+  category: MethodCategory;
+}
+
+const { category } = Astro.props;
+const list = methodsOfCategory(category.slug);
+const variantCount = list.filter((m) => m.variantOf).length;
+const completed = list.filter((m) => m.status === "complete").length;
+---
+
+<a
+  href={`/methods/${category.slug}/`}
+  id={`cat-${category.slug}`}
+  class="group flex h-full scroll-mt-24 flex-col rounded-card border border-line bg-bg p-6 transition-colors duration-200 hover:border-line-strong hover:bg-panel"
+>
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <h3
+        class="text-[17px] font-medium text-ink transition-colors duration-100 group-hover:text-accent"
+      >
+        {category.name}
+      </h3>
+      <p class="mt-1 font-mono text-[11px] tracking-wide text-ink-4">
+        {category.nameEn}
+      </p>
+    </div>
+    <span class="shrink-0 text-[11.5px] text-ink-4">
+      {completed > 0 ? `${completed} 篇已完成` : "内容建设中"}
+    </span>
+  </div>
+
+  <p class="mt-4 text-[13px] leading-6 text-ink-2">{category.summary}</p>
+
+  <div class="mt-3 flex gap-2 text-[12.5px] leading-6 text-ink-3">
+    <span class="shrink-0 text-ink-4">适用</span>
+    <span>{category.applicability}</span>
+  </div>
+
+  <ul class="mt-5 flex flex-wrap gap-1.5">
+    {
+      list.map((method) => (
+        <li class="rounded-card border border-line-soft bg-surface px-2 py-[3px] text-[11.5px] text-ink-2">
+          {method.name}
+        </li>
+      ))
+    }
+  </ul>
+
+  <div
+    class="mt-auto flex items-center justify-between border-t border-line-soft pt-3 text-[11.5px] text-ink-4"
+  >
+    <span>
+      {list.length} 项方法{variantCount > 0 && <span> · 含 {variantCount} 项变体</span>}
+    </span>
+    <span class="transition-colors duration-100 group-hover:text-accent">查看分类 →</span>
+  </div>
+</a>

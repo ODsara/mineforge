@@ -1,0 +1,54 @@
+---
+/** 最近更新列表：表格式行，信息密度高于卡片 */
+import StatusDot from "./StatusDot.astro";
+import type { ContentStatus } from "../../lib/taxonomy";
+
+interface Item {
+  title: string;
+  type: string;
+  href: string;
+  date: string;
+  status: ContentStatus;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+
+const formatDate = (iso: string) => iso.slice(5, 10).replace("-", ".");
+---
+
+<div class="border-t border-line">
+  <div
+    class="hidden grid-cols-12 gap-4 border-b border-line-soft py-2.5 text-[11px] tracking-wide text-ink-4 md:grid"
+  >
+    <span class="col-span-2">日期</span>
+    <span class="col-span-2">类型</span>
+    <span class="col-span-6">条目</span>
+    <span class="col-span-2 text-right">状态</span>
+  </div>
+
+  {
+    items.map((item) => (
+      <a
+        href={item.href}
+        class="group grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-1 border-b border-line-soft py-3 transition-colors duration-100 md:grid-cols-12 md:items-center md:gap-4"
+      >
+        <span class="font-mono text-[12px] text-ink-4 md:col-span-2">
+          {formatDate(item.date)}
+        </span>
+        <span class="hidden text-[12.5px] text-ink-3 md:col-span-2 md:block">
+          {item.type}
+        </span>
+        <span class="col-span-1 text-[13.5px] text-ink transition-colors duration-100 group-hover:text-accent md:col-span-6">
+          {item.title}
+        </span>
+        <span class="col-span-2 md:col-span-2 md:text-right">
+          <StatusDot status={item.status} />
+        </span>
+      </a>
+    ))
+  }
+</div>

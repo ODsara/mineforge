@@ -1,0 +1,275 @@
+/*
+ * 正文排版（.mf-prose）
+ * 只服务于文章正文，不参与页面布局。
+ * 目标：中文长文可读性优先——行高 1.8、段距 22px、表格信息密度高于正文。
+ */
+
+.mf-prose {
+  /* M-06：深读正文 16px / 行高 1.75 / 行宽 75ch。
+     75ch 在 640px 的正文栏里不会触发，是为将来放宽布局预留的上限。 */
+  max-width: 75ch;
+  color: var(--color-ink-2);
+  font-size: 16px;
+  line-height: 1.75;
+  counter-reset: mf-sec;
+}
+
+.mf-prose > :first-child {
+  margin-top: 0;
+}
+
+.mf-prose h2 {
+  /* 编号在标题上方 14px，编号左侧 24px 金线；章节之间留白 56px。
+     编号由 counter 生成，正文里不写数字——增删章节不会出现断号。
+     v2.1：标题 25px（原 21），与正文 16px 拉开 1.56× 层级差。 */
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 56px 0 18px;
+  counter-increment: mf-sec;
+  font-family: var(--font-serif);
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--color-navy);
+  scroll-margin-top: 96px;
+}
+
+.mf-prose h2::before {
+  content: counter(mf-sec, decimal-leading-zero);
+  display: block;
+  padding-left: 32px;
+  background: linear-gradient(var(--color-accent), var(--color-accent)) 0 50% / 24px 1.5px no-repeat;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+}
+
+.mf-prose > h2:first-child {
+  margin-top: 0;
+}
+
+/* ── M-06#1 首字下沉：每篇一次，仅正文第一段 ──────── */
+.mf-prose > p:first-of-type::first-letter {
+  float: left;
+  margin: 0 8px 8px 0;
+  padding-top: 4px;
+  font-family: var(--font-serif);
+  font-size: 3.4em;
+  line-height: 1;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.mf-prose h3 {
+  /* v2.1：18px，必须大于正文 16px，三级标题才立得住 */
+  margin: 30px 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-ink);
+  scroll-margin-top: 96px;
+}
+
+.mf-prose h4 {
+  margin: 22px 0 8px;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.mf-prose p {
+  margin: 0 0 16px;
+}
+
+.mf-prose strong {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.mf-prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
+
+.mf-prose a:hover {
+  color: var(--color-accent-strong);
+  text-decoration-color: currentColor;
+}
+
+.mf-prose ul,
+.mf-prose ol {
+  margin: 0 0 18px;
+  padding-left: 1.35em;
+}
+
+.mf-prose ul {
+  list-style: disc;
+}
+
+.mf-prose ol {
+  list-style: decimal;
+}
+
+.mf-prose li {
+  margin: 6px 0;
+  padding-left: 0.25em;
+}
+
+.mf-prose li::marker {
+  color: var(--color-ink-4);
+}
+
+.mf-prose li > ul,
+.mf-prose li > ol {
+  margin: 6px 0 6px;
+}
+
+/* 表格：正文中信息密度最高的元素，样式优先级也最高 */
+.mf-prose table:not([data-ui]) {
+  display: block;
+  width: 100%;
+  margin: 8px 0 20px;
+  overflow-x: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  font-size: 13px;
+  line-height: 1.7;
+  border-collapse: collapse;
+}
+
+.mf-prose table:not([data-ui]) thead th {
+  background: var(--color-surface);
+  font-weight: 500;
+  color: var(--color-ink-3);
+  white-space: nowrap;
+}
+
+.mf-prose table:not([data-ui]) th,
+.mf-prose table:not([data-ui]) td {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--color-line-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+.mf-prose table:not([data-ui]) thead th {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.mf-prose table:not([data-ui]) tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.mf-prose blockquote {
+  margin: 18px 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+  background: var(--color-panel);
+  color: var(--color-ink-2);
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+}
+
+.mf-prose blockquote p {
+  margin-bottom: 8px;
+}
+
+.mf-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.mf-prose hr {
+  margin: 32px 0;
+  border: none;
+  border-top: 1px solid var(--color-line);
+}
+
+.mf-prose code {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--color-surface);
+  font-size: 0.9em;
+}
+
+.mf-prose img {
+  margin: 8px 0 20px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+}
+
+/* 图版（Plate）自己带卡纸衬边与圆角，不能再套一层图片边框与留白 */
+.mf-prose .mf-plate img {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+/* 正文里的自定义区块（三维容器、图表区）不需要额外上下留白挤压 */
+.mf-prose > section {
+  margin: 0;
+}
+
+/* ── M-06#2 Sticky 图文锁定：工艺步骤与剖面图并排，左图吸顶 ────────
+   ≤768px 取消 sticky，改上下排列（手机上没有足够高度做吸顶对照）。 */
+.mf-split {
+  margin: 16px 0 8px;
+}
+
+.mf-split__cap {
+  margin-top: 8px;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--color-ink-4);
+}
+
+@media (min-width: 769px) {
+  /*
+   * 6:6 而不是 5:7：三栏布局里正文栏只有 ~677px，5fr 只剩 268px，
+   * 正方形剖面图会被压成一小块并留出上下黑边。等分后左列 338px，图能撑满列宽。
+   * 图高按宽度自适应并封顶 60vh——固定 60vh 会让正方形图在窄列里大量留空。
+   */
+  .mf-split {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .mf-split__figure {
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mf-split__figure img {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    object-fit: contain;
+    border-radius: var(--radius-card);
+    background: var(--color-stage);
+  }
+
+  .mf-split__body > h3:first-child {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .mf-split__figure img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+    background: var(--color-stage);
+  }
+}

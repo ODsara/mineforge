@@ -1,0 +1,107 @@
+---
+/**
+ * 资料分类页
+ * 六个类型共用同一路由模板，正文区按类型派发到对应列表组件。
+ * 新增一类资料只需在 resources.json 加一条并在 COMPONENTS 里登记，无需改模板结构。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import Breadcrumb from "../../components/global/Breadcrumb.astro";
+import SubNav from "../../components/nav/SubNav.astro";
+import StatusDot from "../../components/content/StatusDot.astro";
+import GlossaryList from "../../components/content/GlossaryList.astro";
+import ParameterLibrary from "../../components/content/ParameterLibrary.astro";
+import DrawingIndex from "../../components/content/DrawingIndex.astro";
+import ReferenceIndex from "../../components/content/ReferenceIndex.astro";
+import StandardIndex from "../../components/content/StandardIndex.astro";
+import TextbookIndex from "../../components/content/TextbookIndex.astro";
+import {
+  resourceTypes,
+  resourceHref,
+  resourceCount,
+  resourcesUpdated,
+  type ResourceType,
+} from "../../lib/resources";
+
+export function getStaticPaths() {
+  return resourceTypes.map((type) => ({ params: { type: type.slug }, props: { type } }));
+}
+
+const { type } = Astro.props as { type: ResourceType };
+const count = resourceCount();
+const total = count[type.slug] ?? 0;
+
+const COMPONENTS: Record<string, any> = {
+  glossary: GlossaryList,
+  formulas: ParameterLibrary,
+  drawings: DrawingIndex,
+  references: ReferenceIndex,
+  standards: StandardIndex,
+  textbooks: TextbookIndex,
+};
+
+const Body = COMPONENTS[type.slug];
+
+const navItems = [
+  { label: "全部资料", href: "/resources/" },
+  ...resourceTypes.map((t) => ({
+    label: t.name,
+    href: resourceHref(t.slug),
+    active: t.slug === type.slug,
+  })),
+];
+
+const unit = type.slug === "drawings" ? "幅" : type.slug === "references" ? "篇" : "条";
+---
+
+<BaseLayout
+  title={type.name}
+  description={`${type.name}：${type.summary}`}
+  activePath="/resources/"
+>
+  <div class="mf-container pt-6">
+    <Breadcrumb
+      items={[
+        { label: "首页", href: "/" },
+        { label: "资料中心", href: "/resources/" },
+        { label: type.name },
+      ]}
+    />
+  </div>
+
+  <PageHero eyebrow={type.nameEn} title={type.name} description={type.summary}>
+    <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
+      <div>
+        <dt class="text-ink-4">收录数量</dt>
+        <dd class="mt-1 font-mono text-[14px] text-ink">
+          {total} <span class="font-sans text-[11.5px] text-ink-4">{unit}</span>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-ink-4">内容状态</dt>
+        <dd class="mt-1"><StatusDot status={type.status} /></dd>
+      </div>
+      <div>
+        <dt class="text-ink-4">更新</dt>
+        <dd class="mt-1 font-mono text-[13px] text-ink-2">{resourcesUpdated}</dd>
+      </div>
+    </dl>
+  </PageHero>
+
+  <div class="border-b border-line bg-bg md:sticky md:top-16 md:z-30">
+    <div class="mf-container">
+      <SubNav label="资料类型" items={navItems} />
+    </div>
+  </div>
+
+  <div class="mf-container py-10 md:py-14">
+    {Body ? <Body /> : (
+      <p class="text-[13px] text-ink-4">该类资料尚未接入展示组件。</p>
+    )}
+
+    <p class="mt-12 border-t border-line pt-5 text-[12px] leading-6 text-ink-4">
+      本页资料随方法正文的核对进度同步更新。新增一篇采矿方法正文后，其文献、条文与参数会自动进入资料中心，
+      无需单独维护。
+    </p>
+  </div>
+</BaseLayout>

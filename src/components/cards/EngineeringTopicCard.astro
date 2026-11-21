@@ -1,0 +1,43 @@
+---
+/** 工程专题卡片：序号 + 名称 + 说明 + 收录条目数 */
+import StatusDot from "../content/StatusDot.astro";
+import { engineeringHref, type EngineeringTopic } from "../../lib/taxonomy";
+
+interface Props {
+  topic: EngineeringTopic;
+  /** 是否为贯穿全过程的支撑专题，影响序号呈现 */
+  span?: boolean;
+}
+
+const { topic, span = false } = Astro.props;
+---
+
+<a
+  href={engineeringHref(topic.slug)}
+  class="mf-lift group flex h-full flex-col rounded-card border border-line bg-surface p-5 hover:border-line-strong hover:bg-panel"
+>
+  <div class="flex items-start justify-between">
+    <span class="font-mono text-[12px] tracking-wider text-accent">
+      {span ? "贯穿" : String(topic.order).padStart(2, "0")}
+    </span>
+    <StatusDot status={topic.status} />
+  </div>
+
+  <h3
+    class="mf-card-title mt-3 text-[16.5px] leading-6 font-semibold text-ink transition-colors duration-150 group-hover:text-accent"
+  >
+    {topic.name}
+  </h3>
+
+  <p class="mt-2 line-clamp-3 flex-1 text-[13px] leading-6 text-ink-2">
+    {topic.summary}
+  </p>
+
+  <div class="mt-4 flex items-center justify-between border-t border-line-soft pt-3">
+    <span class="text-[12px] text-ink-3">{topic.scope.length} 个内容条目</span>
+    <span class="flex items-center gap-1 text-[12px] text-ink-3 transition-colors duration-150 group-hover:text-accent">
+      查看专题
+      <svg class="mf-arrow" width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </span>
+  </div>
+</a>

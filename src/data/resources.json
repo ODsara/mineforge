@@ -1,0 +1,568 @@
+{
+  "updated": "2026-11-14",
+  "types": [
+    {
+      "slug": "glossary",
+      "order": 1,
+      "name": "专业术语库",
+      "nameEn": "Glossary",
+      "summary": "采矿工程基本术语、采场结构名称与方法判别用语。与方法详情页的术语解释共用同一份数据，不两处维护。",
+      "status": "draft"
+    },
+    {
+      "slug": "formulas",
+      "order": 2,
+      "name": "公式与参数库",
+      "nameEn": "Formulas & Parameters",
+      "summary": "作业中真正要查的两样东西：可代数的公式与有出处的参数。公式只收定义式与力学平衡式，参数按来源性质分组，每一条都能追到页码。",
+      "status": "draft"
+    },
+    {
+      "slug": "drawings",
+      "order": 3,
+      "name": "工程图纸与示意图",
+      "nameEn": "Drawings & Figures",
+      "summary": "本项目的自产工程渲染与图解索引，标注视图类型、所属方法与建模依据。",
+      "status": "stub"
+    },
+    {
+      "slug": "references",
+      "order": 4,
+      "name": "参考文献",
+      "nameEn": "References",
+      "summary": "教材、期刊论文、学位论文、技术报告与技术标准，按可信度分级并标注适用边界。",
+      "status": "draft"
+    },
+    {
+      "slug": "standards",
+      "order": 5,
+      "name": "标准与规范",
+      "nameEn": "Standards & Codes",
+      "summary": "现行国家标准与部门规章，条文按条号摘录；摘录不替代原文，涉及设计取值以原文为准。",
+      "status": "draft"
+    },
+    {
+      "slug": "textbooks",
+      "order": 6,
+      "name": "推荐教材",
+      "nameEn": "Textbooks",
+      "summary": "已核对书目的教材与工具书，标明版次、覆盖范围与核对状态，区分「已入库」与「仅核书目」。",
+      "status": "draft"
+    }
+  ],
+  "glossary": [
+    {
+      "term": "空场采矿法",
+      "termEn": "Open Stope Method",
+      "group": "方法",
+      "definition": "回采期间依靠矿柱与围岩自身稳固性维护采空区，采后不行充填、也不强制崩落围岩的一类地下采矿方法。",
+      "source": "R0 第 11 章 分类体系",
+      "verified": true
+    },
+    {
+      "term": "阶段矿房法",
+      "termEn": "Stage Room Stoping",
+      "group": "方法",
+      "definition": "以阶段为单位划分矿房、在矿房内进行深孔落矿、矿柱随后单独回采的空场采矿法。",
+      "source": "R0 p292-295",
+      "verified": true
+    },
+    {
+      "term": "分段矿房法",
+      "termEn": "Sublevel Room Stoping",
+      "group": "方法",
+      "definition": "沿阶段划分分段，每个分段即一个独立回采单元并独立出矿的空场采矿法。",
+      "source": "R0 p290-292",
+      "verified": true
+    },
+    {
+      "term": "分段凿岩阶段矿房法",
+      "termEn": "Sublevel Drilling Stage Stoping",
+      "group": "方法",
+      "definition": "分段只布置凿岩巷道、不独立出矿，崩落矿石下移至阶段底部集中放出的阶段矿房法变体。",
+      "source": "R0 p292-295",
+      "verified": true
+    },
+    {
+      "term": "VCR 法（阶段凿岩阶段矿房法）",
+      "termEn": "Vertical Crater Retreat",
+      "group": "方法",
+      "definition": "在顶柱下开凿凿岩硐室，钻凿大直径垂直深孔，以球状药包自下而上分层爆破的空场采矿法。",
+      "source": "R0 p295-303",
+      "verified": true
+    },
+    {
+      "term": "矿房",
+      "termEn": "Stope",
+      "group": "采场结构",
+      "definition": "两间柱之间、顶柱与底柱之间的回采空间，是空场法中矿石被采出的主体部位。",
+      "source": "R0 结构表 S1",
+      "verified": true
+    },
+    {
+      "term": "间柱",
+      "termEn": "Sill Pillar / Rib Pillar",
+      "group": "采场结构",
+      "definition": "矿房两侧垂直留设的矿柱，支撑采空区并分隔相邻矿房。",
+      "source": "R0 结构表 S2",
+      "verified": true
+    },
+    {
+      "term": "顶柱",
+      "termEn": "Crown Pillar",
+      "group": "采场结构",
+      "definition": "矿房顶部的矿柱，隔离上阶段并承受上覆荷载。",
+      "source": "R0 结构表 S3；GB 16423-2020 6.3.1.6",
+      "verified": true
+    },
+    {
+      "term": "底柱",
+      "termEn": "Sill Pillar",
+      "group": "采场结构",
+      "definition": "矿房底部的矿柱，承接受矿并容纳底部结构。",
+      "source": "R0 结构表 S4",
+      "verified": true
+    },
+    {
+      "term": "分段凿岩巷道",
+      "termEn": "Sublevel Drilling Drift",
+      "group": "采准工程",
+      "definition": "各分段水平沿走向布置于矿体内的巷道，仅提供凿岩作业空间、不承担出矿，是本方法的标志性结构。",
+      "source": "R0 结构表 D4",
+      "verified": true
+    },
+    {
+      "term": "阶段运输平巷",
+      "termEn": "Level Haulage Drift",
+      "group": "采准工程",
+      "definition": "布置于下盘围岩内、沿走向掘进的阶段运输干线。",
+      "source": "R0 结构表 D1",
+      "verified": true
+    },
+    {
+      "term": "通风人行天井",
+      "termEn": "Ventilation & Manway Raise",
+      "group": "采准工程",
+      "definition": "在矿体厚度中央贯通上下阶段的天井，兼作通风、人行与安全出口。",
+      "source": "R0 结构表 D3；GB 16423-2020 6.3",
+      "verified": true
+    },
+    {
+      "term": "拉底平巷",
+      "termEn": "Undercut Drift",
+      "group": "采准工程",
+      "definition": "矿房底部沿走向掘进的巷道，是拉底与扩漏斗作业的起点。",
+      "source": "R0 结构表 D5",
+      "verified": true
+    },
+    {
+      "term": "矿石溜井",
+      "termEn": "Ore Pass",
+      "group": "采准工程",
+      "definition": "布置于下盘或矿房端部的垂直溜井，把采场矿石放至阶段运输平巷。",
+      "source": "R0 结构表 D6",
+      "verified": true
+    },
+    {
+      "term": "电耙巷道",
+      "termEn": "Scraper Drift",
+      "group": "底部结构",
+      "definition": "位于底柱内、沿走向布置于漏斗穿下方的巷道，承担集矿与耙运功能。",
+      "source": "R0 结构表 D7",
+      "verified": true
+    },
+    {
+      "term": "漏斗穿",
+      "termEn": "Chute Crosscut",
+      "group": "底部结构",
+      "definition": "自电耙道向上掘至漏斗颈的放矿通道。",
+      "source": "R0 结构表 D8",
+      "verified": true
+    },
+    {
+      "term": "漏斗颈与喇叭口",
+      "termEn": "Chute Neck & Bell Mouth",
+      "group": "底部结构",
+      "definition": "位于拉底水平以下的受矿与放矿结构，颈口上部扩成喇叭口以扩大受矿面积。",
+      "source": "R0 结构表 D9",
+      "verified": true
+    },
+    {
+      "term": "底部结构",
+      "termEn": "Stope Bottom Structure",
+      "group": "底部结构",
+      "definition": "采场底部承受并放出崩落矿石的工程结构，常见漏斗式、堑沟式与平底式三种基本型式。",
+      "source": "R0 第 11 章",
+      "verified": true
+    },
+    {
+      "term": "切割天井",
+      "termEn": "Slot Raise",
+      "group": "切割工程",
+      "definition": "自拉底平巷向上掘进的天井，用于形成切割槽的初始自由面。",
+      "source": "R0 结构表 D10",
+      "verified": true
+    },
+    {
+      "term": "切割槽",
+      "termEn": "Cut-off Slot",
+      "group": "切割工程",
+      "definition": "位于矿房中央、垂直贯通矿房全高的槽体，为后续落矿提供初始自由面与补偿空间。",
+      "source": "R0 结构表 D11",
+      "verified": true
+    },
+    {
+      "term": "拉底空间",
+      "termEn": "Undercut Space",
+      "group": "切割工程",
+      "definition": "在矿房底部形成的初始受矿空间，其高度决定首次爆破的补偿条件。",
+      "source": "R0 结构表 D12",
+      "verified": true
+    },
+    {
+      "term": "采准",
+      "termEn": "Development Preparation",
+      "group": "工序",
+      "definition": "在已完成开拓的阶段内，为具体采场创造凿岩、出矿与通风条件而掘进的巷道工程。",
+      "source": "通用术语表述，待与术语标准核对",
+      "verified": false
+    },
+    {
+      "term": "切割",
+      "termEn": "Cutting",
+      "group": "工序",
+      "definition": "在采准工程基础上形成初始自由面与受矿空间的工程，包括切割槽与拉底。",
+      "source": "通用术语表述，待与术语标准核对",
+      "verified": false
+    },
+    {
+      "term": "回采",
+      "termEn": "Stoping",
+      "group": "工序",
+      "definition": "采场内的作业循环，包括凿岩、爆破落矿、出矿与地压管理。",
+      "source": "通用术语表述，待与术语标准核对",
+      "verified": false
+    }
+  ],
+  "formulas": {
+    "intro": "公式库只收两类：定义式（按定义写出的恒等关系）与力学平衡式（由静力平衡直接导出、不含经验系数）。含回归系数或经验取值的公式（矿柱强度经验式、凿岩爆破参数、风量计算）必须先核对原文，未核对前只列名称。",
+    "items": [
+      {
+        "id": "loss-rate",
+        "name": "损失率",
+        "kind": "定义式",
+        "vars": [
+          {
+            "sym": "K_l",
+            "name": "损失率",
+            "unit": "%"
+          },
+          {
+            "sym": "Q_l",
+            "name": "损失矿量",
+            "unit": "t"
+          },
+          {
+            "sym": "Q_g",
+            "name": "工业矿量",
+            "unit": "t"
+          }
+        ],
+        "note": "损失矿量指工业矿量中未被采出、或采出后丢失于放矿与运输环节的部分。直接法与间接法（以品位反算）的统计口径不同，同一矿山必须固定一种，否则数据不可比。",
+        "source": "通用定义；口径须与矿山统计办法统一",
+        "tex": "K_l = \\frac{Q_l}{Q_g} \\times 100\\%"
+      },
+      {
+        "id": "dilution-rate",
+        "name": "贫化率（品位法）",
+        "kind": "定义式",
+        "vars": [
+          {
+            "sym": "K_d",
+            "name": "贫化率",
+            "unit": "%"
+          },
+          {
+            "sym": "\\alpha_g",
+            "name": "工业矿石品位",
+            "unit": "%"
+          },
+          {
+            "sym": "\\alpha",
+            "name": "采出矿石品位",
+            "unit": "%"
+          }
+        ],
+        "note": "该式假设混入的废石不含有用组分。围岩含矿或混入低品位矿石时，须按加权式修正，否则贫化率会被低估。另一个常用口径是数量法：按混入废石量占采出矿量的比例计算，两者不可混用。",
+        "source": "通用定义；含矿围岩条件下需改用加权式",
+        "tex": "K_d = \\frac{\\alpha_g - \\alpha}{\\alpha_g} \\times 100\\%"
+      },
+      {
+        "id": "development-ratio",
+        "name": "采准比（千吨掘进量）",
+        "kind": "定义式",
+        "vars": [
+          {
+            "sym": "R",
+            "name": "采准比",
+            "unit": "m/kt"
+          },
+          {
+            "sym": "L",
+            "name": "采准切割巷道总长度",
+            "unit": "m"
+          },
+          {
+            "sym": "Q",
+            "name": "采场（或矿块）矿量",
+            "unit": "t"
+          }
+        ],
+        "note": "用于横向比较不同采矿方法的采准工程量。也有按体积计的口径（m³/kt），比较时须先统一单位；巷道断面不同而只比长度，会得出误导性结论。",
+        "source": "通用定义；口径（长度法/体积法）须注明",
+        "tex": "R = \\frac{1000\\,L}{Q}"
+      },
+      {
+        "id": "pillar-stress",
+        "name": "矿柱平均应力（面积承载法）",
+        "kind": "力学平衡式",
+        "vars": [
+          {
+            "sym": "\\sigma_p",
+            "name": "矿柱平均应力",
+            "unit": "MPa"
+          },
+          {
+            "sym": "\\gamma",
+            "name": "上覆岩层平均容重",
+            "unit": "kN/m³"
+          },
+          {
+            "sym": "H",
+            "name": "开采深度",
+            "unit": "m"
+          },
+          {
+            "sym": "W_o",
+            "name": "矿房宽度",
+            "unit": "m"
+          },
+          {
+            "sym": "W_p",
+            "name": "矿柱宽度",
+            "unit": "m"
+          }
+        ],
+        "note": "二维简化式，假设矿柱等间距布置、与矿房等长、且矿柱与顶底板全面接触。矿柱不等长或存在未接顶时，应按实际负担面积比 A_t / A_p 计算。该式只给平均应力，不反映矿柱内部的应力集中。",
+        "source": "面积承载法（静力平衡导出，无经验系数）",
+        "tex": "\\sigma_p = \\gamma H \\left( 1 + \\frac{W_o}{W_p} \\right)"
+      },
+      {
+        "id": "pillar-safety-factor",
+        "name": "矿柱安全系数",
+        "kind": "定义式",
+        "vars": [
+          {
+            "sym": "F",
+            "name": "安全系数",
+            "unit": "—"
+          },
+          {
+            "sym": "\\sigma_{ps}",
+            "name": "矿柱强度",
+            "unit": "MPa"
+          },
+          {
+            "sym": "\\sigma_p",
+            "name": "矿柱平均应力",
+            "unit": "MPa"
+          }
+        ],
+        "note": "本式只定义安全系数的含义。难点在 σ_ps：矿柱强度须由岩样试验或经核对的经验式确定，本站暂不提供经验式与其系数。",
+        "source": "通用定义；强度取值须另据试验或规范",
+        "tex": "F = \\frac{\\sigma_{ps}}{\\sigma_p}"
+      },
+      {
+        "id": "ore-reserve-life",
+        "name": "三级矿量保有期",
+        "kind": "定义式",
+        "vars": [
+          {
+            "sym": "T",
+            "name": "保有期",
+            "unit": "a"
+          },
+          {
+            "sym": "Q_b",
+            "name": "某级矿量保有量",
+            "unit": "t"
+          },
+          {
+            "sym": "A",
+            "name": "矿山年产量",
+            "unit": "t/a"
+          }
+        ],
+        "note": "开拓、采准、备采三级矿量分别按本式计算保有期，再与规范要求的下限比较。保有期下限属规范取值，本站未摘录，须查现行设计规范原文。",
+        "source": "通用定义；下限值依现行规范",
+        "tex": "T = \\frac{Q_b}{A}"
+      }
+    ],
+    "planned": [
+      {
+        "name": "矿柱强度经验式",
+        "use": "由岩样单轴抗压强度与矿柱宽高比估算矿柱强度，含回归系数"
+      },
+      {
+        "name": "采场生产能力",
+        "use": "由回采强度、同时回采采场数与利用系数推算，系数据设备与组织条件"
+      },
+      {
+        "name": "凿岩爆破参数",
+        "use": "孔距、排距与单位炸药消耗量的取值关系，属经验取值"
+      },
+      {
+        "name": "通风风量计算",
+        "use": "按人员、炸药量与排尘需求核定，系数依规程条文"
+      }
+    ]
+  },
+  "standards": [
+    {
+      "code": "GB 16423-2020",
+      "name": "金属非金属矿山安全规程",
+      "status": "现行",
+      "effective": "2021-09-01",
+      "scope": "6.3 地下开采；6.3.2 各采矿方法专条",
+      "note": "替代 2006 版。空场法矿柱与采空区处理要求的主要来源。",
+      "verified": true
+    },
+    {
+      "code": "GB 50830-2013",
+      "name": "冶金矿山采矿设计规范",
+      "status": "现行",
+      "effective": "2013-10-01",
+      "scope": "采矿方法结构参数的设计取值",
+      "note": "教材值是教学典型值，设计取值应以此规范为依据。",
+      "verified": true
+    },
+    {
+      "code": "GB/T 50564-2010",
+      "name": "金属非金属矿山采矿制图标准",
+      "status": "现行",
+      "effective": "2010-12-01",
+      "scope": "采矿专业制图规则、图例与剖面表达",
+      "note": "工程图解与三维模型出图的表达依据。",
+      "verified": true
+    },
+    {
+      "code": "矿安〔2022〕88 号",
+      "name": "金属非金属矿山重大事故隐患判定标准",
+      "status": "现行",
+      "effective": null,
+      "scope": "采空区未处理、矿柱擅自开采、顶板未支护等判定情形",
+      "note": "用于判断采场管理是否触及红线。",
+      "verified": true
+    },
+    {
+      "code": "GB 6722",
+      "name": "爆破安全规程",
+      "status": "现行（2014 版）",
+      "effective": null,
+      "scope": "井下爆破、安全距离与振动控制",
+      "note": "版次待核，条文暂不摘录。",
+      "verified": false
+    }
+  ],
+  "textbooks": [
+    {
+      "title": "采矿学",
+      "edition": "第 2 版",
+      "authors": [
+        "王青",
+        "任凤玉"
+      ],
+      "publisher": "冶金工业出版社",
+      "year": 2011,
+      "isbn": "9787502454906",
+      "pages": "521 页",
+      "scope": "4 篇 23 章；第 2 篇地下开采含崩落、空场、充填三大类采矿方法",
+      "status": "已入库",
+      "note": "第 11 章 p277-306 已逐页核对，本项目的参数表以其为教学值来源。",
+      "verified": true
+    },
+    {
+      "title": "金属矿床地下开采",
+      "edition": "第 3 版",
+      "authors": [
+        "任凤玉"
+      ],
+      "publisher": "冶金工业出版社",
+      "year": 2018,
+      "isbn": "9787502477417",
+      "pages": null,
+      "scope": "4 篇 18 章；第 4 篇 13—18 章为采矿方法，含空场采矿法专章与方法选择",
+      "status": "仅核书目",
+      "note": "解世俊版教材的修订延续，空场法分类体系与典型方案图以此本为准。",
+      "verified": true
+    },
+    {
+      "title": "非煤固体矿床地下开采",
+      "edition": "第 1 版",
+      "authors": [
+        "张东升",
+        "马立强",
+        "万志军"
+      ],
+      "publisher": "中国矿业大学出版社",
+      "year": 2010,
+      "isbn": null,
+      "pages": null,
+      "scope": "非煤矿床地下开采，与金属矿地下开采最为接近",
+      "status": "仅核书目",
+      "note": "作为非煤方向的对照教材。",
+      "verified": false
+    },
+    {
+      "title": "现代采矿工程案例",
+      "edition": "第 1 版",
+      "authors": [
+        "屠世浩"
+      ],
+      "publisher": "中国矿业大学出版社",
+      "year": 2012,
+      "isbn": null,
+      "pages": null,
+      "scope": "工程案例集，可用于补充方法详情页的案例一节",
+      "status": "仅核书目",
+      "note": "尚未逐例核对，暂不引入正文。",
+      "verified": false
+    },
+    {
+      "title": "采矿工程设计手册",
+      "edition": "版次待确认",
+      "authors": [],
+      "publisher": "待确认",
+      "year": null,
+      "isbn": null,
+      "pages": null,
+      "scope": "设计参数与结构尺寸的常用查表来源",
+      "status": "待补",
+      "note": "需确认版次、出版社与页码后入库。",
+      "verified": false
+    },
+    {
+      "title": "中国冶金百科全书 · 采矿卷",
+      "edition": "版次待确认",
+      "authors": [],
+      "publisher": "待确认",
+      "year": null,
+      "isbn": null,
+      "pages": null,
+      "scope": "术语定义的权威表述来源",
+      "status": "待补",
+      "note": "用于校订术语库中标记「待核对」的条目。",
+      "verified": false
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+---
+/**
+ * 通用分区切换条
+ * 工程技术（工序专题）与资料中心（资料类型）共用，避免各写一套标签栏。
+ * 与 CategoryTabs 的区别：本组件只吃 items，不认任何业务数据，可复用于任意分区。
+ */
+interface Item {
+  label: string;
+  href: string;
+  badge?: string;
+  active?: boolean;
+}
+
+interface Props {
+  label: string;
+  items: Item[];
+}
+
+const { label, items } = Astro.props;
+---
+
+<nav aria-label={label}>
+  <ul class="flex flex-wrap items-stretch gap-x-1 md:min-w-max md:flex-nowrap">
+    {
+      items.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            aria-current={item.active ? "page" : undefined}
+            class:list={[
+              "flex h-11 items-center gap-2 border-b-2 px-3 text-[13px] transition-colors duration-100",
+              item.active
+                ? "border-accent text-ink"
+                : "border-transparent text-ink-3 hover:text-ink",
+            ]}
+          >
+            {item.label}
+            {item.badge && (
+              <span class="font-mono text-[10.5px] text-ink-4">{item.badge}</span>
+            )}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

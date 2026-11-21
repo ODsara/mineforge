@@ -1,0 +1,199 @@
+---
+/**
+ * 采矿方法总览（v2.1 重设计）
+ * 三大类分组 + 方法卡 + 速查对比表。全部分组与方法来自 methods.json / taxonomy.json。
+ * v2.1：每个大类做成不对称「导读栏 + 方法图集」——左侧分类号/名称/适用条件 + 一幅代表剖面，
+ * 右侧方法卡（真实工程图缩略）。三大类背景深浅交替，形成阅读节奏，不再是一排排相同卡片。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import SectionHeader from "../../components/layout/SectionHeader.astro";
+import CategoryTabs from "../../components/nav/CategoryTabs.astro";
+import MethodCard from "../../components/cards/MethodCard.astro";
+import MethodCompareTable from "../../components/content/MethodCompareTable.astro";
+import QuickMatch from "../../components/content/QuickMatch.astro";
+import Plate from "../../components/content/Plate.astro";
+import {
+  methodCategories,
+  methodsOfCategory,
+  methods,
+  categoryProgress,
+  methodHref,
+  siteStats,
+  methodStatusCount,
+  figures,
+} from "../../lib/taxonomy";
+
+const stats = siteStats();
+const progress = methodStatusCount();
+
+/** 每个大类的代表图：优先取本类旗舰/首个方法的渲染图，否则首幅线稿 */
+const signatureOf = (categorySlug: string) => {
+  const list = methodsOfCategory(categorySlug);
+  for (const m of list) {
+    const fs = figures.filter((f) => f.method === m.slug);
+    const render = fs.find((f) => f.kind === "render");
+    if (render) return render;
+  }
+  for (const m of list) {
+    const fs = figures.filter((f) => f.method === m.slug);
+    if (fs[0]) return fs[0];
+  }
+  return null;
+};
+---
+
+<BaseLayout
+  title="采矿方法"
+  description="地下采矿方法总览：空场采矿法、充填采矿法、崩落采矿法三大类的简介、适用范围、方法列表与建设状态。"
+  activePath="/methods/"
+>
+  <PageHero
+    eyebrow="采矿方法"
+    title="地下采矿方法"
+    description="按围岩稳固性与地压管理方式划分为空场法、充填法、崩落法三大类。方法名称与标识严格沿用项目术语规范，分段凿岩阶段矿房法作为阶段矿房法的变体单独建页，不在导航中单列。"
+  >
+    <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[13px]">
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[17px] font-medium text-ink">{methods.length}</dd>
+        <dt class="text-ink-3">项方法</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[17px] font-medium text-ink">{methodCategories.length}</dd>
+        <dt class="text-ink-3">个类别</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[17px] font-medium text-ink">{progress.complete}</dd>
+        <dt class="text-ink-3">篇已完成</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[17px] font-medium text-ink">{stats[2].value}</dd>
+        <dt class="text-ink-3">幅工程图解</dt>
+      </div>
+    </dl>
+  </PageHero>
+
+  {/* 按条件筛选 */}
+  <section class="border-b border-line" aria-label="按矿体条件筛选">
+    <div class="mf-container py-9">
+      <div class="max-w-[900px]">
+        <QuickMatch />
+      </div>
+      <p class="mt-3 text-[12.5px] leading-6 text-ink-3">
+        结果只包含已核对过适用条件的方法；尚未核对条件的方法不会进入候选，也不作为推荐依据。
+      </p>
+    </div>
+  </section>
+
+  <div class="border-b border-line bg-bg md:sticky md:top-16 md:z-30">
+    <div class="mf-container">
+      <CategoryTabs mode="anchor" />
+    </div>
+  </div>
+
+  {
+    methodCategories.map((category, ci) => {
+      const list = methodsOfCategory(category.slug);
+      const sig = signatureOf(category.slug);
+      const tint = ci % 2 === 1 ? "bg-surface" : "bg-bg";
+      return (
+        <section
+          id={category.slug}
+          class:list={["scroll-mt-32 border-b border-line", tint]}
+          aria-labelledby={`sec-${category.slug}`}
+        >
+          <div class="mf-container py-14 md:py-20">
+            <div class="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <!-- 导读栏 -->
+              <div class="lg:col-span-5 xl:col-span-4">
+                <div class="lg:sticky lg:top-28">
+                  <p class="mf-sec mb-3">
+                    <span class="mf-sec__no">{String(category.order).padStart(2, "0")}</span>
+                    {category.nameEn}
+                  </p>
+                  <h2
+                    id={`sec-${category.slug}`}
+                    class="text-[30px] leading-tight font-semibold tracking-[-0.01em] md:text-[34px]"
+                  >
+                    {category.name}
+                  </h2>
+                  <p class="mt-4 text-[14px] leading-7 text-ink-2">
+                    {category.summary}
+                  </p>
+
+                  <dl class="mt-6 space-y-3 border-t border-line pt-5 text-[13px]">
+                    <div>
+                      <dt class="text-[12px] text-ink-3">适用范围</dt>
+                      <dd class="mt-1 leading-6 text-ink-2">{category.applicability}</dd>
+                    </div>
+                    <div class="flex gap-8">
+                      <div>
+                        <dt class="text-[12px] text-ink-3">方法数量</dt>
+                        <dd class="mt-1 font-mono text-[15px] text-ink">{list.length} 项</dd>
+                      </div>
+                      <div>
+                        <dt class="text-[12px] text-ink-3">正文进度</dt>
+                        <dd class="mt-1 font-mono text-[15px] text-ink">{categoryProgress(category.slug)}</dd>
+                      </div>
+                    </div>
+                  </dl>
+
+                  <a
+                    href={`/methods/${category.slug}/`}
+                    class="mf-goto mt-6"
+                  >
+                    查看{category.name}分类页
+                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+
+                  {sig && (
+                    <div class="mt-8 hidden lg:block" data-reveal="media">
+                      <Plate
+                        src={sig.src}
+                        width={sig.width}
+                        height={sig.height}
+                        alt={`${category.name}代表工程图：${sig.title}`}
+                        figureNo={sig.figureNo}
+                        title={sig.title.split("·")[0].trim()}
+                        source={sig.source}
+                        meta={sig.kind === "render" ? "三维渲染" : "剖面"}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <!-- 方法图集 -->
+              <div class="lg:col-span-7 xl:col-span-8">
+                <div class="grid gap-5 sm:grid-cols-2" data-reveal="stagger">
+                  {list.map((method) => (
+                    <MethodCard method={method} href={methodHref(method)} />
+                  ))}
+                </div>
+                <p class="mt-6 text-[12px] leading-6 text-ink-3">
+                  正文与参数已依《采矿学》（第 2 版）逐页核对；示意图与逐矿案例卡按标注陆续补齐。
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    })
+  }
+
+  <section id="compare" class="scroll-mt-32" aria-labelledby="sec-compare">
+    <div class="mf-container py-14 md:py-20">
+      <SectionHeader
+        id="sec-compare"
+        index="04 / 速查对比"
+        title="方法速查表"
+        description={`${methods.length} 项方法的名称、英文名称、所属大类与变体关系。参数级对比在教材核对完成后补充。`}
+      />
+      <div class="mt-8">
+        <MethodCompareTable />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,78 @@
+---
+/**
+ * 文章目录
+ * 标题由 Astro 渲染 Markdown 时自动产出（headings），不手工维护。
+ * 滚动高亮用 IntersectionObserver，只在客户端跑几十行，不引入框架。
+ */
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  /** 2 = 只列二级标题（右栏窄，放三级会过长） */
+  maxDepth?: 2 | 3;
+  class?: string;
+}
+
+const { headings, maxDepth = 2, class: className = "" } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || (maxDepth === 3 && h.depth === 3));
+---
+
+{
+  items.length > 0 && (
+    <nav aria-label="本文目录" class:list={["text-[12.5px]", className]}>
+      <p class="mb-2.5 text-[11px] tracking-[0.08em] text-ink-4">本文目录</p>
+      <ul class="space-y-px border-l border-line" data-toc>
+        {items.map((item) => (
+          <li>
+            <a
+              href={`#${item.slug}`}
+              data-toc-link={item.slug}
+              class:list={[
+                "block border-l-2 border-transparent py-1 leading-5 transition-colors duration-100",
+                item.depth === 3 ? "pl-6 text-ink-4" : "pl-3 text-ink-3",
+                "hover:text-ink",
+              ]}
+            >
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"));
+  if (links.length > 0) {
+    const map = new Map(links.map((el) => [el.dataset.tocLink ?? "", el]));
+    const setActive = (id: string) => {
+      links.forEach((el) => {
+        const on = el.dataset.tocLink === id;
+        el.classList.toggle("text-accent", on);
+        el.classList.toggle("border-accent", on);
+        el.classList.toggle("bg-accent-soft", on);
+        el.classList.toggle("text-ink-3", !on && el.dataset.depth !== "3");
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target.id) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-96px 0px -70% 0px", threshold: 0 }
+    );
+
+    links.forEach((link) => {
+      const target = document.getElementById(link.dataset.tocLink ?? "");
+      if (target) observer.observe(target);
+    });
+  }
+</script>

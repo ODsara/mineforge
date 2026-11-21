@@ -1,0 +1,619 @@
+---
+/**
+ * 三维模型查看器（2026-11-21 程序化重建）
+ *
+ * 双数据源（方案 §3.4 / 授权书技术路线第 5 条）：
+ *   procedural —— registry[slug].build() 现场生成，anchors/bbox 由 builder 返回；
+ *   glb        —— 兼容旧 GLB 条目，anchors 走 JSON（Blender Z-up，客户端转 three Y-up）。
+ *
+ * DOM 契约沿用 data-mf-model 系；CSS 在 styles/base.css 的 .mf-model 命名空间。
+ * 模型区位置：详情页「主要工程结构」之后（信息架构规范 v1.0 §6 第 8 位）。
+ * 非 ready 条目不渲染任何内容——骨架页本就列有「三维工程模型｜待补充」。
+ */
+import { methods } from "../../lib/taxonomy";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const method = methods.find((m) => m.slug === slug);
+const model = method?.model;
+const ready = model?.status === "ready" && !!method;
+
+const data = ready
+  ? {
+      slug,
+      source: (model!.source ?? "glb") as "procedural" | "glb",
+      glb: model!.glb ?? null,
+      poster: model!.poster ?? null,
+      presets: model!.presets ?? [],
+      layers: model!.layers ?? [],
+      anchors: model!.anchors ?? [],
+      stages: model!.stages ?? [],
+    }
+  : null;
+const badge = data?.source === "procedural" ? "程序化 · 教材参数" : "GLB";
+const scrolly = (data?.stages.length ?? 0) > 1 && data?.source === "procedural";
+---
+
+{
+  data && method && (
+    <div
+      class="mf-model"
+      class:list={["mf-model", scrolly && "mf-model--scrolly"]}
+      id="mf-model"
+      data-mf-model
+      data-model-json={JSON.stringify(data)}
+    >
+      <header class="mf-model__head">
+        <div class="min-w-0">
+          <p class="mf-model__eyebrow">交互模型 · INTERACTIVE</p>
+          <h3 class="mf-model__title">{method.name} · 三维工程模型</h3>
+          <p class="mf-model__lead">
+            由《采矿学》参数程序化生成。拖拽旋转、滚轮缩放；切换剖面视角与结构图层，对照正文阅读。
+          </p>
+        </div>
+        <span class="mf-model__badge" data-model-badge>
+          {badge}
+        </span>
+      </header>
+
+      {/* scrollytelling：模型吸顶，随下方关键帧标题滚动切换工艺阶段 */}
+      <div class="mf-model__pin">
+      <div class="mf-model__stage">
+        {data.poster && (
+          <img
+            class="mf-model__poster"
+            src={data.poster}
+            alt={`${method.name} 三维模型渲染图`}
+            loading="lazy"
+          />
+        )}
+        <canvas class="mf-model__canvas" role="img" aria-label={`${method.name} 三维工程模型（可交互）`} />
+        <div class="mf-model__labels" data-model-labels aria-hidden="true" />
+        <div class="mf-model__skeleton" data-model-skeleton>
+          <span class="mf-model__skeleton-text">正在生成三维模型…</span>
+        </div>
+        <span class="mf-model__hint" aria-hidden="true">拖拽旋转 · 滚轮缩放</span>
+      </div>
+
+      <div class="mf-model__toolbar">
+        <div class="mf-model__group" role="group" aria-label="预设视角">
+          <span class="mf-model__group-label">视角</span>
+          <div class="mf-model__group-btns">
+            {data.presets.map((p) => (
+              <button
+                type="button"
+                class="mf-model__btn"
+                data-view={p.id}
+                aria-pressed={p.id === data.presets[0]?.id ? "true" : "false"}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div class="mf-model__group" role="group" aria-label="图层显隐">
+          <span class="mf-model__group-label">图层</span>
+          <div class="mf-model__group-btns">
+            {data.layers.map((l) => (
+              <button
+                type="button"
+                class="mf-model__btn"
+                data-layer={l}
+                aria-pressed={l === "围岩" ? "false" : "true"}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div class="mf-model__group" role="group" aria-label="标注">
+          <span class="mf-model__group-label">标注</span>
+          <div class="mf-model__group-btns">
+            <button
+              type="button"
+              class="mf-model__btn mf-model__btn--annot"
+              data-toggle-annotations
+              aria-pressed="true"
+            >
+              工程锚点
+            </button>
+          </div>
+        </div>
+        <div class="mf-model__group" role="group" aria-label="工艺阶段">
+          <span class="mf-model__group-label">阶段</span>
+          <div class="mf-model__group-btns" data-model-stages>
+            {/* 阶段按钮由客户端按 builder STAGES 生成（默认末阶段=验收通过的现状态） */}
+          </div>
+        </div>
+      </div>
+
+      <p class="mf-model__note">
+        模型为教学示意，几何比例按可读性分档显示（见参数表 displayNote），不作为施工依据。
+        「围岩」图层默认关闭以露内部结构；剖面视角会重建对应剖切变体。
+      </p>
+      </div>
+
+      {/* 工艺阶段关键帧：黑色标题块随页面滚动依次经过，驱动吸顶模型推进开拓与回采 */}
+      {scrolly && data!.stages.length > 0 && (
+        <div class="mf-model__keys">
+          {data!.stages.map((st, i) => (
+            <div class="mf-model__key" data-key-stage={i + 1}>
+              <p class="mf-model__key-index">阶段 {i + 1} / {data!.stages.length}</p>
+              <h3 class="mf-model__key-title">{st.label}</h3>
+              {st.note && <p class="mf-model__key-note">{st.note}</p>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+<script>
+  // ── 客户端查看器：程序化 + GLB 双分支（模块脚本，页面无查看器时空转） ──
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { stageBackground, disposeTree } from "../../lib/models/theme.ts";
+  import { registry } from "../../lib/models/registry.ts";
+  import type { ModelBuildResult, BuildVariant } from "../../lib/models/types.ts";
+
+  interface ViewData {
+    slug: string;
+    source: "procedural" | "glb";
+    glb: string | null;
+    poster: string | null;
+    presets: { id: string; label: string; az: number; el: number; variant?: BuildVariant; focus?: string }[];
+    stages: { label: string; note?: string }[];
+    layers: string[];
+    anchors: { label: string; pos: [number, number, number] }[];
+  }
+
+  interface LabelEntry {
+    el: HTMLDivElement;
+    world: THREE.Vector3;
+  }
+
+  function initViewer(container: HTMLElement): void {
+    if (container.dataset.mfInit === "1") return; // 防重复初始化
+    container.dataset.mfInit = "1";
+
+    const data = JSON.parse(container.dataset.modelJson ?? "{}") as ViewData;
+    const canvas = container.querySelector<HTMLCanvasElement>(".mf-model__canvas");
+    const stage = canvas?.parentElement;
+    const labelsBox = container.querySelector<HTMLElement>("[data-model-labels]");
+    const badge = container.querySelector<HTMLElement>("[data-model-badge]");
+    const skeleton = container.querySelector<HTMLElement>("[data-model-skeleton]");
+    const poster = container.querySelector<HTMLElement>(".mf-model__poster");
+    if (!canvas || !stage) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ── 渲染器与场景（暖主光 + 冷补光装置） ──
+    // preserveDrawingBuffer：保证 toDataURL / headless 截图可读帧缓冲（截图与自动化验收依赖）
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      powerPreference: "high-performance",
+      preserveDrawingBuffer: true,
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.32;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const scene = new THREE.Scene();
+    scene.background = stageBackground(stage); // 与页面展台令牌同温（terracotta）
+
+    const camera = new THREE.PerspectiveCamera(34, 1, 0.5, 4000);
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.enablePan = false;
+    controls.minPolarAngle = 0.06;
+    controls.maxPolarAngle = Math.PI / 2 + 0.25;
+
+    scene.add(new THREE.HemisphereLight(0xdfe7f5, 0x0a1018, 0.85));
+    scene.add(new THREE.AmbientLight(0x46586f, 0.9));
+    const keyLight = new THREE.DirectionalLight(0xfff1d6, 1.9);
+    keyLight.position.set(160, 220, 120);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0x9fb6d4, 0.65);
+    fillLight.position.set(-140, 90, -120);
+    scene.add(fillLight);
+    // 头灯：跟随相机的点光源——空心巷道内部只有环境光时近乎全黑，
+    // 头灯让任何视角下巷道内壁/岔口可读（纯渲染层，不动几何）
+    const headlamp = new THREE.PointLight(0xfff1d6, 8, 45, 1);
+    headlamp.position.copy(camera.position);
+    scene.add(headlamp);
+
+    // ── 相机定位（az/el 公式与旧版一致） ──
+    const target = new THREE.Vector3();
+    let dist = 40;
+    const camPos = (az: number, el: number): THREE.Vector3 => {
+      const a = (az * Math.PI) / 180;
+      const e = (el * Math.PI) / 180;
+      return new THREE.Vector3(
+        target.x + dist * Math.cos(e) * Math.sin(a),
+        target.y + dist * Math.sin(e),
+        target.z + dist * Math.cos(e) * Math.cos(a),
+      );
+    };
+
+    // ── 状态 ──
+    let currentGroup: THREE.Object3D | null = null;
+    let currentVariant: BuildVariant | "" = "";
+    let currentFocus = "";
+    let currentStage = 0;
+    let labels: LabelEntry[] = [];
+    let annotationsOn = true;
+    let loaded = false;
+    let fly: { from: THREE.Vector3; to: THREE.Vector3; t0: number } | null = null;
+
+    const badgeText = (t: string) => {
+      if (badge) badge.textContent = t;
+    };
+    const hideSkeleton = () => skeleton?.remove();
+    const showPoster = () => {
+      if (poster) {
+        poster.style.opacity = "1";
+        poster.style.pointerEvents = "auto";
+      }
+    };
+
+    /** 依据可见图层重算 target 与 dist（fitToVisible） */
+    const fitToVisible = (): void => {
+      if (!currentGroup) return;
+      const box = new THREE.Box3();
+      const tmp = new THREE.Box3();
+      currentGroup.traverse((obj: THREE.Object3D) => {
+        const mesh = obj as THREE.Mesh;
+        if (!(mesh as THREE.Mesh).isMesh && !(obj as THREE.Line).isLine) return;
+        let o: THREE.Object3D | null = obj;
+        while (o) {
+          if (o.name.startsWith("L_") && !o.visible) return;
+          o = o.parent;
+        }
+        tmp.setFromObject(obj);
+        box.union(tmp);
+      });
+      if (box.isEmpty()) return;
+      box.getCenter(target);
+      dist = ((box.getSize(new THREE.Vector3()).length() / 2) / Math.sin((camera.fov * Math.PI) / 360)) * 0.93;
+      controls.target.copy(target);
+    };
+
+    const placeCamera = (az: number, el: number, animate = true): void => {
+      const pos = camPos(az, el);
+      if (reducedMotion || !animate) {
+        camera.position.copy(pos);
+        controls.update();
+        return;
+      }
+      fly = { from: camera.position.clone(), to: pos, t0: performance.now() };
+    };
+
+    // ── 锚点标注（DOM 投影 + 相机后方剔除） ──
+    const setAnchors = (list: { label: string; pos: [number, number, number] }[], zUp = false): void => {
+      if (!labelsBox) return;
+      labelsBox.innerHTML = "";
+      labels = list.map((a) => {
+        const el = document.createElement("div");
+        el.className = "mf-model__label";
+        el.innerHTML = '<span class="mf-model__label-dot"></span><span class="mf-model__label-text"></span>';
+        (el.querySelector(".mf-model__label-text") as HTMLElement).textContent = a.label;
+        labelsBox.appendChild(el);
+        // glb 条目的 anchors 是 Blender Z-up，转 three Y-up；程序化锚点已是原生坐标
+        const p = zUp ? new THREE.Vector3(a.pos[0], a.pos[2], -a.pos[1]) : new THREE.Vector3(a.pos[0], a.pos[1], a.pos[2]);
+        return { el, world: p };
+      });
+    };
+
+    const projectLabels = (): void => {
+      if (!labels.length || !stage) return;
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      const v = new THREE.Vector3();
+      for (const { el, world } of labels) {
+        v.copy(world).project(camera);
+        const visible = annotationsOn && v.z < 1;
+        el.style.opacity = visible ? "1" : "0";
+        if (!visible) continue;
+        const x = (v.x * 0.5 + 0.5) * w;
+        const y = (-v.y * 0.5 + 0.5) * h;
+        el.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+      }
+    };
+
+    // ── 程序化分支 ──
+    const buildProcedural = (variant: BuildVariant, focus: string, stage?: number): ModelBuildResult | null => {
+      const builder = registry[data.slug];
+      if (!builder) return null;
+      if (currentGroup) {
+        scene.remove(currentGroup);
+        disposeTree(currentGroup); // variant/阶段 切换：释放旧几何，重建成本 <5ms
+        currentGroup = null;
+      }
+      const st = Math.min(Math.max(stage ?? data.stages.length, 1), Math.max(data.stages.length, 1));
+      const result: ModelBuildResult = builder.build({ variant, focus: focus || undefined, stage: st });
+      currentGroup = result.group;
+      currentVariant = variant;
+      currentFocus = focus;
+      currentStage = st;
+      // 按图层按钮状态设置可见性（「围岩」默认关——与 GLB 分支同一规则）
+      for (const l of data.layers) {
+        const node = result.group.getObjectByName(`L_${l}`);
+        const btn = container.querySelector<HTMLButtonElement>(`[data-layer="${l}"]`);
+        if (node) node.visible = btn ? btn.getAttribute("aria-pressed") === "true" : true;
+        else {
+          btn?.setAttribute("disabled", "true");
+          btn?.classList.add("opacity-40");
+        }
+      }
+      scene.add(currentGroup);
+      setAnchors(result.anchors, false);
+      return result;
+    };
+
+    // ── 启动 ──
+    const first = data.presets[0];
+    if (data.source === "procedural") {
+      try {
+        if (buildProcedural((first?.variant as BuildVariant) ?? "iso", first?.focus ?? "", data.stages.length)) {
+          fitToVisible();
+          placeCamera(first?.az ?? 34, first?.el ?? 26, false);
+          loaded = true;
+          hideSkeleton();
+          if (poster) {
+            poster.style.opacity = "0";
+            poster.style.pointerEvents = "none";
+          }
+        } else {
+          badgeText("生成失败 · 显示渲染图");
+          hideSkeleton();
+          showPoster();
+        }
+      } catch (err) {
+        console.error("[mf-model] procedural build failed:", err);
+        badgeText("生成失败 · 显示渲染图");
+        hideSkeleton();
+        showPoster();
+      }
+    } else if (data.glb) {
+      // ── GLB 兼容分支：按需动态加载 GLTFLoader ──
+      import("three/addons/loaders/GLTFLoader.js")
+        .then(({ GLTFLoader }) => {
+          new GLTFLoader().load(
+            data.glb as string,
+            (gltf: { scene: THREE.Group }) => {
+              scene.add(gltf.scene);
+              currentGroup = gltf.scene;
+              for (const l of data.layers) {
+                const node = gltf.scene.getObjectByName(`L_${l}`);
+                const btn = container.querySelector<HTMLButtonElement>(`[data-layer="${l}"]`);
+                if (!node) {
+                  btn?.setAttribute("disabled", "true");
+                  btn?.classList.add("opacity-40");
+                  continue;
+                }
+                node.visible = btn ? btn.getAttribute("aria-pressed") === "true" : true;
+              }
+              setAnchors(data.anchors, true);
+              fitToVisible();
+              placeCamera(first?.az ?? 34, first?.el ?? 26, false);
+              loaded = true;
+              badgeText("GLB");
+              hideSkeleton();
+              if (poster) {
+                poster.style.opacity = "0";
+                poster.style.pointerEvents = "none";
+              }
+            },
+            undefined,
+            () => {
+              badgeText("加载失败 · 显示渲染图");
+              hideSkeleton();
+              showPoster();
+            },
+          );
+        })
+        .catch((err: unknown) => {
+          console.error("[mf-model] GLB branch failed:", err);
+          badgeText("查看器不可用 · 显示渲染图");
+          hideSkeleton();
+          showPoster();
+        });
+    } else {
+      // glb 字段缺失的 ready 条目：直接降级为渲染图
+      badgeText("数据缺失 · 显示渲染图");
+      hideSkeleton();
+      showPoster();
+    }
+
+    // ── 交互：视角 / 图层 / 标注 ──
+    container.querySelectorAll<HTMLButtonElement>("[data-view]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const preset = data.presets.find((p) => p.id === btn.dataset.view);
+        if (!preset) return;
+        container.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+        const variant = (preset.variant as BuildVariant) ?? "iso";
+        const focus = preset.focus ?? "";
+        if (data.source === "procedural" && (variant !== currentVariant || focus !== currentFocus)) {
+          try {
+            const result = buildProcedural(variant, focus, currentStage);
+            if (result) {
+              fitToVisible();
+              if (preset.focus && result.focusPoints?.[preset.focus]) {
+                const fp = result.focusPoints[preset.focus];
+                target.set(fp[0], fp[1], fp[2]); // 细部：目标点移到构件并拉近
+                dist *= 0.45;
+              }
+            }
+          } catch (err) {
+            console.error("[mf-model] variant rebuild failed:", err);
+          }
+        }
+        placeCamera(preset.az, preset.el);
+      });
+    });
+
+    container.querySelectorAll<HTMLButtonElement>("[data-layer]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const name = btn.dataset.layer ?? "";
+        const on = btn.getAttribute("aria-pressed") !== "true";
+        btn.setAttribute("aria-pressed", String(on));
+        const node = currentGroup?.getObjectByName(`L_${name}`);
+        if (node) {
+          node.visible = on;
+          fitToVisible(); // 图层变化重定距（隐藏围岩后拉近主体）
+        }
+      });
+    });
+
+    const annotBtn = container.querySelector<HTMLButtonElement>("[data-toggle-annotations]");
+    annotBtn?.addEventListener("click", () => {
+      annotationsOn = annotBtn.getAttribute("aria-pressed") !== "true";
+      annotBtn.setAttribute("aria-pressed", String(annotationsOn));
+    });
+
+    // ── 工艺阶段（scrollytelling）：关键帧标题驱动 + 工具条按钮同步 ──
+    const stageBtnBox = container.querySelector<HTMLElement>("[data-model-stages]");
+    const keyBlocks = Array.from(container.querySelectorAll<HTMLElement>(".mf-model__key"));
+    const syncStageUI = (s: number) => {
+      stageBtnBox?.querySelectorAll<HTMLButtonElement>("[data-stage]").forEach((b) => {
+        b.setAttribute("aria-pressed", String(Number(b.dataset.stage) === s));
+      });
+      keyBlocks.forEach((k) => k.setAttribute("data-active", String(Number(k.dataset.keyStage) === s)));
+    };
+    /** 切换工艺阶段：仅重建几何，相机保持原位——滚动阅读时模型原地演进 */
+    const setStage = (s: number) => {
+      const clamped = Math.min(Math.max(s, 1), Math.max(data.stages.length, 1));
+      if (clamped === currentStage || data.source !== "procedural") return;
+      try {
+        buildProcedural(currentVariant || "iso", currentFocus, clamped);
+        syncStageUI(clamped);
+      } catch (err) {
+        console.error("[mf-model] stage rebuild failed:", err);
+      }
+    };
+    if (data.source === "procedural" && data.stages.length > 1 && stageBtnBox) {
+      // 工具条阶段按钮（标签来自 methods.json model.stages，与 builder STAGES 逐字一致——builders.test 锁定）
+      data.stages.forEach((st, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "mf-model__btn";
+        b.dataset.stage = String(i + 1);
+        b.setAttribute("aria-pressed", String(i + 1 === data.stages.length));
+        b.textContent = `${i + 1} ${st.label}`;
+        b.addEventListener("click", () => setStage(i + 1));
+        stageBtnBox.appendChild(b);
+      });
+      syncStageUI(currentStage);
+    }
+    if (data.source === "procedural" && data.stages.length > 1 && keyBlocks.length > 1) {
+      // 滚动引擎：关键帧标题块中心最接近视口 45% 线者激活对应阶段（rAF 节流）
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          const vh = window.innerHeight;
+          let best = 1;
+          let bestDist = Infinity;
+          keyBlocks.forEach((k) => {
+            const r = k.getBoundingClientRect();
+            const dist = Math.abs(r.top + r.height / 2 - vh * 0.45);
+            if (dist < bestDist) {
+              bestDist = dist;
+              best = Number(k.dataset.keyStage) || 1;
+            }
+          });
+          setStage(best);
+        });
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+      const disposeScroll = () => window.removeEventListener("scroll", onScroll);
+      window.addEventListener("pagehide", disposeScroll, { once: true });
+    }
+
+    // ── 尺寸与可见性 ──
+    const resize = () => {
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    const ro = new ResizeObserver(resize);
+    ro.observe(stage);
+    resize();
+
+    let inView = true;
+    const io = new IntersectionObserver((es: IntersectionObserverEntry[]) => es.forEach((e) => (inView = e.isIntersecting)), { threshold: 0.05 });
+    io.observe(stage);
+
+    const frame = (t: number) => {
+      if (!inView) return; // 离屏暂停渲染
+      if (fly) {
+        const k = Math.min((t - fly.t0) / 380, 1);
+        const e = 1 - Math.pow(1 - k, 3); // ease-out cubic
+        camera.position.lerpVectors(fly.from, fly.to, e);
+        if (k >= 1) fly = null;
+      }
+      controls.update();
+      headlamp.position.copy(camera.position);
+      renderer.render(scene, camera);
+      if (loaded) projectLabels();
+    };
+    renderer.setAnimationLoop(frame);
+
+    // 截图/自动化钩子：__mfPause(true) 渲一帧并停循环（headless captureScreenshot
+    // 在 WebGL 持续合成时会挂起），false 恢复；__mfCam(pos, tgt) 直接摆相机渲一帧
+    // （岔口近拍等验收视角）。仅挂在容器元素上，无全局污染。
+    const hook = container as HTMLElement & {
+      __mfPause?: (pause: boolean) => void;
+      __mfCam?: (pos: [number, number, number], tgt: [number, number, number]) => void;
+    };
+    hook.__mfPause = (pause: boolean) => {
+      if (pause) {
+        controls.update();
+        headlamp.position.copy(camera.position);
+        renderer.render(scene, camera);
+        if (loaded) projectLabels();
+        renderer.setAnimationLoop(null);
+      } else {
+        renderer.setAnimationLoop(frame);
+      }
+    };
+    hook.__mfCam = (pos, tgt) => {
+      camera.position.set(pos[0], pos[1], pos[2]);
+      controls.target.set(tgt[0], tgt[1], tgt[2]);
+      controls.update();
+      headlamp.position.copy(camera.position);
+      renderer.render(scene, camera);
+      if (loaded) projectLabels();
+    };
+
+    // ── 资源释放（页面离开 / 重复进入防泄漏） ──
+    const dispose = () => {
+      ro.disconnect();
+      io.disconnect();
+      controls.dispose();
+      renderer.setAnimationLoop(null);
+      if (currentGroup) {
+        scene.remove(currentGroup);
+        disposeTree(currentGroup);
+        currentGroup = null;
+      }
+      renderer.dispose();
+    };
+    window.addEventListener("pagehide", dispose, { once: true });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-mf-model][data-model-json]").forEach((el) => initViewer(el));
+</script>

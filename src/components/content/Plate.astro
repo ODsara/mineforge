@@ -1,0 +1,79 @@
+---
+/**
+ * 图版（Plate）—— 工程图的统一装框方式
+ *
+ * 语法移植自外部模板的「邮卡片框」：外圈卡纸留边、内嵌影像、底部带分割线图注。
+ * 本站把影像换成展台深色里的工程图，图注改成图纸标题栏结构：
+ *   第一行 图号 + 图名（左）／视图或比例（右，可选）
+ *   第二行 图注
+ *   末行   出处（细线分隔，mono）
+ * 样式在 styles/base.css 的 .mf-plate（slot 内容拿不到作用域样式，且多页共用）。
+ */
+interface Props {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  /** 图号，如「图 01」 */
+  figureNo: string;
+  title: string;
+  caption?: string;
+  /** 出处，如「自产渲染 · Blender 参数化模型」；渲染在底部细线条上 */
+  source?: string;
+  /** 右上角短标注，如「等轴测」「1:200」 */
+  meta?: string;
+  class?: string;
+}
+
+const {
+  src,
+  width,
+  height,
+  alt,
+  figureNo,
+  title,
+  caption,
+  source,
+  meta,
+  class: className = "",
+} = Astro.props;
+---
+
+<figure class:list={["mf-plate not-prose", className]}>
+  <div class="mf-plate__inner">
+    <img
+      src={src}
+      width={width}
+      height={height}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      class="block h-auto w-full object-contain"
+    />
+  </div>
+
+  <figcaption>
+    <div class="mf-plate__cap">
+      <div class="min-w-0">
+        <div class="flex items-baseline gap-2">
+          <span class="font-mono text-[10px] tracking-[0.16em] text-accent">{figureNo}</span>
+          <h4 class="mf-card-title truncate text-[13px] font-medium text-ink">{title}</h4>
+        </div>
+      </div>
+      {
+        meta && (
+          <span class="shrink-0 self-start rounded-button border border-line px-2 py-0.5 font-mono text-[10px] text-ink-4">
+            {meta}
+          </span>
+        )
+      }
+    </div>
+    {
+      source && (
+        <p class="mt-2.5 border-t border-line-soft pt-1.5 font-mono text-[10px] leading-4 text-ink-4">
+          {source}
+        </p>
+      )
+    }
+  </figcaption>
+</figure>
