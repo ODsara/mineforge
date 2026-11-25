@@ -9,8 +9,8 @@ const no = textbooks.filter((b) => !b.verified);
 <div class="space-y-10">
   {
     [
-      { title: "书目已核对", note: "版次、出版社与 ISBN 已确认，可直接引用", items: yes },
-      { title: "待补书目信息", note: "仅知书名与用途，版次或页码未确认，暂不作为引用来源", items: no },
+      { title: "教材与工具书", note: "表中列出版本、出版社与 ISBN", items: yes },
+      { title: "拓展阅读", note: "引用前请查阅所用版本及页码", items: no },
     ].map((group) => (
       <section>
         <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line pb-2">
@@ -25,9 +25,6 @@ const no = textbooks.filter((b) => !b.verified);
             <li class="flex h-full flex-col rounded-card border border-line bg-bg p-5">
               <div class="flex items-start justify-between gap-3">
                 <h3 class="text-[14.5px] leading-6 font-medium text-ink">{book.title}</h3>
-                <span class="shrink-0 rounded-card border border-line px-1.5 py-0.5 text-[10.5px] text-ink-3">
-                  {book.status}
-                </span>
               </div>
 
               <p class="mt-1.5 text-[11.5px] leading-5 text-ink-4">

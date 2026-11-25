@@ -24,11 +24,7 @@ const splitView = (title: string) => {
 ---
 
 {
-  list.length === 0 ? (
-    <p class="rounded-card border border-dashed border-line-strong bg-surface px-4 py-3 text-[12.5px] text-ink-4">
-      工程示意图待补充。
-    </p>
-  ) : (
+  list.length > 0 && (
     <div class="not-prose grid gap-5">
       {list.map((figure) => {
         const { name, view } = splitView(figure.title);
@@ -40,6 +36,7 @@ const splitView = (title: string) => {
             alt={`${figure.figureNo} ${figure.title}：${figure.caption}`}
             figureNo={figure.figureNo}
             title={name}
+            caption={figure.caption}
             source={figure.source}
             meta={view}
           />

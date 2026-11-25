@@ -1,7 +1,7 @@
 ---
 /**
  * 工程技术总览
- * 八个工序专题全部来自 taxonomy.json 的 engineeringTopics，专题页由 [topic].astro 统一生成。
+ * 七个工序专题全部来自 taxonomy.json 的 engineeringTopics，专题页由 [topic].astro 统一生成。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/layout/PageHero.astro";
@@ -33,7 +33,7 @@ const navItems = [
   <PageHero
     eyebrow="工程技术"
     title="工程技术专题"
-    description="按施工工序组织的技术资料。「知识体系」回答学什么、按什么顺序学；「工程技术」回答干这道工序时要查什么。同一项技术全站只有一个规范地址，两边用交叉引用互指，不重复写正文。"
+    description="沿井下生产流程认识开拓、采准切割、回采和运输，再看通风、安全与设计如何贯穿各环节。"
   >
     <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
       <div class="flex items-baseline gap-1.5">
@@ -42,15 +42,15 @@ const navItems = [
       </div>
       <div class="flex items-baseline gap-1.5">
         <dd class="font-mono text-[15px] font-medium text-ink">{standardDocs.length}</dd>
-        <dt class="text-ink-4">部现行规范</dt>
+        <dt class="text-ink-4">部相关标准</dt>
       </div>
       <div class="flex items-baseline gap-1.5">
         <dd class="font-mono text-[15px] font-medium text-ink">{clauseCount}</dd>
-        <dt class="text-ink-4">条已摘录条文</dt>
+        <dt class="text-ink-4">条条文摘录</dt>
       </div>
       <div class="flex items-baseline gap-1.5">
         <dd class="font-mono text-[15px] font-medium text-ink">{paramCount}</dd>
-        <dt class="text-ink-4">条已核对参数</dt>
+        <dt class="text-ink-4">条工程参数</dt>
       </div>
     </dl>
   </PageHero>
@@ -66,8 +66,8 @@ const navItems = [
       <SectionHeader
         id="sec-chain"
         index="01 / 工序关系"
-        title="七个专题不是平级的一排"
-        description="把七个专题按施工顺序与作用范围排开，才能看清谁在前谁在后、谁贯穿全程。"
+        title="地下矿山生产流程"
+        description="沿主线看矿石如何从采场到达地面，再学习各工序共用的工程系统。"
       />
       <div class="mt-8">
         <EngineeringFlow />
@@ -83,7 +83,7 @@ const navItems = [
         title="按施工顺序推进"
         description="这四项在时间上先后相承：开拓建立通道，采准切割创造作业条件，回采完成矿石采出，运输把矿石送到井底或地面。"
       />
-      <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div data-reveal="stagger" class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {steps.map((topic) => <EngineeringTopicCard topic={topic} />)}
       </div>
     </div>
@@ -94,10 +94,10 @@ const navItems = [
       <SectionHeader
         id="sec-span"
         index="03 / 贯穿支撑"
-        title="贯穿全过程的四个专题"
+        title="贯穿全过程的三个专题"
         description="这三项不占单独的施工阶段，但每一道工序都要用它们校核：通风定环境、安全定红线、设计定表达。"
       />
-      <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div data-reveal="stagger" class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {spans.map((topic) => <EngineeringTopicCard topic={topic} span />)}
       </div>
     </div>
@@ -108,8 +108,8 @@ const navItems = [
       <SectionHeader
         id="sec-xref"
         index="04 / 交叉引用"
-        title="与知识体系的分工"
-        description="知识体系按学科组织，按学习顺序推进；工程技术按工序组织，按作业需要查阅。同一条技术内容只在正文层写一次。"
+        title="关联知识方向"
+        description="从工序回到相关的原理、术语与布置方式。"
         action={{ label: "进入知识体系", href: "/knowledge/" }}
       />
       <ul class="mt-8 divide-y divide-line border-y border-line">
@@ -134,16 +134,11 @@ const navItems = [
                       {t.name}
                     </a>
                   ))}
-                {engineeringTopics.filter((t) => t.relatedDomains.includes(domain.slug))
-                  .length === 0 && <span class="text-[11.5px] text-ink-4">正文在建</span>}
               </div>
             </li>
           ))
         }
       </ul>
-      <p class="mt-4 text-[12px] leading-6 text-ink-4">
-        交叉引用只带标题与去向，不带段落副本。判断题：如果两处文字几乎一样，说明写重复了。
-      </p>
     </div>
   </section>
 
@@ -156,11 +151,11 @@ const navItems = [
         description="每个专题引用的条文、参数与图解都可追到出处。摘录不替代规范原文，设计取值以现行版本为准。"
         action={{ label: "进入资料中心", href: "/resources/" }}
       />
-      <div class="mt-8 grid gap-4 sm:grid-cols-3">
+      <div data-reveal="stagger" class="mt-8 grid gap-4 sm:grid-cols-3">
         {
           [
             {
-              title: "现行规范",
+              title: "相关标准",
               value: standardDocs.length,
               unit: "部",
               desc: "含 GB 16423、GB 50830、GB/T 50564 与重大隐患判定标准",
@@ -174,7 +169,7 @@ const navItems = [
               href: "/resources/standards/",
             },
             {
-              title: "已核对参数",
+              title: "工程参数",
               value: paramCount,
               unit: "条",
               desc: "分教材值、实测值与国际实践值三组列出",

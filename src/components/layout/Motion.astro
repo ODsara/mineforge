@@ -1,139 +1,28 @@
----
-/**
- * 揭示动效调度器（零依赖，纯 CSS 驱动）
- *
- * 为什么不引 GSAP：旧实现先把 [data-reveal] 设成 opacity:0，再去 await import("gsap")，
- * 那 70KB 下载的几百毫秒里整页是空的——用户看到的就是「打开像卡了一下」。
- * 现在揭示动作由 CSS transition 完成，脚本只负责在合适的时机加一个 .is-in 类，
- * 不需要等待任何外部资源，也就不存在空白窗。
- *
- * 分工：
- *   base.css 负责「怎么动」（初始态、过渡曲线、时长、四类变体）；
- *   本文件只负责「什么时候动」（IntersectionObserver）。
- *
- * 四类变体：
- *   默认      —— 整块淡入上移 16px
- *   stagger   —— 容器不动，子元素逐条落位（卡片网格、参数条）
- *   rows      —— 表格逐行落下（参数表、对比表）
- *   media     —— 图版与三维展台，淡入 + 极轻缩放
- *
- * 兜底：2.5 秒后仍未揭示的元素一律放行。任何脚本异常都不该让内容永久不可见。
- */
----
-
 <script>
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  const STAGGER_MS = 62;
-  const ROWS_MS = 26;
+  if (!reduce.matches && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      for (const { target, isIntersecting } of entries) {
+        if (!isIntersecting) continue;
+        observer.unobserve(target);
+        target.classList.add("is-in");
+      }
+    }, { rootMargin: "48px 0px", threshold: 0 });
 
-  const revealStagger = (el: HTMLElement) => {
-    // 容器自身也要放行：base.css 的 [data-reveal] 基础规则会把容器一起隐藏，
-    // 只给子元素加类的话容器永远是透明的，整块内容看不见。
-    el.classList.add("is-in");
-    [...el.children].forEach((kid, i) => {
-      window.setTimeout(() => kid.classList.add("is-in"), i * STAGGER_MS);
-    });
-  };
-
-  const revealRows = (el: HTMLElement) => {
-    el.classList.add("is-in");
-    el.querySelectorAll("tbody tr").forEach((row, i) => {
-      window.setTimeout(() => row.classList.add("is-in"), i * ROWS_MS);
-    });
-  };
-
-  const reveal = (el: HTMLElement) => {
-    const mode = el.dataset.reveal;
-    if (mode === "stagger") {
-      revealStagger(el);
-      return;
-    }
-    if (mode === "rows") {
-      revealRows(el);
-      return;
-    }
-    el.classList.add("is-in");
-  };
-
-  /**
-   * 数字递增：只处理「纯数字」或「数字区间」，其余原样保留。
-   * 参数值形如 8–15、60–70、105–200，所以两个数字同步跑。
-   * 结束时不保留浮点误差，直接写回原文。
-   */
-  const countUp = (el: HTMLElement) => {
-    const raw = (el.textContent ?? "").trim();
-    const m = raw.match(/^(\d+(?:\.\d+)?)(?:[–-](\d+(?:\.\d+)?))?$/);
-    if (!m) return;
-
-    const decimals = Math.max(
-      ...[m[1], m[2]].filter(Boolean).map((v) => (v.split(".")[1] ?? "").length)
-    );
-    const head = parseFloat(m[1]);
-    const tail = m[2] ? parseFloat(m[2]) : null;
-    const dur = 880;
-    const t0 = performance.now();
-    const fmt = (n: number) => n.toFixed(decimals);
-
-    const tick = (now: number) => {
-      const k = Math.min((now - t0) / dur, 1);
-      // easeOutCubic：快起慢收，数字不会拖到最后才停
-      const e = 1 - Math.pow(1 - k, 3);
-      el.textContent =
-        tail === null ? fmt(head * e) : `${fmt(head * e)}–${fmt(tail * e)}`;
-      if (k < 1) requestAnimationFrame(tick);
-      else el.textContent = raw;
-    };
-
-    requestAnimationFrame(tick);
-  };
-
-  const nodes = [...document.querySelectorAll<HTMLElement>("[data-reveal]")];
-
-  if (nodes.length > 0) {
-    if (reduce.matches) {
-      // 减弱动效：不播揭示，也不跑数字，内容直接是终态
-      nodes.forEach((n) => n.classList.add("is-in"));
-    } else {
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (!entry.isIntersecting) continue;
-            const el = entry.target as HTMLElement;
-            io.unobserve(el);
-            reveal(el);
-          }
-        },
-        // 提前 12% 触发：元素完全进入视口才动，读者会先看到空白再看到字
-        { rootMargin: "0px 0px -12% 0px", threshold: 0.12 }
-      );
-      nodes.forEach((n) => io.observe(n));
-
-      // 数字单独观察：它可能嵌在 stagger 容器里，不该跟着容器一起起跑
-      const cio = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (!entry.isIntersecting) continue;
-            const el = entry.target as HTMLElement;
-            cio.unobserve(el);
-            window.setTimeout(() => countUp(el), 160);
-          }
-        },
-        { threshold: 0.6 }
-      );
-      document.querySelectorAll<HTMLElement>("[data-count]").forEach((c) => cio.observe(c));
-
-      // 兜底放行：脚本异常、观察器失灵时，内容也不能永远藏着
-      window.setTimeout(() => {
-        nodes.forEach((n) => {
-          const mode = n.dataset.reveal;
-          if (mode === "stagger" || mode === "rows") {
-            if (n.querySelector(".is-in") === null) reveal(n);
-          } else if (!n.classList.contains("is-in")) {
-            n.classList.add("is-in");
-          }
-        });
-      }, 2500);
+    for (const element of document.querySelectorAll<HTMLElement>("[data-reveal]")) {
+      const mode = element.dataset.reveal;
+      if (mode !== "stagger" && mode !== "rows") {
+        observer.observe(element);
+        continue;
+      }
+      const children = mode === "rows" ? element.querySelectorAll("tbody tr") : element.children;
+      Array.from(children).forEach((child, index) => {
+        if (!(child instanceof HTMLElement)) return;
+        child.dataset.revealItem = "";
+        child.style.setProperty("--mf-delay", (index % 4) * (mode === "rows" ? 18 : 38) + "ms");
+        observer.observe(child);
+      });
     }
   }
 </script>

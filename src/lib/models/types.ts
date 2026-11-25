@@ -8,25 +8,19 @@
  */
 import type * as THREE from "three";
 
-/** 受控图层词表（方案 §3.7 + §4.1⑬/§4.2⑩ 的「回采进路」）——builder 的 LAYERS 与 methods.json layers 只能从这里取 */
+/** 受控图层词表（2026-11-23 模型替换轮：对齐 mining-methods-3d 引擎岩矿图层）
+ *  ore/rock/drift/stope/pillar/fill/muck/cut/shaft/lod2 → 中文；「标注」不进按钮（走锚点体系）。 */
 export const LAYER_NAMES = [
   "矿体",
   "围岩",
+  "巷道",
+  "采场空区",
   "矿柱",
-  "采准巷道",
-  "回采巷道",
-  "回采进路",
-  "切割工程",
   "充填体",
-  "暂留矿",  // 留矿法：崩落矿石暂留矿房作工作台（书 p288）
-  "崩落岩",
-  "深孔",
-  "深孔与药包",  // 阶段矿房法 VCR：深孔+球状药包+分层崩落线
-  "支护",  // 单层充填/单层崩落：木棚/支柱排架
-  "平衡拱面",  // 阶段自然崩落法：平衡拱半透明壳（签名）
-  "出矿系统",
-  "通风",
-  "设备",
+  "崩落体",
+  "切割工程",
+  "井筒",
+  "辅助细节",
 ] as const;
 
 export type LayerName = (typeof LAYER_NAMES)[number];
@@ -43,6 +37,8 @@ export interface BuildOpts {
    * 缺省 = 末阶段（验收通过的现状态）。stage 参数只改变几何/可见性，不改巷道布局与尺寸。
    */
   stage?: number;
+  /** 原始工序的 1-based 下标，优先于用于概览的 stage。 */
+  step?: number;
 }
 
 export interface ModelAnchor {

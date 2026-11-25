@@ -2,7 +2,7 @@
 /**
  * 文章目录
  * 标题由 Astro 渲染 Markdown 时自动产出（headings），不手工维护。
- * 滚动高亮用 IntersectionObserver，只在客户端跑几十行，不引入框架。
+ * 高亮指向阅读焦点线之前的最后一个标题。
  */
 interface Heading {
   depth: number;
@@ -31,6 +31,7 @@ const items = headings.filter((h) => h.depth === 2 || (maxDepth === 3 && h.depth
             <a
               href={`#${item.slug}`}
               data-toc-link={item.slug}
+              data-depth={item.depth}
               class:list={[
                 "block border-l-2 border-transparent py-1 leading-5 transition-colors duration-100",
                 item.depth === 3 ? "pl-6 text-ink-4" : "pl-3 text-ink-3",
@@ -48,31 +49,44 @@ const items = headings.filter((h) => h.depth === 2 || (maxDepth === 3 && h.depth
 
 <script>
   const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"));
-  if (links.length > 0) {
-    const map = new Map(links.map((el) => [el.dataset.tocLink ?? "", el]));
-    const setActive = (id: string) => {
-      links.forEach((el) => {
-        const on = el.dataset.tocLink === id;
-        el.classList.toggle("text-accent", on);
-        el.classList.toggle("border-accent", on);
-        el.classList.toggle("bg-accent-soft", on);
-        el.classList.toggle("text-ink-3", !on && el.dataset.depth !== "3");
-      });
-    };
+  const ids = [...new Set(links.flatMap((link) => link.dataset.tocLink ?? []))];
+  const targets = ids.map((id) => document.getElementById(id)).filter((target) => target !== null);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]?.target.id) setActive(visible[0].target.id);
-      },
-      { rootMargin: "-96px 0px -70% 0px", threshold: 0 }
-    );
+  if (targets.length > 0) {
+    let activeId = "";
+    let frame = 0;
 
-    links.forEach((link) => {
-      const target = document.getElementById(link.dataset.tocLink ?? "");
-      if (target) observer.observe(target);
-    });
+    function update() {
+      frame = 0;
+      const focusLine = Math.max(105, window.innerHeight * 0.23);
+      let current: HTMLElement | undefined;
+      for (const target of targets) {
+        if (target.getBoundingClientRect().top > focusLine) break;
+        current = target;
+      }
+      const id = current?.id ?? "";
+      if (id === activeId) return;
+      activeId = id;
+      for (const link of links) {
+        const active = link.dataset.tocLink === id;
+        link.classList.toggle("text-accent", active);
+        link.classList.toggle("border-accent", active);
+        link.classList.toggle("bg-accent-soft", active);
+        link.classList.toggle("text-ink-3", !active && link.dataset.depth !== "3");
+        link.classList.toggle("text-ink-4", !active && link.dataset.depth === "3");
+        if (active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      }
+    }
+
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(update);
+    }
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    window.addEventListener("hashchange", schedule);
+    document.addEventListener("toggle", schedule, true);
+    schedule();
   }
 </script>

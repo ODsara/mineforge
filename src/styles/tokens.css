@@ -42,6 +42,7 @@
   --color-stage-ink: #F0E7D8; /* 15.3:1 */
   --color-stage-ink-dim: #A89883;
   --color-stage-line: #3C2D1B;
+  --color-model-stage: #0e1318; /* 模型查看器深蓝炭展台（11-23 模型上线轮定色，与岩矿色谱同调） */
 
   /* ── 来源徽章四色（文字/底 均已 AA；gf 保留冷灰蓝以维持四类区分度）──── */
   --color-badge-jc: #66594A;

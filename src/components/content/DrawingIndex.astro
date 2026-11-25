@@ -10,7 +10,11 @@ const rows = figures.map((f) => ({ figure: f, method: methodBySlug(f.method) }))
 ---
 
 <div class="space-y-10">
-  <div class="grid gap-5 md:grid-cols-2">
+  <div class="max-w-[52em]">
+    <h2 class="text-[17px] font-medium">采场读图</h2>
+    <p class="mt-2 text-[13px] leading-7 text-ink-2">先确认视图方向，再从图例区分原矿、围岩、充填体与崩落矿岩，最后沿箭头判断回采方向或出矿路线。点击图面可查看原图。</p>
+  </div>
+  <div data-reveal="stagger" class="grid gap-5 md:grid-cols-2">
     {
       rows.map(({ figure }) => (
         <FigureCard figure={figure} size="lg" />
@@ -25,7 +29,7 @@ const rows = figures.map((f) => ({ figure: f, method: methodBySlug(f.method) }))
     </div>
 
     <div class="mt-4 overflow-x-auto rounded-card border border-line">
-      <table class="w-full min-w-[760px] border-collapse text-left">
+      <table data-ui class="w-full min-w-[760px] border-collapse text-left">
         <caption class="sr-only">工程图纸索引表</caption>
         <thead>
           <tr class="bg-surface text-[11px] tracking-wide text-ink-4">
@@ -33,7 +37,7 @@ const rows = figures.map((f) => ({ figure: f, method: methodBySlug(f.method) }))
             <th scope="col" class="border-b border-line px-3 py-2 font-normal">图名</th>
             <th scope="col" class="border-b border-line px-3 py-2 font-normal">视图</th>
             <th scope="col" class="border-b border-line px-3 py-2 font-normal">所属方法</th>
-            <th scope="col" class="border-b border-line px-3 py-2 font-normal">尺寸</th>
+            <th scope="col" class="border-b border-line px-3 py-2 font-normal">画布尺寸</th>
             <th scope="col" class="border-b border-line px-3 py-2 font-normal">来源</th>
           </tr>
         </thead>
@@ -48,7 +52,7 @@ const rows = figures.map((f) => ({ figure: f, method: methodBySlug(f.method) }))
                   {figure.figureNo}
                 </th>
                 <td class="px-3 py-2.5 text-[12.5px] text-ink">{figure.title}</td>
-                <td class="px-3 py-2.5 text-[11.5px] text-ink-3">{figure.kind}</td>
+                <td class="px-3 py-2.5 text-[11.5px] text-ink-3">{figure.title.split("·").at(-1)?.trim()}</td>
                 <td class="px-3 py-2.5 text-[11.5px]">
                   {method ? (
                     <a
@@ -73,8 +77,7 @@ const rows = figures.map((f) => ({ figure: f, method: methodBySlug(f.method) }))
     </div>
 
     <p class="mt-4 text-[12px] leading-6 text-ink-4">
-      现有图解均为自产渲染，按教材对结构的文字描述与参数表重建，用于理解空间关系，不作为施工依据，
-      也不替代教材原图。图集类外部资源涉及版权，只标来源、不转载。
+      教学示意图按教材原理绘制，图面非按比例。工程取值应根据矿山条件、工程资料与现行标准确定。
     </p>
   </section>
 </div>

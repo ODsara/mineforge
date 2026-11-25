@@ -43,7 +43,7 @@ const value = (p: Param) => (p.unit && p.unit !== "—" ? `${p.value} ${p.unit}`
 {
   params.length === 0 ? (
     <p class="rounded-card border border-dashed border-line-strong bg-surface px-4 py-3 text-[12.5px] text-ink-4">
-      本方法的参数尚未核对入库，核实后按来源类型分组列出。
+      具体参数可查阅本页参考文献。
     </p>
   ) : (
     <div class="not-prose space-y-8">
@@ -58,7 +58,7 @@ const value = (p: Param) => (p.unit && p.unit !== "—" ? `${p.value} ${p.unit}`
           </div>
 
           <div class="overflow-x-auto rounded-card border border-line">
-            <table data-ui class="w-full min-w-[480px] border-collapse text-left text-[12.5px]">
+            <table data-ui data-reveal="rows" class="w-full min-w-[480px] border-collapse text-left text-[12.5px]">
               <thead>
                 <tr class="bg-surface text-[11px] text-ink-4">
                   <th scope="col" class="border-b border-line px-3 py-2 font-normal">参数</th>

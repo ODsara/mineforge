@@ -7,6 +7,8 @@
     scroll-padding-top: calc(var(--mf-header-h) + 16px);
   }
 
+  html.mf-nav-open { overflow: hidden; }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-ink);
@@ -304,55 +306,36 @@
     animation-delay: var(--d, 0ms);
   }
 
-  /* ── L2 滚动揭示 ────────────────────────────────────────────── */
-  /* 初始隐藏态挂在 html.mf-anim 下。该类由 <head> 内联脚本在首帧之前同步挂上，
-     所以不会闪烁；脚本被禁用时该类不存在，元素直接以终态显示。 */
-  [data-reveal] {
-    transition:
-      opacity var(--mf-d2) var(--mf-ease),
-      transform var(--mf-d2) var(--mf-ease);
-  }
-  html.mf-anim [data-reveal]:not(.is-in) {
-    opacity: 0;
-    transform: translate3d(0, 16px, 0);
+  @keyframes mf-ui-in {
+    from { opacity: 0.25; translate: 0 9px; }
+    to { opacity: 1; translate: 0; }
   }
 
-  /* stagger：容器不动，子元素逐条落位。整块位移会吃掉顺序感，容器只负责触发 */
-  /* 容器自身不做过场：它一放行就该「已经在位」，观感上只有子元素在依次浮现 */
-  [data-reveal="stagger"],
-  [data-reveal="rows"] {
-    transition: none;
-  }
-  [data-reveal="stagger"] > * {
-    transition:
-      opacity var(--mf-d2) var(--mf-ease),
-      transform var(--mf-d2) var(--mf-ease);
-  }
-  html.mf-anim [data-reveal="stagger"] > *:not(.is-in) {
-    opacity: 0;
-    transform: translate3d(0, 13px, 0);
+  @keyframes mf-ui-media-in {
+    from { opacity: 0.55; scale: 0.985; }
+    to { opacity: 1; scale: 1; }
   }
 
-  /* rows：表格逐行落下。行多时节奏要快，否则读到后面还在动 */
-  [data-reveal="rows"] tbody tr {
-    transition:
-      opacity 0.34s var(--mf-ease),
-      transform 0.34s var(--mf-ease);
-  }
-  html.mf-anim [data-reveal="rows"] tbody tr:not(.is-in) {
-    opacity: 0;
-    transform: translate3d(0, 8px, 0);
-  }
+  @media (prefers-reduced-motion: no-preference) {
+    .mf-enter,
+    [data-reveal].is-in,
+    [data-reveal-item].is-in {
+      animation: mf-ui-in var(--mf-d2) var(--mf-ease) var(--mf-delay, 0ms) both;
+    }
 
-  /* media：图版与三维展台。位移最小、缩放极轻，避免大块元素推动版面 */
-  [data-reveal="media"] {
-    transition:
-      opacity 0.62s var(--mf-ease),
-      transform 0.9s var(--mf-ease);
-  }
-  html.mf-anim [data-reveal="media"]:not(.is-in) {
-    opacity: 0;
-    transform: scale(1.022);
+    [data-reveal="media"].is-in {
+      animation-name: mf-ui-media-in;
+      animation-duration: 0.55s;
+    }
+
+    .mf-feedback-in {
+      animation: mf-ui-in 0.23s var(--mf-ease) both;
+    }
+
+    [data-reveal].is-in:is(:focus-within, :target),
+    [data-reveal-item].is-in:is(:focus-within, :target) {
+      animation: none;
+    }
   }
 
   /* ── L3 交互反馈 ────────────────────────────────────────────── */
@@ -440,33 +423,30 @@
     animation: mf-fold-in 0.3s var(--mf-ease) both;
   }
 
-  /*
-   * 悬停反馈（v1.1 改法）：只加深底色、不做任何位移。
-   * 卡片类用 .mf-lift 拿到过渡，具体 hover 底色由各组件按自身底色给
-   * （白卡 → panel，深底按钮 → 自身加深），避免用一个通用规则把不同底色的组件压成同一个色。
-   */
   .mf-lift {
     transition:
-      background-color 0.18s ease,
-      border-color 0.18s ease,
-      color 0.18s ease;
+      background-color var(--mf-d1) ease,
+      border-color var(--mf-d1) ease,
+      color var(--mf-d1) ease,
+      transform var(--mf-d1) var(--mf-ease);
+  }
+
+  .mf-press {
+    transition: background-color var(--mf-d1) ease, border-color var(--mf-d1) ease,
+      color var(--mf-d1) ease, transform var(--mf-d1) var(--mf-ease);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mf-press:active { transform: translateY(1px); }
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .mf-lift:hover { transform: translateY(-2px); }
+    .mf-lift:hover .mf-arrow { transform: translateX(4px); }
   }
 
   /* ── 减弱动效：全部落到终态，只保留颜色过渡 ─────────────────── */
   @media (prefers-reduced-motion: reduce) {
-    html.mf-anim [data-reveal],
-    html.mf-anim [data-reveal]:not(.is-in),
-    html.mf-anim [data-reveal="stagger"] > *:not(.is-in),
-    html.mf-anim [data-reveal="rows"] tbody tr:not(.is-in) {
-      opacity: 1;
-      transform: none;
-    }
-    [data-reveal],
-    [data-reveal="stagger"] > *,
-    [data-reveal="rows"] tbody tr,
-    [data-reveal="media"] {
-      transition: none;
-    }
     .mf-rise,
     .mf-rise-sm,
     .mf-plate-in {
@@ -496,6 +476,9 @@
   @media print {
     [data-reveal],
     [data-reveal] *,
+    [data-reveal-item],
+    .mf-enter,
+    .mf-feedback-in,
     .mf-rise,
     .mf-rise-sm,
     .mf-plate-in {

@@ -1,63 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 56 820 564" width="820" height="564" role="img" aria-labelledby="msTitle msDesc">
-  <title id="msTitle">地下矿山系统剖面示意</title>
-  <desc id="msDesc">竖井、三个中段的运输平巷、矿房与通风井的空间关系示意，含中段标高，非按比例。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" role="img" aria-labelledby="title desc">
+  <title id="title">地下矿山开拓系统剖面</title>
+  <desc id="desc">主井连接三个中段，采场通过中段联络巷接入运输系统，回风井连接回风巷并通至地表。示意图非按比例。</desc>
   <defs>
-    <pattern id="msGrid" width="26" height="26" patternUnits="userSpaceOnUse">
-      <path d="M26 0H0V26" fill="none" stroke="#E4E0D5" stroke-width="0.7"/>
+    <pattern id="rock" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#e4e9e4"/>
+      <path d="M2 4h4m4 8h4" stroke="#b2bcb6"/>
     </pattern>
-    <pattern id="msHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
-      <line x1="0" y1="0" x2="0" y2="8" stroke="#9a6b15" stroke-width="1.25" opacity="0.55"/>
+    <pattern id="ore" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#ecd3ab"/>
+      <path d="M0 10 10 0" stroke="#ad7638"/>
     </pattern>
   </defs>
-
-  <rect width="820" height="620" fill="#FFFEFA"/>
-
-  <rect x="0" y="140" width="820" height="480" fill="#F3F1E9"/>
-  <rect y="140" width="820" height="480" fill="url(#msGrid)"/>
-
-  <path d="M0 140H820" stroke="#152a45" stroke-width="2.6" stroke-linecap="square"/>
-  <text x="26" y="128" font-family="Consolas, ui-monospace, monospace" font-size="11" fill="#6a6f7a">地表</text>
-
-  <g stroke="#152a45" stroke-width="2.6" fill="none" stroke-linecap="round">
-    <path d="M120 140L133 96"/>
-    <path d="M146 140L133 96"/>
-    <path d="M123 124H143"/>
+  <rect width="900" height="480" fill="#faf8f0"/>
+  <g font-family="'Microsoft YaHei','PingFang SC',sans-serif" fill="#263844" font-size="19">
+    <path d="M45 114H246L328 102H555L651 114H855V414H45Z" fill="url(#rock)" stroke="#61737c" stroke-width="2"/>
+    <path d="M488 115H574L706 413H608Z" fill="url(#ore)" stroke="#a4713f" stroke-width="2"/>
+    <g fill="#fffdf7" stroke="#455c65" stroke-width="2">
+      <path d="M149 114H172V383H149Z"/>
+      <path d="M739 114H759V200H739Z"/>
+      <path d="M172 184H739V200H172Z"/>
+      <path d="M172 264H613V280H172Z"/>
+      <path d="M172 357H670V373H172Z"/>
+      <path d="M566 200H589L613 264H586Z" fill="#c5e0d4"/>
+    </g>
+    <path d="M128 114l32-44 32 44M143 94h33" fill="none" stroke="#455c65" stroke-width="2"/>
+    <text x="51" y="96">地表</text>
+    <text x="208" y="148">主井</text>
+    <path d="M201 143H172" stroke="#61737c"/>
+    <text x="778" y="152">回风井</text>
+    <path d="M771 148H759" stroke="#61737c"/>
+    <text x="286" y="176">上中段回风巷</text>
+    <text x="282" y="257">中段运输巷</text>
+    <text x="286" y="350">下中段运输巷</text>
+    <text x="651" y="245">采场</text>
+    <path d="M642 239H601" stroke="#61737c"/>
+    <text x="735" y="394">矿体</text>
+    <path d="M725 389H695" stroke="#61737c"/>
+    <text x="48" y="452" fill="#61737c">系统剖面示意 · 非按比例</text>
   </g>
-  <rect x="120" y="140" width="26" height="398" fill="#FFFEFA" stroke="#152a45" stroke-width="2.8"/>
-  <text x="164" y="186" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#5a5f6a">竖井</text>
-
-  <rect x="146" y="262" width="610" height="16" fill="#FFFEFA" stroke="#152a45" stroke-width="2.6"/>
-  <rect x="146" y="392" width="610" height="16" fill="#FFFEFA" stroke="#152a45" stroke-width="2.6"/>
-  <rect x="146" y="522" width="610" height="16" fill="#FFFEFA" stroke="#152a45" stroke-width="2.6"/>
-
-  <rect x="734" y="140" width="22" height="252" fill="#FFFEFA" stroke="#152a45" stroke-width="2.8"/>
-  <text x="745" y="128" text-anchor="middle" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#5a5f6a">通风井</text>
-
-  <rect x="360" y="278" width="240" height="17" fill="#152a45" opacity="0.18"/>
-  <rect x="360" y="375" width="240" height="17" fill="#152a45" opacity="0.18"/>
-  <rect x="360" y="295" width="240" height="80" fill="url(#msHatch)" stroke="#9a6b15" stroke-width="1.9"/>
-  <g stroke="#9a6b15" stroke-width="1" stroke-dasharray="4 6" opacity="0.6">
-    <path d="M362 322H598"/>
-    <path d="M362 348H598"/>
-  </g>
-
-  <g stroke="#9a6b15" stroke-width="1" stroke-dasharray="3 4">
-    <path d="M78 270H114"/>
-    <path d="M78 400H114"/>
-    <path d="M78 530H114"/>
-  </g>
-  <g text-anchor="end" font-family="Consolas, ui-monospace, monospace" font-size="11.5" fill="#9a6b15">
-    <text x="72" y="274">−100 m</text>
-    <text x="72" y="404">−200 m</text>
-    <text x="72" y="534">−300 m</text>
-  </g>
-
-  <g stroke="#868c98" stroke-width="0.9" stroke-dasharray="3 3" fill="none">
-    <path d="M470 250V262"/>
-    <path d="M600 340L652 316"/>
-  </g>
-  <text x="470" y="246" text-anchor="middle" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#5a5f6a">阶段运输平巷</text>
-  <text x="656" y="313" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#5a5f6a">矿房</text>
-
-  <text x="800" y="600" text-anchor="end" font-family="Consolas, ui-monospace, monospace" font-size="10.5" fill="#868c98">系统示意 · 非按比例</text>
 </svg>

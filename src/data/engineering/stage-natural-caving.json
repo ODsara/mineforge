@@ -234,22 +234,70 @@
   "references": [
     {
       "id": "R0",
+      "type": "教材",
+      "title": "采矿学（第2版）",
+      "authors": [
+        "王青",
+        "任凤玉"
+      ],
+      "publisher": "冶金工业出版社",
+      "year": 2011,
+      "isbn": "9787502454906",
+      "pages": "266-270",
+      "chapter": "第10章 崩落采矿法",
+      "tier": 0,
+      "caveat": "教材值为教学典型值，非规范值或实测值",
       "text": "王青, 任凤玉 主编. 采矿学（第 2 版）[M]. 北京: 冶金工业出版社, 2011: 266-270. ISBN 9787502454906"
     },
     {
       "id": "R1",
+      "type": "国家标准",
+      "code": "GB 16423-2020",
+      "title": "金属非金属矿山安全规程",
+      "effective": "2021-09-01",
+      "tier": 1,
       "text": "GB 16423-2020 金属非金属矿山安全规程"
     },
     {
       "id": "R2",
+      "type": "期刊论文",
+      "title": "自然崩落法采场软破围岩巷道支护技术研究",
+      "authors": [
+        "明建",
+        "单强",
+        "严荣富"
+      ],
+      "journal": "采矿与安全工程学报",
+      "year": 2014,
+      "volume": 31,
+      "issue": 1,
+      "pages": "34-40",
+      "tier": 1,
       "text": "明建, 单强, 严荣富. 自然崩落法采场软破围岩巷道支护技术研究[J]. 采矿与安全工程学报, 2014, 31(1): 34-40.（全文 PDF 已入库）"
     },
     {
       "id": "R3",
+      "type": "期刊论文",
+      "title": "自然崩落法岩体可崩性研究现状与展望",
+      "authors": [
+        "刘欢"
+      ],
+      "journal": "中国矿业",
+      "year": 2023,
+      "tier": 1,
       "text": "刘欢, 等. 自然崩落法岩体可崩性研究现状与展望[J]. 中国矿业, 2023.（全文 PDF 已入库）"
     },
     {
       "id": "R4",
+      "type": "技术报告",
+      "title": "Discussion of selected block caving operations",
+      "authors": [
+        "Kliche C"
+      ],
+      "institution": "SWCA Environmental Consultants",
+      "publisher": "Resolution Copper Mine EIS reference document",
+      "year": 2017,
+      "tier": 2,
       "text": "Kliche C, SWCA Environmental Consultants. Discussion of selected block caving operations[R]. Resolution Copper Mine EIS reference document, 2017.（38 页，含 El Teniente/San Manuel/Palabora 逐矿案例，全文 PDF 已入库）"
     }
   ]

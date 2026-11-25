@@ -1,6 +1,5 @@
 ---
 /** 知识方向卡片：编号 + 名称 + 一句说明 + 知识点数量 */
-import StatusDot from "../content/StatusDot.astro";
 import { domainHref, type Domain } from "../../lib/taxonomy";
 
 interface Props {
@@ -20,7 +19,6 @@ const linkedTopics = domain.topics.filter((t) => t.href).length;
     <span class="font-mono text-[11px] tracking-wider text-ink-4">
       {String(domain.order).padStart(2, "0")}
     </span>
-    <StatusDot status={domain.status} />
   </div>
 
   <h3
@@ -35,7 +33,7 @@ const linkedTopics = domain.topics.filter((t) => t.href).length;
 
   <div class="mt-4 flex items-center justify-between border-t border-line-soft pt-3">
     <span class="text-[11.5px] text-ink-4">
-      {linkedTopics > 0 ? `${linkedTopics} 个知识点` : "知识点待补充"}
+      {linkedTopics} 个知识点
     </span>
     <span class="text-[11.5px] text-ink-4 transition-colors duration-100 group-hover:text-accent">
       {domain.slug === "underground-mining" ? "进入方法库" : "查看分类"} →

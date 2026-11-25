@@ -17,15 +17,10 @@ import {
   methodCategories,
   methodsOfCategory,
   methods,
-  categoryProgress,
   methodHref,
-  siteStats,
-  methodStatusCount,
   figures,
 } from "../../lib/taxonomy";
 
-const stats = siteStats();
-const progress = methodStatusCount();
 
 /** 每个大类的代表图：优先取本类旗舰/首个方法的渲染图，否则首幅线稿 */
 const signatureOf = (categorySlug: string) => {
@@ -45,13 +40,13 @@ const signatureOf = (categorySlug: string) => {
 
 <BaseLayout
   title="采矿方法"
-  description="地下采矿方法总览：空场采矿法、充填采矿法、崩落采矿法三大类的简介、适用范围、方法列表与建设状态。"
+  description="地下采矿方法总览：空场采矿法、充填采矿法、崩落采矿法三大类的开采原理、适用条件、工程图解与回采工序。"
   activePath="/methods/"
 >
   <PageHero
     eyebrow="采矿方法"
     title="地下采矿方法"
-    description="按围岩稳固性与地压管理方式划分为空场法、充填法、崩落法三大类。方法名称与标识严格沿用项目术语规范，分段凿岩阶段矿房法作为阶段矿房法的变体单独建页，不在导航中单列。"
+    description="学习时先看围岩如何支撑、采空区如何处理，再比较矿体条件、落矿方式和出矿路径。"
   >
     <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[13px]">
       <div class="flex items-baseline gap-1.5">
@@ -63,11 +58,7 @@ const signatureOf = (categorySlug: string) => {
         <dt class="text-ink-3">个类别</dt>
       </div>
       <div class="flex items-baseline gap-1.5">
-        <dd class="font-mono text-[17px] font-medium text-ink">{progress.complete}</dd>
-        <dt class="text-ink-3">篇已完成</dt>
-      </div>
-      <div class="flex items-baseline gap-1.5">
-        <dd class="font-mono text-[17px] font-medium text-ink">{stats[2].value}</dd>
+        <dd class="font-mono text-[17px] font-medium text-ink">{figures.length}</dd>
         <dt class="text-ink-3">幅工程图解</dt>
       </div>
     </dl>
@@ -80,7 +71,7 @@ const signatureOf = (categorySlug: string) => {
         <QuickMatch />
       </div>
       <p class="mt-3 text-[12.5px] leading-6 text-ink-3">
-        结果只包含已核对过适用条件的方法；尚未核对条件的方法不会进入候选，也不作为推荐依据。
+        筛选结果用于课堂比较。工程选法还需结合矿岩稳定性、地表保护要求和矿山技术经济条件。
       </p>
     </div>
   </section>
@@ -131,10 +122,6 @@ const signatureOf = (categorySlug: string) => {
                         <dt class="text-[12px] text-ink-3">方法数量</dt>
                         <dd class="mt-1 font-mono text-[15px] text-ink">{list.length} 项</dd>
                       </div>
-                      <div>
-                        <dt class="text-[12px] text-ink-3">正文进度</dt>
-                        <dd class="mt-1 font-mono text-[15px] text-ink">{categoryProgress(category.slug)}</dd>
-                      </div>
                     </div>
                   </dl>
 
@@ -172,9 +159,6 @@ const signatureOf = (categorySlug: string) => {
                     <MethodCard method={method} href={methodHref(method)} />
                   ))}
                 </div>
-                <p class="mt-6 text-[12px] leading-6 text-ink-3">
-                  正文与参数已依《采矿学》（第 2 版）逐页核对；示意图与逐矿案例卡按标注陆续补齐。
-                </p>
               </div>
             </div>
           </div>
@@ -189,7 +173,7 @@ const signatureOf = (categorySlug: string) => {
         id="sec-compare"
         index="04 / 速查对比"
         title="方法速查表"
-        description={`${methods.length} 项方法的名称、英文名称、所属大类与变体关系。参数级对比在教材核对完成后补充。`}
+        description={`${methods.length} 项方法的名称、英文名称、所属大类与变体关系。`}
       />
       <div class="mt-8">
         <MethodCompareTable />

@@ -4,7 +4,7 @@
  * mode="anchor" 用于方法总览页内锚点跳转；mode="route" 用于大类页之间跳转。
  * 两种模式共用同一套视觉与数据，避免两处维护分类顺序。
  */
-import { methodCategories, categoryProgress, type MethodCategory } from "../../lib/taxonomy";
+import { methodCategories, methodsOfCategory, type MethodCategory } from "../../lib/taxonomy";
 
 interface Props {
   mode: "anchor" | "route";
@@ -50,7 +50,7 @@ const hrefOf = (category: MethodCategory) =>
             >
               {category.name}
               <span class="font-mono text-[10.5px] text-ink-4">
-                {categoryProgress(category.slug)}
+                {methodsOfCategory(category.slug).length}
               </span>
             </a>
           </li>

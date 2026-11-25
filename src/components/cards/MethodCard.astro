@@ -9,7 +9,6 @@
  * 字号整体上抬：标题 16px、辅助 12px，达标且立得住层级。
  * 缺图条目才回落到图纸网格占位，不编数字、不填空白。
  */
-import StatusDot from "../content/StatusDot.astro";
 import SourceBadge from "../content/SourceBadge.astro";
 import { parentMethod, categoryBySlug, figures, type Method } from "../../lib/taxonomy";
 import { engineeringRecord, splitValue } from "../../lib/engineering";
@@ -82,7 +81,6 @@ const tags = method.conditions
       )
     }
     <span class="absolute top-2.5 right-2.5">
-      <StatusDot status={method.status} />
     </span>
     {
       thumb && (
@@ -108,7 +106,7 @@ const tags = method.conditions
     </p>
 
     {
-      metrics.length > 0 ? (
+      metrics.length > 0 && (
         <dl class="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-button border border-line bg-line">
           {metrics.map((m) => (
             <div class="bg-bg px-2.5 py-2">
@@ -125,10 +123,6 @@ const tags = method.conditions
             </div>
           ))}
         </dl>
-      ) : (
-        <p class="mt-3 rounded-button border border-dashed border-line px-2.5 py-2 text-[11.5px] text-ink-4">
-          参数待核对
-        </p>
       )
     }
 

@@ -12,12 +12,10 @@ import CategoryTabs from "../../components/nav/CategoryTabs.astro";
 import MethodCard from "../../components/cards/MethodCard.astro";
 import FigureCard from "../../components/cards/FigureCard.astro";
 import Plate from "../../components/content/Plate.astro";
-import StatusDot from "../../components/content/StatusDot.astro";
 import {
   methodCategories,
   methodsOfCategory,
   methodHref,
-  categoryProgress,
   figures,
 } from "../../lib/taxonomy";
 
@@ -67,12 +65,6 @@ const signature =
         <dt class="text-ink-3">方法数量</dt>
         <dd class="mt-1 font-mono text-[16px] text-ink">{list.length} 项</dd>
       </div>
-      <div>
-        <dt class="text-ink-3">正文进度</dt>
-        <dd class="mt-1 font-mono text-[16px] text-ink">
-          {categoryProgress(category.slug)}
-        </dd>
-      </div>
     </dl>
   </PageHero>
 
@@ -93,7 +85,7 @@ const signature =
           </p>
           <h2 class="text-[24px] leading-tight font-semibold">{category.name}</h2>
           <p class="mt-3 text-[13.5px] leading-7 text-ink-2">{category.applicability}</p>
-          <p class="mt-4 font-mono text-[12px] text-ink-3">{list.length} 项方法 · {categoryProgress(category.slug)} 已完成</p>
+          <p class="mt-4 font-mono text-[12px] text-ink-3">{categoryFigures.length} 幅工程图解</p>
 
           {signature && (
             <div class="mt-7 hidden lg:block" data-reveal="media">
@@ -117,10 +109,6 @@ const signature =
         <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-reveal="stagger">
           {list.map((method) => <MethodCard method={method} href={methodHref(method)} />)}
         </div>
-        <p class="mt-6 text-[12.5px] leading-6 text-ink-3">
-          每项方法使用同一套详情模板（基本信息、原理、适用条件、采准与切割、回采工艺、工程结构、三维模型、优缺点、案例、示意图、相关知识、参考文献）。
-          正文完成并通过来源核对后，状态由「建设中」变为「已完成」。
-        </p>
       </div>
     </div>
 
@@ -162,7 +150,6 @@ const signature =
                 <h3 class="mf-card-title text-[17px] font-semibold text-navy transition-colors duration-150 group-hover:text-accent">
                   {item.name}
                 </h3>
-                <StatusDot status={item.status} />
               </div>
               <p class="mt-2 text-[13px] leading-6 text-ink-2">{item.summary}</p>
               <p class="mt-3 font-mono text-[12px] text-ink-3">

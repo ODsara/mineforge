@@ -9,7 +9,6 @@ interface Props {
 const { category } = Astro.props;
 const list = methodsOfCategory(category.slug);
 const variantCount = list.filter((m) => m.variantOf).length;
-const completed = list.filter((m) => m.status === "complete").length;
 ---
 
 <a
@@ -29,7 +28,7 @@ const completed = list.filter((m) => m.status === "complete").length;
       </p>
     </div>
     <span class="shrink-0 text-[11.5px] text-ink-4">
-      {completed > 0 ? `${completed} 篇已完成` : "内容建设中"}
+      {list.length} 项方法
     </span>
   </div>
 

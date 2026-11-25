@@ -1,8 +1,8 @@
 {
   "name": "MineForge",
   "nameZh": "矿山知识工场",
-  "tagline": "探索地下矿山工程的知识与技术",
-  "description": "MineForge 是面向采矿工程专业的知识平台，以知识体系为骨架、以工程图解为载体，系统整理地下开采方法、开拓采准、通风安全等专业内容。",
+  "tagline": "金属矿床地下开采教学",
+  "description": "MineForge 面向采矿工程学习者，结合工程图解与三维工序演示，讲解金属矿床地下开采方法、开拓采准、通风和运输。",
   "version": "1.1.0",
   "nav": [
     {
@@ -95,7 +95,7 @@
             "href": "/resources/formulas/"
           },
           {
-            "label": "工程图纸与示意图",
+            "label": "工程图解",
             "href": "/resources/drawings/"
           },
           {
@@ -113,7 +113,7 @@
         ]
       },
       {
-        "title": "项目",
+        "title": "关于",
         "links": [
           {
             "label": "关于 MineForge",
@@ -124,13 +124,13 @@
             "href": "/about/#principles"
           },
           {
-            "label": "后续发展方向",
+            "label": "学习指南",
             "href": "/about/#roadmap"
           }
         ]
       }
     ],
-    "note": "本站专业内容依据公开出版教材、国家标准与公开发表文献整理。参数与工程数据均标注来源类型，未经核实的内容一律标注「待补充」，不作为工程设计依据。",
+    "note": "本站用于地下开采课程学习。图解用于理解空间关系，工程设计请采用现场资料与现行标准。",
     "copyright": "MineForge · 采矿工程知识平台"
   }
 }

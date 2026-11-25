@@ -182,10 +182,10 @@ try {
     // 检查查看器健康
     const health = await evalJs(
       `(() => { const c = document.querySelector("[data-mf-model]"); if (!c) return { viewer: false };
-        return { viewer: true, badge: document.querySelector("[data-model-badge]")?.textContent ?? "",
-                 skeletonGone: !document.querySelector("[data-model-skeleton]"),
-                 labels: document.querySelectorAll(".mf-model__label").length,
-                 views: document.querySelectorAll("[data-view]").length,
+        return { viewer: true, method: c.dataset.modelActive ?? "",
+                 loaded: Boolean(c.dataset.modelActive),
+                 labels: document.querySelectorAll(".studio-label").length,
+                 views: document.querySelectorAll("[data-model-view] option").length,
                  layers: document.querySelectorAll("[data-layer]").length }; })()`,
     );
     console.log("  健康:", JSON.stringify(health));
@@ -193,7 +193,7 @@ try {
     await evalJs(`document.querySelector("[data-mf-model]")?.scrollIntoView({ block: "center" })`);
     await sleep(400);
     for (const v of t.views) {
-      await evalJs(`document.querySelector('[data-view="${v}"]')?.click()`);
+      await evalJs(`(() => { const select = document.querySelector("[data-model-view]"); if (!select) return; select.value = ${JSON.stringify(v)}; select.dispatchEvent(new Event("change")); })()`);
       await sleep(700);
       await shotCanvas(`p0-${t.slug}-${v}`);
     }
@@ -219,8 +219,8 @@ try {
       for (const l of off) {
         await evalJs(
           `(() => { const b = document.querySelector('[data-layer="${l}"]');
-            if (b && b.getAttribute("aria-pressed") === "true") b.click();
-            return b?.getAttribute("aria-pressed"); })()`,
+            if (b && b.checked) b.click();
+            return b?.checked; })()`,
         );
       }
       await evalJs(
@@ -232,8 +232,8 @@ try {
       for (const l of off) {
         await evalJs(
           `(() => { const b = document.querySelector('[data-layer="${l}"]');
-            if (b && b.getAttribute("aria-pressed") === "false") b.click();
-            return b?.getAttribute("aria-pressed"); })()`,
+            if (b && !b.checked) b.click();
+            return b?.checked; })()`,
         );
       }
     }

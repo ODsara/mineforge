@@ -163,15 +163,15 @@ const payload = {
 
       if (hits.length === 0) {
         list.innerHTML =
-          '<li class="rounded-button border border-dashed border-line-strong bg-bg px-3.5 py-3">' +
-          '<p class="text-[12.5px] font-medium text-ink-2">该组合尚无已核对的方法</p></li>';
+          '<li class="mf-feedback-in rounded-button border border-dashed border-line-strong bg-bg px-3.5 py-3">' +
+          '<p class="text-[12.5px] font-medium text-ink-2">没有符合全部所选条件的方法</p></li>';
         return;
       }
 
       list.innerHTML = hits
         .map(
           (it) =>
-            `<li><a href="${it.href}" class="group block rounded-button border border-line bg-bg px-3.5 py-3 transition-colors duration-150 hover:border-line-strong hover:bg-panel">` +
+            `<li class="mf-feedback-in"><a href="${it.href}" class="group block rounded-button border border-line bg-bg px-3.5 py-3 transition-colors duration-150 hover:border-line-strong hover:bg-panel">` +
             `<div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">` +
             `<span class="mf-card-title text-[13.5px] font-semibold text-ink group-hover:text-accent">${it.name}</span>` +
             `<span class="font-mono text-[11px] text-ink-4">${it.path}</span>` +

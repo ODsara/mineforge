@@ -165,6 +165,8 @@ export function disposeTree(root: THREE.Object3D): void {
 }
 
 function isShared(m: THREE.Material): boolean {
+  // 引擎材质单例（bootstrap 标记 mfShared）跨 variant/stage 构建复用，不随单棵树销毁
+  if (m.userData && m.userData.mfShared) return true;
   for (const v of matCache.values()) if (v === m) return true;
   for (const v of lineCache.values()) if (v === m) return true;
   return false;

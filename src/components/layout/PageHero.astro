@@ -19,24 +19,24 @@ const hasActions = Astro.slots.has("actions");
   <div class="mf-container pt-12 pb-10 md:pt-16 md:pb-14">
     {
       eyebrow && (
-        <p class="mf-sec mb-4">
+        <p class="mf-sec mf-enter mb-4">
           {eyebrow}
         </p>
       )
     }
-    <h1 class="max-w-4xl text-[30px] leading-[1.18] font-semibold tracking-[-0.015em] md:text-[42px]">
+    <h1 class="mf-enter max-w-4xl text-[30px] leading-[1.18] font-semibold tracking-[-0.015em] md:text-[42px]">
       {title}
     </h1>
     {
       description && (
-        <p class="mf-measure mt-4 text-[15.5px] leading-[1.8] text-ink-2 md:mt-5 md:text-[16.5px]">
+        <p style="--mf-delay:55ms" class="mf-measure mf-enter mt-4 text-[15.5px] leading-[1.8] text-ink-2 md:mt-5 md:text-[16.5px]">
           {description}
         </p>
       )
     }
     {
       hasActions && (
-        <div class="mt-8 flex flex-wrap items-center gap-3">
+        <div style="--mf-delay:95ms" class="mf-enter mt-8 flex flex-wrap items-center gap-3">
           <slot name="actions" />
         </div>
       )

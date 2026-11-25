@@ -8,7 +8,6 @@ terms: [矿房, 分段, 间柱, 斜顶柱, 堑沟平巷, 凿岩平巷, 切割横
 
 import ParameterTable from "../../components/content/ParameterTable.astro";
 import FoldSection from "../../components/content/FoldSection.astro";
-import PendingBlock from "../../components/content/PendingBlock.astro";
 import FigureGallery from "../../components/content/FigureGallery.astro";
 import ModelViewer from "../../components/model/ModelViewer.astro";
 
@@ -106,7 +105,7 @@ import ModelViewer from "../../components/model/ModelViewer.astro";
 3. **80% 以上总回采率含矿柱回采**——前提是"采完立即回采矿柱"这一运营纪律被真正执行。
 
 
-<ModelViewer slug="sublevel-room" />
+<ModelViewer slug="sublevel-room" scrolly />
 ## 优缺点分析
 
 ### 优点
@@ -126,17 +125,7 @@ import ModelViewer from "../../components/model/ModelViewer.astro";
 | 对比对象 | 本方法的相对位置 |
 | --- | --- |
 | 与分段凿岩阶段矿房法比 | 分段独立出矿、灵活、矿柱即采即空区即处理；但底部结构每个分段都要一套，采准量大 |
-| 与阶段矿房法（VCR）比 | 孔浅、偏斜可控；但无 VCR 一次崩全段的强度 |
-
-<FoldSection summary="典型工程案例">
-
-<PendingBlock
-  label="CASE"
-  title="案例待补充"
-  text="文献已定位：①铜山铜矿前山 84# 矿体——原分段崩落法存在通风困难、采场自燃、地压难控、损失贫化大，改试验分段空场嗣后充填（郭金峰等，2000，[位]）；②安徽龙桥铁矿、山东苍山铁矿缓倾斜中厚矿体分段空场法（郑成英，《黄金》2018，[位]）。两篇全文核对后写入卡片。"
-/>
-
-</FoldSection>
+| 与阶段矿房法（VCR）比 | 分段独立出矿。VCR 由顶部硐室向下凿岩、从底部向上逐层回采，并由阶段底部集中出矿。 |
 
 <FoldSection summary="工程示意图">
 

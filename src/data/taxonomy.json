@@ -7,7 +7,7 @@
       "name": "地下采矿方法",
       "nameEn": "Underground Mining Methods",
       "summary": "按地压管理方式划分为空场法、充填法与崩落法三大类，是地下矿床开采方法选择与采场设计的核心内容。",
-      "status": "stub",
+      "status": "complete",
       "href": "/methods/",
       "topics": [
         {
@@ -37,24 +37,40 @@
       "name": "露天开采",
       "nameEn": "Surface Mining",
       "summary": "以台阶开采为核心，涵盖开采要素、边坡稳定、剥离排土以及露天转地下等环节，与地下开采共用矿床开拓与采准的基础。",
-      "status": "planned",
+      "status": "complete",
       "href": "/knowledge/open-pit/",
       "topics": [
         {
           "label": "台阶与开采要素",
-          "href": null
+          "href": null,
+          "body": [
+            "露天开采以台阶为基本单元。台阶高度要与钻机、铲装设备和爆破设计匹配，台阶宽度要容纳穿孔、爆破、铲装和运输作业，并保证边坡有足够的安全平台。",
+            "开采要素包括台阶高度、台阶宽度、工作帮坡角、最终边坡角和采剥顺序。它们不是孤立参数：台阶过高会增加爆破与边坡风险，过窄会限制设备回转和运输，最终边坡角过陡则把风险留给闭坑后的长期稳定。"
+          ]
         },
         {
           "label": "最终边坡与边坡稳定",
-          "href": null
+          "href": null,
+          "body": [
+            "最终边坡由若干台阶和平台组成，稳定性取决于岩体结构、节理裂隙、地下水、爆破振动和开采顺序。边坡设计要先做工程地质分区，再按岩体质量与结构面组合确定坡角，不能全矿用一个角度。",
+            "靠帮爆破要控制单段药量、预裂或光面爆破，减少对坡面的损伤；边坡要设截排水沟、监测点和警戒区。发现裂缝、位移加速或台阶错动，应停止靠帮作业并复核坡角，不能以生产进度压过稳定要求。"
+          ]
         },
         {
           "label": "剥离与排土",
-          "href": null
+          "href": null,
+          "body": [
+            "剥离是把覆盖层和废石从矿体上分开，排土是把废石运到指定场地堆存。剥离比决定露天矿的经济性，也决定排土场的规模和复垦方案；采剥顺序要保证揭露矿体与排土能力同步。",
+            "排土场要选在稳定地基上，分层压实、设置排水和挡墙，避免泥石流与边坡失稳；废石中有用组分或酸性岩时，要单独堆存并做防渗、中和或覆盖。排土场闭坑后应按复垦设计恢复植被与排水系统。"
+          ]
         },
         {
           "label": "露天转地下开采",
-          "href": null
+          "href": null,
+          "body": [
+            "露天转地下一般发生在露天境界继续剥离不经济、或边坡与坑底稳定性不允许深采时。转换要确定合理转换深度与境界，保留足够的隔离矿柱和边坡保护带，避免露天与地下同时作业互相扰动。",
+            "转换设计要统一考虑开拓系统、通风、排水、运输和提升；地下采场布置要避开露天边坡与排土场影响区，并控制崩落边界。生产过渡要有产能衔接方案，不能等露天停产后再开始地下建设。"
+          ]
         }
       ],
       "related": []
@@ -65,7 +81,7 @@
       "name": "矿床开拓与采准",
       "nameEn": "Mine Development & Preparation",
       "summary": "从地表通达矿体的井巷系统与采准切割工程，直接决定矿山生产能力、运输方式与基建投资，是采矿方法能否落地的前提。",
-      "status": "stub",
+      "status": "complete",
       "href": "/knowledge/development/",
       "topics": [
         {
@@ -86,7 +102,7 @@
         },
         {
           "label": "三级矿量",
-          "href": null
+          "href": "/engineering/development/#development-5"
         }
       ],
       "related": [
@@ -99,7 +115,7 @@
       "name": "矿井通风与安全",
       "nameEn": "Mine Ventilation & Safety",
       "summary": "涵盖矿井通风系统、风量计算与安全管理，是井下作业环境保障与事故防治的基础，也是采矿方法选择必须校核的约束条件。",
-      "status": "stub",
+      "status": "complete",
       "href": "/knowledge/ventilation-safety/",
       "topics": [
         {
@@ -112,7 +128,7 @@
         },
         {
           "label": "局部通风",
-          "href": null
+          "href": "/engineering/ventilation/#ventilation-4"
         },
         {
           "label": "粉尘与有害气体",
@@ -133,7 +149,7 @@
       "name": "矿山机械与运输",
       "nameEn": "Mining Machinery & Haulage",
       "summary": "凿岩、装载、运输与提升设备的选型与配套，直接影响采矿方法的机械化程度、生产能力与作业安全。",
-      "status": "planned",
+      "status": "complete",
       "href": "/knowledge/machinery-transport/",
       "topics": [
         {
@@ -150,11 +166,11 @@
         },
         {
           "label": "矿井提升",
-          "href": null
+          "href": "/engineering/development/#development-6"
         },
         {
           "label": "设备配套",
-          "href": null
+          "href": "/engineering/haulage/#haulage-3"
         }
       ],
       "related": [
@@ -166,8 +182,8 @@
       "order": 6,
       "name": "矿山设计与数字化",
       "nameEn": "Mine Design & Digitalization",
-      "summary": "矿山设计流程、采矿制图标准与数字化技术，包括三维地质建模、数值模拟与数字矿山建设，是本项目三维模型的落点。",
-      "status": "stub",
+      "summary": "矿山设计流程、采矿制图标准与数字化技术，包括三维地质建模、数值模拟与数字矿山建设，用于理解井下工程的空间表达与分析方法。",
+      "status": "complete",
       "href": "/knowledge/design-digital/",
       "topics": [
         {
@@ -180,15 +196,15 @@
         },
         {
           "label": "三维地质建模",
-          "href": null
+          "href": "/engineering/mine-design/#mine-design-5"
         },
         {
           "label": "数值模拟",
-          "href": null
+          "href": "/engineering/mine-design/#mine-design-5"
         },
         {
           "label": "数字矿山",
-          "href": null
+          "href": "/engineering/mine-design/#mine-design-5"
         }
       ],
       "related": []
@@ -200,7 +216,7 @@
       "order": 1,
       "name": "矿床开拓",
       "summary": "开拓方式比选、井巷布置与生产能力核定。",
-      "status": "planned",
+      "status": "complete",
       "intro": "从地表通达矿体、为全矿建立运输、通风、排水与动力通道的井巷系统。开拓方式一经确定即约束矿山生产能力与基建投资，属于全矿性、难以更改的技术决策。",
       "scope": [
         {
@@ -241,8 +257,8 @@
       "order": 2,
       "name": "采准与切割",
       "summary": "采准巷道、切割天井与拉底工程的布置原则。",
-      "status": "planned",
-      "intro": "在已完成开拓的阶段内，为具体采场创造凿岩、爆破、出矿与通风条件而掘进的巷道和空间。采准切割工程量计入采矿方法的千吨掘进比，是方法经济性比较的一项硬指标。",
+      "status": "complete",
+      "intro": "在开拓形成的阶段内，为具体采场创造凿岩、爆破、出矿与通风条件而掘进的巷道和空间。采准切割工程量计入采矿方法的千吨掘进比，是方法经济性比较的一项硬指标。",
       "scope": [
         {
           "label": "采准巷道布置",
@@ -272,9 +288,7 @@
       "relatedMethods": [
         "sublevel-drilling-stage-room"
       ],
-      "relatedFigures": [
-        "fig-stope-sublevel-cross"
-      ],
+      "relatedFigures": ["fig-sublevel-drilling-stage-room-01"],
       "xrefNote": "具体布置随采矿方法而变，方法详情页的「采准与切割工程」一节给出该方法的实际布置。"
     },
     {
@@ -282,7 +296,7 @@
       "order": 3,
       "name": "回采工艺",
       "summary": "凿岩爆破、落矿、出矿与采场管理的工序组织。",
-      "status": "planned",
+      "status": "complete",
       "intro": "采场完成采准切割后的作业循环：凿岩、爆破落矿、出矿与采空区处理。同一套工序在不同采矿方法中的组织方式差异，构成方法之间的主要判别依据。",
       "scope": [
         {
@@ -312,9 +326,7 @@
       "relatedMethods": [
         "sublevel-drilling-stage-room"
       ],
-      "relatedFigures": [
-        "fig-stope-sublevel-long"
-      ],
+      "relatedFigures": ["fig-sublevel-drilling-stage-room-01"],
       "xrefNote": "回采工艺是采矿方法正文的组成部分，本专题只抽出跨方法共用的作业环节。"
     },
     {
@@ -322,7 +334,7 @@
       "order": 4,
       "name": "矿山通风",
       "summary": "通风系统构建、风量分配与风机选型。",
-      "status": "planned",
+      "status": "complete",
       "intro": "向井下各作业面持续供给新鲜空气，稀释并排出粉尘与有害气体。通风能力是采矿方法选择与采场布置必须校核的约束条件之一。",
       "scope": [
         {
@@ -358,7 +370,7 @@
       "order": 5,
       "name": "矿山运输",
       "summary": "井下运输方式、转运环节与设备配套。",
-      "status": "planned",
+      "status": "complete",
       "intro": "井下矿石、废石、人员、材料与设备的转运，涵盖采场出矿点到井底车场或地面的完整链条。运输环节的通过能力常常是矿山生产能力的实际瓶颈。",
       "scope": [
         {
@@ -395,7 +407,7 @@
       "order": 6,
       "name": "矿山安全",
       "summary": "地压、通风、爆破与提升运输的安全要求。",
-      "status": "planned",
+      "status": "complete",
       "intro": "覆盖地压、通风、爆破、提升运输与防排水等环节的强制性要求。安全规程的条文是采矿方法能否采用的硬约束，而不是可选的优化项。",
       "scope": [
         {
@@ -433,7 +445,7 @@
       "order": 7,
       "name": "矿山设计",
       "summary": "设计阶段划分、图纸体系与设计文件构成。",
-      "status": "planned",
+      "status": "complete",
       "intro": "把资源条件与技术方案固化为可施工的图纸和设计文件。设计阶段的划分决定了内容深度，制图标准决定了图纸能否被施工方正确读取。",
       "scope": [
         {
@@ -463,9 +475,7 @@
       "relatedMethods": [
         "sublevel-drilling-stage-room"
       ],
-      "relatedFigures": [
-        "fig-stope-sublevel-iso"
-      ],
+      "relatedFigures": [],
       "xrefNote": "三维模型最终要落到符合制图标准的剖面与视图上，这也是本站三维模块的目标形态。"
     }
   ],
@@ -517,8 +527,8 @@
     },
     {
       "stage": "第三步",
-      "title": "做设计",
-      "description": "通风、运输、安全校核与设计制图，把选定的方法落到可施工的图纸上。",
+      "title": "联系工程系统",
+      "description": "结合通风、运输、安全与设计，理解采场怎样接入整座矿山的生产系统。",
       "domains": [
         "ventilation-safety",
         "machinery-transport",

@@ -29,8 +29,8 @@ const tex = (src: string, displayMode = false) =>
     {
       [
         { label: "公式", value: formulas.length, unit: "条", hint: "定义式与力学平衡式" },
-        { label: "已核对参数", value: total, unit: "条", hint: `${groups.length} 组来源类型` },
-        { label: "待收录", value: plannedFormulas.length, unit: "项", hint: "含经验系数，须核原文" },
+        { label: "工程参数", value: total, unit: "条", hint: `${groups.length} 组来源类型` },
+        { label: "经验公式索引", value: plannedFormulas.length, unit: "项", hint: "按原文核对经验系数" },
       ].map((item) => (
         <div class="rounded-card border border-line bg-surface px-4 py-3">
           <p class="text-[11.5px] text-ink-4">{item.label}</p>
@@ -54,7 +54,10 @@ const tex = (src: string, displayMode = false) =>
     <div class="mt-5 grid gap-4 lg:grid-cols-2">
       {
         formulas.map((f) => (
-          <article class="flex h-full flex-col rounded-card border border-line bg-bg p-5">
+          <article
+            id={`formula-${f.id}`}
+            class="flex h-full scroll-mt-24 flex-col rounded-card border border-line bg-bg p-5"
+          >
             <div class="flex items-baseline justify-between gap-3">
               <h3 class="text-[14px] font-medium text-ink">{f.name}</h3>
               <span class="shrink-0 rounded-card border border-line px-1.5 py-0.5 text-[10.5px] text-ink-3">
@@ -96,24 +99,27 @@ const tex = (src: string, displayMode = false) =>
           <span class="font-mono text-[11px] text-ink-4">{group.items.length} 条</span>
         </div>
         <div class="overflow-x-auto rounded-card border border-line">
-          <table class="w-full min-w-[760px] border-collapse text-left">
+          <table data-ui class="w-full min-w-[760px] table-fixed border-collapse text-left">
             <caption class="sr-only">{group.type}参数表</caption>
             <thead>
               <tr class="bg-surface text-[11px] tracking-wide text-ink-4">
-                <th scope="col" class="border-b border-line px-3 py-2 font-normal">参数</th>
-                <th scope="col" class="border-b border-line px-3 py-2 font-normal">取值</th>
-                <th scope="col" class="border-b border-line px-3 py-2 font-normal">所属方法</th>
-                <th scope="col" class="border-b border-line px-3 py-2 font-normal">条件与说明</th>
-                <th scope="col" class="border-b border-line px-3 py-2 font-normal">出处</th>
+                <th scope="col" class="w-[15%] border-b border-line px-3 py-2 font-normal">参数</th>
+                <th scope="col" class="w-[27%] border-b border-line px-3 py-2 font-normal">取值</th>
+                <th scope="col" class="w-[18%] border-b border-line px-3 py-2 font-normal">所属方法</th>
+                <th scope="col" class="w-[28%] border-b border-line px-3 py-2 font-normal">条件与说明</th>
+                <th scope="col" class="w-[12%] border-b border-line px-3 py-2 font-normal">出处</th>
               </tr>
             </thead>
             <tbody>
               {group.items.map((p) => (
-                <tr class="border-b border-line-soft align-top last:border-b-0 hover:bg-surface">
+                <tr
+                  id={`param-${p.pid}`}
+                  class="scroll-mt-24 border-b border-line-soft align-top last:border-b-0 hover:bg-surface"
+                >
                   <th scope="row" class="px-3 py-2.5 text-left text-[12.5px] font-normal text-ink">
                     {p.name}
                   </th>
-                  <td class="px-3 py-2.5 font-mono text-[12px] whitespace-nowrap text-ink">
+                  <td class="px-3 py-2.5 font-mono text-[12px] text-ink">
                     {p.value}
                     {p.unit && p.unit !== "—" && (
                       <span class="ml-0.5 text-[10.5px] text-ink-4">{p.unit}</span>
@@ -123,7 +129,7 @@ const tex = (src: string, displayMode = false) =>
                   <td class="px-3 py-2.5 text-[11.5px] leading-5 text-ink-4">
                     {p.condition ?? p.note ?? "—"}
                   </td>
-                  <td class="px-3 py-2.5 font-mono text-[10.5px] whitespace-nowrap text-ink-4">
+                  <td class="px-3 py-2.5 font-mono text-[10.5px] leading-5 text-ink-4">
                     {p.source}
                   </td>
                 </tr>
@@ -137,11 +143,11 @@ const tex = (src: string, displayMode = false) =>
 
   <section>
     <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
-      <h2 class="text-[14px] font-medium text-ink">待收录：含经验系数的公式</h2>
+      <h2 class="text-[14px] font-medium text-ink">含经验系数的公式索引</h2>
       <span class="font-mono text-[11px] text-ink-4">{plannedFormulas.length} 项</span>
     </div>
     <p class="mt-2 max-w-2xl text-[12px] leading-6 text-ink-4">
-      这类公式的系数来自回归分析、试验统计或规程条文，脱离原文使用等于伪造依据。核对到具体文献与页码后再入库。
+      经验系数取决于试验条件、统计样本或规程适用范围。使用前请查阅原始文献并核对适用条件。
     </p>
     <ul class="mt-4 divide-y divide-line border-y border-line">
       {
@@ -149,7 +155,7 @@ const tex = (src: string, displayMode = false) =>
           <li class="grid gap-x-6 gap-y-1 py-3 md:grid-cols-12">
             <span class="text-[13px] text-ink md:col-span-3">{f.name}</span>
             <span class="text-[12px] leading-6 text-ink-4 md:col-span-7">{f.use}</span>
-            <span class="text-[11px] text-ink-4 md:col-span-2 md:text-right">待核对</span>
+            <span class="text-[11px] text-ink-4 md:col-span-2 md:text-right">查阅原文</span>
           </li>
         ))
       }

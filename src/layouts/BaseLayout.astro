@@ -42,18 +42,6 @@ const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta name="theme-color" content="#F7F1E6" />
-    {/*
-      揭示动效的「上锁」脚本。
-      必须在首帧之前同步执行：先由 CSS 把 [data-reveal] 置于初始态，再由脚本
-      在进入视口时加 .is-in 放行。若推迟到 defer 模块里执行，元素会先以终态
-      绘制一帧再被隐藏，出现闪烁。is:inline 保证不被 Astro 打包成外部模块。
-      减弱动效时不上锁，内容直接是终态。
-    */}
-    <script is:inline>
-      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        document.documentElement.classList.add("mf-anim");
-      }
-    </script>
   </head>
   <body class="flex min-h-screen flex-col">
     <SkipLink />

@@ -8,11 +8,52 @@ import { standardDocs, clauses } from "../../lib/resources";
 import { methodBySlug, methodHref } from "../../lib/taxonomy";
 
 const codes = [...new Set(clauses.map((c) => c.code))];
-const grouped = codes.map((code) => ({
-  code,
-  name: clauses.find((c) => c.code === code)?.name ?? "",
-  items: clauses.filter((c) => c.code === code),
-}));
+
+const nameOf = (code: string) =>
+  standardDocs.find((d) => d.code === code)?.name ??
+  clauses.find((c) => c.code === code && c.name)?.name ??
+  "";
+
+/** 锚点 id：条文在页面里的稳定定位，检索结果直接跳转到条 */
+const anchorOf = (clause: string) =>
+  clause
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\p{M}\p{Pc}]+/gu, "-")
+    .replace(/^-+|-+$/g, "") || "misc";
+
+/**
+ * 同一条文可能被多个方法共同引用：按 编号+条号 合并成一行，
+ * 出处方法合并展示，避免同一条重复出现 5 次。
+ */
+const grouped = codes.map((code) => {
+  const map = new Map<
+    string,
+    {
+      clause: string;
+      text?: string;
+      note?: string;
+      methods: { slug: string; name: string }[];
+    }
+  >();
+  for (const c of clauses.filter((x) => x.code === code)) {
+    const cur = map.get(c.clause);
+    if (!cur) {
+      map.set(c.clause, {
+        clause: c.clause,
+        text: c.text,
+        note: c.note,
+        methods: [{ slug: c.methodSlug, name: c.methodName }],
+      });
+    } else {
+      if (!cur.text && c.text) cur.text = c.text;
+      if (!cur.note && c.note) cur.note = c.note;
+      if (!cur.methods.some((m) => m.slug === c.methodSlug)) {
+        cur.methods.push({ slug: c.methodSlug, name: c.methodName });
+      }
+    }
+  }
+  return { code, name: nameOf(code), items: [...map.values()] };
+});
 
 const hrefOf = (slug: string) => {
   const method = methodBySlug(slug);
@@ -28,7 +69,7 @@ const hrefOf = (slug: string) => {
     </div>
 
     <div class="mt-4 overflow-x-auto rounded-card border border-line">
-      <table class="w-full min-w-[720px] border-collapse text-left">
+      <table data-ui class="w-full min-w-[720px] border-collapse text-left">
         <caption class="sr-only">本站引用的现行标准与规范</caption>
         <thead>
           <tr class="bg-surface text-[11px] tracking-wide text-ink-4">
@@ -67,7 +108,7 @@ const hrefOf = (slug: string) => {
                       doc.verified ? "text-ink-3" : "text-ink-4",
                     ]}
                   >
-                    {doc.verified ? "已核" : "待核"}
+                    {doc.verified ? "有条文索引" : "查标准原文"}
                   </span>
                 </td>
               </tr>
@@ -85,26 +126,47 @@ const hrefOf = (slug: string) => {
           <h2 class="text-[14px] font-medium text-ink">
             {group.code}　{group.name}
           </h2>
-          <span class="font-mono text-[11px] text-ink-4">已摘录 {group.items.length} 条</span>
+          <span class="font-mono text-[11px] text-ink-4">{group.items.length} 条摘录</span>
         </div>
 
         <ul class="divide-y divide-line-soft">
-          {group.items.map((clause) => (
-            <li class="grid gap-x-8 gap-y-1.5 py-4 md:grid-cols-12">
-              <div class="md:col-span-2">
-                <span class="font-mono text-[11.5px] text-accent">{clause.clause}</span>
-              </div>
-              <p class="text-[13px] leading-7 text-ink-2 md:col-span-8">{clause.text}</p>
-              <div class="md:col-span-2 md:text-right">
-                <a
-                  href={hrefOf(clause.methodSlug)}
-                  class="text-[11px] text-ink-4 transition-colors duration-100 hover:text-accent"
-                >
-                  用于{clause.methodName} →
-                </a>
-              </div>
-            </li>
-          ))}
+          {
+            group.items.map((clause) => (
+              <li
+                id={`clause-${anchorOf(clause.clause)}`}
+                class="grid scroll-mt-28 gap-x-8 gap-y-1.5 py-4 md:grid-cols-12"
+              >
+                <div class="md:col-span-2">
+                  <span class="font-mono text-[11.5px] text-accent">{clause.clause}</span>
+                </div>
+                <div class="md:col-span-7">
+                  {clause.text ? (
+                    <p class="text-[13px] leading-7 text-ink-2">{clause.text}</p>
+                  ) : (
+                    <p class="text-[12.5px] leading-6 text-ink-3">
+                      <span class="mr-2 rounded-card border border-line px-1.5 py-0.5 text-[10px] text-ink-4">
+                        未摘原文
+                      </span>
+                      {clause.note ?? "请查阅标准原文"}
+                    </p>
+                  )}
+                </div>
+                <div class="md:col-span-3 md:text-right">
+                  {clause.methods.map((m, i) => (
+                    <span>
+                      {i > 0 && <span class="text-[11px] text-ink-4">、</span>}
+                      <a
+                        href={hrefOf(m.slug)}
+                        class="inline-block text-[11px] leading-5 text-ink-4 transition-colors duration-100 hover:text-accent"
+                      >
+                        {m.name} →
+                      </a>
+                    </span>
+                  ))}
+                </div>
+              </li>
+            ))
+          }
         </ul>
       </section>
     ))
@@ -112,6 +174,6 @@ const hrefOf = (slug: string) => {
 
   <p class="text-[12px] leading-6 text-ink-4">
     条文摘录用于学习与说明，不构成法律或设计依据。涉及设计取值、验收与处罚认定时，应查阅现行版本原文；
-    标注「待核」的规范尚未确认版次或条文原文，本站不摘录其条文。
+    标准版本及条文内容请以正式发布的原文为准。
   </p>
 </div>

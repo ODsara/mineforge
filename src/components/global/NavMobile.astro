@@ -1,7 +1,7 @@
 ---
 /**
  * 移动端抽屉导航
- * 打开状态由 data-open 控制，交互脚本在 Header.astro 中，本组件只负责结构与样式
+ * 通过原生 dialog 展示菜单，开关由 Header.astro 管理
  */
 import site from "../../data/site.json";
 import { isActive } from "../../lib/nav";
@@ -14,17 +14,14 @@ const { activePath } = Astro.props;
 const items = site.nav;
 ---
 
-<div
-  id="mobile-nav"
-  data-open="false"
-  aria-hidden="true"
-  class="fixed inset-0 z-50 flex-col bg-bg lg:hidden"
->
+<dialog id="mobile-nav" aria-label="移动端菜单" class="flex-col bg-bg">
+
   <div class="flex h-16 shrink-0 items-center justify-between border-b border-line px-5">
     <span class="text-[15px] font-semibold tracking-tight">MineForge</span>
     <button
       type="button"
       data-nav-close
+      autofocus
       class="-mr-2 flex h-10 w-10 items-center justify-center rounded text-ink-2 hover:text-ink"
       aria-label="关闭导航"
     >
@@ -66,13 +63,51 @@ const items = site.nav;
       采矿工程知识平台 · v{site.version}
     </p>
   </div>
-</div>
+</dialog>
 
 <style>
   #mobile-nav {
-    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--color-ink);
+    translate: 0 14px;
+    transition:
+      translate var(--mf-d2) var(--mf-ease),
+      display var(--mf-d2) allow-discrete,
+      overlay var(--mf-d2) allow-discrete;
   }
-  #mobile-nav[data-open="true"] {
+
+  #mobile-nav[open] {
     display: flex;
+    translate: 0;
+  }
+
+  @starting-style {
+    #mobile-nav[open] {
+      translate: 0 14px;
+    }
+  }
+
+  #mobile-nav::backdrop {
+    background: color-mix(in srgb, var(--color-ink) 20%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    #mobile-nav[open] nav li {
+      animation: mf-ui-in var(--mf-d2) var(--mf-ease) both;
+    }
+
+    #mobile-nav[open] nav li:nth-child(2) { animation-delay: 30ms; }
+    #mobile-nav[open] nav li:nth-child(3) { animation-delay: 60ms; }
+    #mobile-nav[open] nav li:nth-child(4) { animation-delay: 90ms; }
+    #mobile-nav[open] nav li:nth-child(5) { animation-delay: 120ms; }
+    #mobile-nav[open] nav li:nth-child(6) { animation-delay: 150ms; }
   }
 </style>

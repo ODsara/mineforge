@@ -1,134 +1,71 @@
 ---
-/**
- * 首页（v2.2 极简）—— 排版即界面
- *
- * 四个乐章，发丝线分隔，大量留白：
- *   ① 排版英雄区：超大衬线标题 + 一句价值表达 + 两个动作；底压一行更新条
- *   ② 索引式入口：三条路做成目录行（编号 / 标题 / 说明 / 计数），不用卡片
- *   ③ 单一视觉锚点：深色展台带只放一幅旗舰等轴测渲染 + 一行图注
- *   ④ 收束行：资料与进度一句话
- *
- * 极简不等于空：每屏一个视觉主角，层级靠字号字重与留白建立，不靠盒子。
- * 页面不写死任何方法名或数值：统计与条目均由 taxonomy / methods 数据推导。
- */
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DrawingCarousel from "../components/content/DrawingCarousel.astro";
 import {
   domains,
   methods,
   methodCategories,
   methodsOfCategory,
   engineeringTopics,
-  recentUpdates,
-  methodStatusCount,
-  methodHref,
-  methodBySlug,
-  figures,
 } from "../lib/taxonomy";
-
-const progress = methodStatusCount();
-const updates = recentUpdates(3);
-
-/** 单一视觉锚点：旗舰方法的等轴测渲染（既有自产资产） */
-const flagship = methodBySlug("sublevel-drilling-stage-room");
-const heroFigure =
-  figures.find((f) => f.id === "fig-stope-sublevel-iso") ??
-  figures.find((f) => f.kind === "render");
-const readyModels = methods.filter((m) => m.model?.status === "ready");
 
 const entries = [
   {
-    index: "01",
     title: "采矿方法",
     href: "/methods/",
     count: `${methods.length} 项`,
-    desc: "按空场 / 充填 / 崩落三大类归口，含原理、工艺、结构与参数出处。",
+    desc: "比较空场法、充填法和崩落法，结合图解与三维模型认识采场结构、适用条件和回采顺序。",
   },
   {
-    index: "02",
     title: "工程技术",
     href: "/engineering/",
-    count: `${engineeringTopics.length} 道`,
-    desc: "按开采工序排的专题——干这道工序之前，该看哪一部分。",
+    count: `${engineeringTopics.length} 个专题`,
+    desc: "跟着矿石的路径学习开拓、采准切割、回采与运输，并理解通风、安全和设计的作用。",
   },
   {
-    index: "03",
     title: "知识体系",
     href: "/knowledge/",
-    count: `${domains.length} 个`,
-    desc: "按学习顺序排的方向——先学什么、后学什么，只做导读。",
+    count: `${domains.length} 个方向`,
+    desc: "从矿体和井巷的空间关系入门，再学习采矿方法和井下生产系统。",
   },
 ];
 ---
 
 <BaseLayout activePath="/">
-  <!-- ==================== ① 排版英雄区 ==================== -->
-  <section class="border-b border-line">
-    <div class="mf-container pb-10 pt-24 md:pt-32">
-      <h1
-        class="mf-rise text-[42px] leading-[1.05] tracking-[-0.03em] md:text-[62px]"
-        style="--d:60ms"
-      >
-        MineForge
-      </h1>
+  <section class="border-b border-line" aria-labelledby="home-title">
+    <div class="mf-container home-hero grid items-center">
+      <header class="home-hero-copy">
+        <h1 id="home-title" class="mf-enter home-hero-title font-semibold">MineForge</h1>
+        <p style="--mf-delay:60ms" class="mf-enter mt-4 font-serif text-[25px] leading-snug text-navy md:text-[34px]">地下开采教学</p>
 
-      <p
-        class="mf-rise-sm mt-5 font-serif text-[21px] leading-snug tracking-[-0.01em] text-navy md:text-[26px]"
-        style="--d:140ms"
-      >
-        把地下采矿方法，读成一部可追溯的工程手册
-      </p>
+        <p style="--mf-delay:100ms" class="mf-enter mt-5 max-w-[28em] text-[14px] leading-7 text-ink-2 md:text-[16px] lg:mx-auto">
+          初次学习可先从 <a href="/knowledge/development/" class="underline underline-offset-4">地下矿山开拓剖面</a> 认识井筒、巷道与采场。
+        </p>
 
-      <p
-        class="mf-rise mt-7 max-w-[34em] text-[15px] leading-[1.9] text-ink-2 md:text-[16.5px]"
-        style="--d:140ms"
-      >
-        {methods.length} 种采矿方法、{engineeringTopics.length} 道开采工序与它们的参数出处，
-        按知识体系组织，配工程图解与程序化三维模型。
-      </p>
-
-      <div class="mf-rise mt-10 flex flex-wrap items-center gap-x-7 gap-y-4" style="--d:220ms">
-        <a href="/methods/" class="mf-btn">
-          进入知识库
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </a>
-        <a href="/engineering/" class="mf-goto">探索工程</a>
-      </div>
-    </div>
-
-    <!-- 更新条：一行发丝线内的事实，不占视觉重心 -->
-    <div class="border-t border-line-soft">
-      <div class="mf-container flex flex-wrap items-center gap-x-7 gap-y-1.5 py-3">
-        <span class="font-mono text-[10.5px] tracking-[0.14em] text-ink-4">最近更新</span>
-        {
-          updates.map((item) => (
-            <a href={item.href} class="text-[12px] text-ink-3 transition-colors duration-150 hover:text-accent">
-              <span class="font-mono text-[10.5px] text-ink-4">{item.date.slice(5)}</span>
-              <span class="ml-1.5">{item.title}</span>
-            </a>
-          ))
-        }
-        <span class="ml-auto font-mono text-[10.5px] text-ink-4">
-          {progress.complete}/{methods.length} 篇已完成
-        </span>
-      </div>
+        <div style="--mf-delay:140ms" class="mf-enter mt-7 flex flex-wrap gap-3 md:mt-8 lg:justify-center">
+          <a href="/knowledge/#sec-path" class="home-hero-action home-hero-action-primary mf-press">查看学习路径</a>
+          <a href="/resources/drawings/" class="home-hero-action mf-press">浏览工程图集</a>
+        </div>
+      </header>
     </div>
   </section>
 
-  <!-- ==================== ② 索引式入口 ==================== -->
+  <section id="home-drawings" class="home-drawings-section scroll-mt-16 border-b border-line" aria-label="工程图纸展示">
+    <div class="mf-container home-drawings">
+      <DrawingCarousel />
+    </div>
+  </section>
+
   <section aria-label="知识库入口" class="border-b border-line">
     <div class="mf-container py-16 md:py-24">
-      <ul>
+      <ul data-reveal="stagger">
         {
           entries.map((entry) => (
             <li class="border-t border-line first:border-t-0">
               <a
                 href={entry.href}
-                class="mf-lift group -mx-4 grid gap-x-6 gap-y-2 px-4 py-7 hover:bg-surface md:grid-cols-[56px_minmax(0,1fr)_auto] md:items-baseline md:py-8"
+                class="mf-lift group -mx-4 grid gap-x-6 gap-y-2 px-4 py-7 hover:bg-surface md:grid-cols-[minmax(0,1fr)_auto] md:items-baseline md:py-8"
               >
-                <span class="font-mono text-[12px] tracking-[0.16em] text-accent">{entry.index}</span>
-
                 <span class="min-w-0">
                   <span class="mf-card-title block text-[22px] leading-snug font-semibold transition-colors duration-150 group-hover:text-accent md:text-[26px]">
                     {entry.title}
@@ -136,7 +73,7 @@ const entries = [
                   <span class="mt-1.5 block max-w-[46em] text-[13px] leading-6 text-ink-3">
                     {entry.desc}
                   </span>
-                  {entry.index === "01" && (
+                  {entry.href === "/methods/" && (
                     <span class="mt-3 flex flex-wrap gap-x-5 gap-y-1">
                       {methodCategories.map((c) => (
                         <span class="font-mono text-[11px] text-ink-4">
@@ -169,59 +106,94 @@ const entries = [
     </div>
   </section>
 
-  <!-- ==================== ③ 单一视觉锚点：深色展台 ==================== -->
-  {
-    heroFigure && flagship && (
-      <section aria-label="三维工程模型" class="bg-stage text-stage-ink">
-        <div class="mf-container py-16 md:py-24">
-          <div class="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
-            <p class="font-mono text-[11px] tracking-[0.16em]" style="color:var(--color-stage-ink-dim)">
-              三维工程模型 · 程序化建模
-            </p>
-            <a
-              href={readyModels[0] ? methodHref(readyModels[0]) : "/methods/"}
-              class="mf-more"
-              style="color:var(--color-stage-ink);border-color:var(--color-stage-line)"
-            >
-              交互查看
-              <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            </a>
-          </div>
-
-          <figure class="mt-8" data-reveal="media">
-            <div class="overflow-hidden rounded-stage border" style="border-color:var(--color-stage-line)">
-              <img
-                src={heroFigure.src}
-                width={heroFigure.width}
-                height={heroFigure.height}
-                alt={`${flagship.name}等轴测三维渲染：矿体、围岩、矿房与矿柱的空间关系`}
-                class="block h-auto w-full object-contain"
-                style="background:var(--color-stage)"
-                decoding="async"
-              />
-            </div>
-            <figcaption class="mt-4 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1">
-              <span class="text-[13px]" style="color:var(--color-stage-ink)">
-                <span class="font-mono text-[10.5px] tracking-[0.14em]" style="color:var(--color-accent)">{heroFigure.figureNo}</span>
-                <span class="ml-2">{flagship.name} · 等轴测</span>
-              </span>
-              <span class="font-mono text-[10.5px]" style="color:var(--color-stage-ink-dim)">
-                已接入 {readyModels.length} 项交互模型 · 教材参数驱动
-              </span>
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- ==================== ④ 收束行 ==================== -->
   <section class="border-t border-line">
     <div class="mf-container flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-8 md:py-10">
       <p class="max-w-[46em] text-[12.5px] leading-6 text-ink-3">
-        另收：专业术语库 · 公式与参数 · 工程图纸 · 参考文献 · 标准与规范 · 推荐教材——参数标页码，条文标条号。
+        在资料中心查术语、公式与参数，也可按图号查找工程图解、教材和文献。
       </p>
       <a href="/resources/" class="mf-goto">资料中心</a>
     </div>
   </section>
 </BaseLayout>
+
+
+<style>
+  .home-hero {
+    max-width: var(--mf-container-wide);
+    padding-block: 2.5rem 3rem;
+  }
+
+  .home-drawings-section {
+    background: linear-gradient(to bottom, var(--color-bg), var(--color-surface) 36%);
+  }
+
+  .home-drawings {
+    display: grid;
+    align-items: center;
+    max-width: var(--mf-container-wide);
+    padding-block: 2.5rem 3rem;
+  }
+
+  .home-hero-copy {
+    min-width: 0;
+  }
+
+  .home-hero-title {
+    font-size: clamp(3rem, 6.55vw, 6.25rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+
+  .home-hero-action {
+    display: inline-flex;
+    min-height: 2.875rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 999px;
+    padding: 0.65rem 1.15rem;
+    color: var(--color-ink);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .home-hero-action:hover {
+    background: var(--color-panel);
+  }
+
+  .home-hero-action-primary {
+    border-color: var(--color-navy);
+    background: var(--color-navy);
+    color: var(--color-on-navy);
+  }
+
+  .home-hero-action-primary:hover {
+    background: var(--color-ink);
+  }
+
+  @media (min-width: 64rem) {
+    .home-hero,
+    .home-drawings {
+      min-height: min(49rem, calc(100svh - 4rem));
+      justify-content: center;
+    }
+
+    .home-hero {
+      grid-template-columns: minmax(0, 44.5rem);
+    }
+
+    .home-hero-copy {
+      text-align: center;
+    }
+
+    .home-drawings {
+      grid-template-columns: minmax(0, 64rem);
+      padding-block: clamp(2rem, 5svh, 4rem);
+    }
+
+    .home-drawings > :global([data-drawing-carousel]) {
+      width: clamp(30rem, calc((100svh - 10.5rem) * 1.7), 100%);
+      justify-self: center;
+    }
+  }
+</style>

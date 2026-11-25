@@ -66,7 +66,10 @@ export interface Clause {
   code: string;
   name: string;
   clause: string;
-  text: string;
+  /** 已核对原文的条文摘录；只有 note 的条目尚未摘原文，不冒充条文 */
+  text?: string;
+  /** 未摘原文时记录本站核对到的要点，页面明示「未摘原文」 */
+  note?: string;
   methodSlug: string;
   methodName: string;
 }
@@ -81,6 +84,8 @@ export interface Param {
   note?: string;
   methodSlug: string;
   methodName: string;
+  /** 参数库锚点 id（param-<pid>），供检索直接跳转到表格行 */
+  pid?: string;
 }
 
 export interface Textbook {
@@ -186,7 +191,12 @@ export function clausesOf(code: string): Clause[] {
 
 export const parameters: Param[] = bundles.flatMap(({ slug, data }) => {
   const name = methodBySlug(slug)?.name ?? slug;
-  return (data.parameters ?? []).map((p) => ({ ...p, methodSlug: slug, methodName: name }));
+  return (data.parameters ?? []).map((p, i) => ({
+    ...p,
+    methodSlug: slug,
+    methodName: name,
+    pid: `${slug}-${String(i + 1).padStart(2, "0")}`,
+  }));
 });
 
 /** 参数按来源类型分组，顺序固定，避免每次渲染顺序漂移 */

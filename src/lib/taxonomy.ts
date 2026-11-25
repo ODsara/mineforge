@@ -6,6 +6,7 @@
 import taxonomyData from "../data/taxonomy.json";
 import methodsData from "../data/methods.json";
 import figuresData from "../data/figures.json";
+import engineeringBodiesData from "../data/engineering-bodies.json";
 
 export type ContentStatus = "complete" | "draft" | "stub" | "planned";
 
@@ -17,7 +18,7 @@ export interface Domain {
   summary: string;
   status: ContentStatus;
   href: string;
-  topics: { label: string; href: string | null }[];
+  topics: { label: string; href: string | null; body?: string[] }[];
   related: string[];
 }
 
@@ -30,7 +31,7 @@ export interface EngineeringTopic {
   /** 工序定位：这一段工序在整个开采流程中解决什么问题 */
   intro: string;
   /** 本专题收录的内容条目。只列结构，不含任何未核对的参数 */
-  scope: { label: string; note: string }[];
+  scope: { label: string; note: string; body?: string[] }[];
   relatedDomains: string[];
   relatedMethods: string[];
   relatedFigures: string[];
@@ -73,10 +74,25 @@ export interface Method {
      * 值 = builder focusPoints 键名）。
      */
     presets?: { id: string; label: string; az: number; el: number; variant?: "iso" | "long" | "cross"; focus?: string }[];
-    /** 图层名 = 节点名 L_<名>，与 builder LAYERS 逐字一致；「围岩」默认关 */
+    /** 图层名 = 节点名 L_<名>，与 builder LAYERS 逐字一致；layersOff 列出默认关闭的图层（围岩/辅助细节） */
     layers?: string[];
+    layersOff?: string[];
+    /** 引擎方法代码（mining-methods-3d，如 A-2/C-19），溯源用 */
+    engineCode?: string;
     /** 工艺阶段关键帧（滚动演示）：label=黑色标题，note=阶段说明；与 builder STAGES 逐字对应 */
     stages?: { label: string; note?: string }[];
+    /** 查看器逐步播放的完整工序，顺序与引擎一致。 */
+    steps?: { label: string; note?: string; phase?: string }[];
+    stepCount?: number;
+    /**
+     * 过程演示迁移轮（2026-11-24）：工序阶段全集（含兜底档，如 B-4 的 post）。
+     * name 带"一、"序号前缀；color 已映射岩矿色谱。供步骤列表/阶段徽章/播放速度。
+     */
+    phases?: { id: string; name: string; color: string }[];
+    /** 过程演示单步停留秒数（独立版 stepDuration），播放间隔 = 该值×1000/速度 */
+    stepDuration?: number;
+    /** 自由探索初始态：Z 向剖切比例与连续回采进程比例（均 0–1） */
+    defaults?: { cut: number; progress: number };
     /** 仅 glb 条目：Blender 世界坐标（Z 向上），查看器转 three；procedural 锚点由 builder 返回，不进 JSON */
     anchors?: { label: string; pos: [number, number, number] }[];
     bbox?: { min: [number, number, number]; max: [number, number, number] };
@@ -118,9 +134,17 @@ const byOrder = <T extends { order: number }>(list: T[]) =>
   [...list].sort((a, b) => a.order - b.order);
 
 export const domains = byOrder(taxonomyData.domains as Domain[]);
-export const engineeringTopics = byOrder(
+const rawEngineeringTopics = byOrder(
   taxonomyData.engineeringTopics as EngineeringTopic[]
 );
+const engineeringBodies = engineeringBodiesData as Record<string, Record<string, string[]>>;
+export const engineeringTopics = rawEngineeringTopics.map((topic) => ({
+  ...topic,
+  scope: topic.scope.map((item) => ({
+    ...item,
+    body: engineeringBodies[topic.slug]?.[item.label] ?? [],
+  })),
+}));
 export const methodCategories = byOrder(
   taxonomyData.methodCategories as MethodCategory[]
 );
@@ -302,12 +326,10 @@ export function recentUpdates(limit = 5): {
 
 /** 站点统计：全部由数据推导，不手填 */
 export function siteStats() {
-  const { complete } = methodStatusCount();
   return [
     { value: String(domains.length), unit: "个", label: "知识方向" },
     { value: String(methods.length), unit: "项", label: "采矿方法" },
     { value: String(figures.length), unit: "幅", label: "工程图解" },
-    { value: String(complete), unit: "篇", label: "已完成正文" },
   ];
 }
 

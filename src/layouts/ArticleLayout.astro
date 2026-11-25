@@ -7,9 +7,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import Breadcrumb from "../components/global/Breadcrumb.astro";
 import Toc from "../components/nav/Toc.astro";
-import StatusDot from "../components/content/StatusDot.astro";
 import TrustRow from "../components/content/TrustRow.astro";
-import type { ContentStatus } from "../lib/taxonomy";
 
 interface Heading {
   depth: number;
@@ -24,8 +22,6 @@ interface Props {
   summary?: string;
   categoryName?: string;
   categoryHref?: string;
-  status: ContentStatus;
-  updated?: string;
   sourceLevel?: string;
   headings: Heading[];
   family?: { name: string; href: string; order: number; active: boolean }[];
@@ -39,8 +35,6 @@ const {
   summary,
   categoryName,
   categoryHref,
-  status,
-  updated,
   sourceLevel,
   headings,
   family = [],
@@ -88,7 +82,7 @@ const {
 
       <!-- 正文 -->
       <article class="min-w-0">
-        <header class="border-b border-line pb-7">
+        <header class="mf-enter border-b border-line pb-7">
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             {
               categoryName && (
@@ -100,7 +94,6 @@ const {
                 </a>
               )
             }
-            <StatusDot status={status} />
           </div>
 
           <h1 class="mt-3 text-[32px] leading-[1.15] font-semibold tracking-[-0.015em] md:text-[40px]">
@@ -118,14 +111,6 @@ const {
           <TrustRow class="mt-5" />
 
           <dl class="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-[12.5px]">
-            {
-              updated && (
-                <div class="flex items-baseline gap-2">
-                  <dt class="text-ink-4">更新</dt>
-                  <dd class="font-mono text-ink-2">{updated}</dd>
-                </div>
-              )
-            }
             {
               sourceLevel && (
                 <div class="flex items-baseline gap-2">

@@ -40,7 +40,7 @@ const {
 ---
 
 <figure class:list={["mf-plate not-prose", className]}>
-  <div class="mf-plate__inner">
+  <a class="mf-plate__inner block" href={src} aria-label={`查看原图：${title}`}>
     <img
       src={src}
       width={width}
@@ -50,7 +50,7 @@ const {
       decoding="async"
       class="block h-auto w-full object-contain"
     />
-  </div>
+  </a>
 
   <figcaption>
     <div class="mf-plate__cap">
@@ -68,6 +68,9 @@ const {
         )
       }
     </div>
+    {
+      caption && <p class="mt-2 text-[12.5px] leading-6 text-ink-2">{caption}</p>
+    }
     {
       source && (
         <p class="mt-2.5 border-t border-line-soft pt-1.5 font-mono text-[10px] leading-4 text-ink-4">

@@ -167,24 +167,24 @@ try {
     let loaded = null;
     for (let i = 0; i < 100; i++) {
       await sleep(100);
-      const ok = await evalJs(`document.querySelectorAll(".mf-model__label").length > 0`);
+      const ok = await evalJs(`Boolean(document.querySelector("[data-mf-model]")?.dataset.modelActive)`);
       if (ok) { loaded = Date.now() - t0; break; }
     }
     const health = await evalJs(
       `(() => { const c = document.querySelector("[data-mf-model]"); if (!c) return { viewer: false };
-        return { viewer: true, badge: document.querySelector("[data-model-badge]")?.textContent ?? "",
-                 labels: document.querySelectorAll(".mf-model__label").length,
-                 views: document.querySelectorAll("[data-view]").length,
+        return { viewer: true, method: c.dataset.modelActive ?? "",
+                 labels: document.querySelectorAll(".studio-label").length,
+                 views: document.querySelectorAll("[data-model-view] option").length,
                  layers: document.querySelectorAll("[data-layer]").length }; })()`,
     );
     console.log(`  首帧 ${loaded}ms · 健康 ${JSON.stringify(health)}`);
-    if (!loaded) { console.error(`  ✖ 模型未就绪（labels=0）——跳过本页（环境问题，非验收项）`); failed++; continue; }
+    if (!loaded) { console.error(`  ✖ 模型未就绪（加载失败）——跳过本页（环境问题，非验收项）`); failed++; continue; }
     await evalJs(`document.querySelector("[data-mf-model]")?.scrollIntoView({ block: "center" })`);
     await sleep(400);
     for (const [name, cam, tgt] of t.shots) {
       if (!cam) {
         // 预设等轴测：点 iso 按钮取标准机位
-        await evalJs(`document.querySelector('[data-view="iso"]')?.click()`);
+        await evalJs(`(() => { const select = document.querySelector("[data-model-view]"); if (!select) return; select.value = "iso"; select.dispatchEvent(new Event("change")); })()`);
         await sleep(700);
       } else {
         await evalJs(

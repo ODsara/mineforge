@@ -710,22 +710,22 @@
     "declared_name": "分段凿岩阶段矿房法",
     "coordinate_system": "X 走向；Y 垂直走向水平（+Y 上盘）；Z 铅垂向上",
     "parameters": {
-      "dip_deg": 72.0,
-      "ore_true_thickness_m": 30.0,
-      "block_length_m": 50.0,
-      "stage_height_m": 50.0,
-      "rib_pillar_width_m": 6.0,
-      "crown_pillar_m": 6.0,
-      "sill_pillar_m": 6.0,
+      "dip_deg": 72,
+      "ore_true_thickness_m": 30,
+      "block_length_m": 50,
+      "stage_height_m": 50,
+      "rib_pillar_width_m": 6,
+      "crown_pillar_m": 6,
+      "sill_pillar_m": 6,
       "sublevel_levels_m": [
-        8.0,
-        18.0,
-        28.0,
-        38.0
+        8,
+        18,
+        28,
+        38
       ],
-      "sublevel_interval_m": 10.0,
+      "sublevel_interval_m": 10,
       "drift_section_m": "2.4 × 2.4",
-      "funnel_spacing_m": 6.0,
+      "funnel_spacing_m": 6,
       "funnel_count": 5
     },
     "deviations": [

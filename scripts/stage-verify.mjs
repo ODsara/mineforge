@@ -1,8 +1,6 @@
 /**
- * 工艺阶段滚动演示·验收证据（只读工具）
- * 1) 滚动驱动验证：真实滚动页面到各关键帧标题 → 读取激活阶段按钮
- * 2) 逐阶段截图：点击阶段按钮 1..5 → canvas 截图
- * 产出：.audit/stages/*.png + 控制台滚动驱动日志
+ * 工序时间轴验收：逐步操作时间轴、核对当前步骤并截图。
+ * 产出：.audit/stage-timeline/*.png
  */
 import { spawn } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
@@ -12,7 +10,7 @@ import os from "node:os";
 
 const BASE = process.argv[2] ?? "http://localhost:4321";
 const PORT = 9360;
-const OUT_DIR = path.resolve(".audit/stages");
+const OUT_DIR = path.resolve(".audit/stage-timeline");
 const CANDIDATES = [
   "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
@@ -131,39 +129,29 @@ try {
     let ready = false;
     for (let i = 0; i < 100; i++) {
       await sleep(100);
-      if (await evalJs(`document.querySelectorAll(".mf-model__label").length > 0`)) { ready = true; break; }
+      // 详情页里查看器嵌在正文中部，且组件按 IntersectionObserver 懒初始化：
+      // 必须先把它滚入视口，观察器才会挂载模型（GitHub 版布局如此，独立 /model/ 页在顶部不受影响）。
+      await evalJs(`(() => { const c = document.querySelector("[data-mf-model]"); c?.scrollIntoView({ block: "center" }); return 1; })()`);
+      if (await evalJs(`Boolean(document.querySelector("[data-mf-model]")?.dataset.modelActive)`)) { ready = true; break; }
     }
     console.log(`  就绪: ${ready}`);
     if (!ready) continue;
 
-    // ── 逐阶段截图（点击阶段按钮）──
-    const nStages = await evalJs(`document.querySelectorAll("[data-model-stages] [data-stage]").length`);
-    console.log(`  阶段按钮数: ${nStages}`);
-    for (let s = 1; s <= nStages; s++) {
-      await evalJs(`document.querySelector('[data-model-stages] [data-stage="${s}"]')?.click()`);
-      await sleep(350);
-      const pressed = await evalJs(`document.querySelector('[data-model-stages] [data-stage="${s}"]')?.getAttribute("aria-pressed")`);
-      await shotCanvas(`st-${t.slug}-s${s}`);
-      console.log(`    阶段${s} aria-pressed=${pressed}`);
-    }
 
-    // ── 滚动驱动验证：滚动到各关键帧块 → 读激活阶段 ──
-    console.log("  滚动驱动验证：");
-    const keyCount = await evalJs(`document.querySelectorAll(".mf-model__key").length`);
-    for (let k = 1; k <= keyCount; k++) {
-      await evalJs(
-        `(() => { const el = document.querySelector('.mf-model__key[data-key-stage="${k}"]');
-          if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - innerHeight * 0.38, behavior: "instant" });
-          return 1; })()`,
-      );
-      await sleep(500); // 等滚动引擎 rAF + 重建
-      const active = await evalJs(
-        `document.querySelector('[data-model-stages] [aria-pressed="true"]')?.dataset.stage ?? "?"`,
-      );
-      const keyActive = await evalJs(
-        `document.querySelector('.mf-model__key[data-active="true"]')?.dataset.keyStage ?? "?"`,
-      );
-      console.log(`    关键帧${k} → 激活阶段=${active}（高亮关键帧=${keyActive}）`);
+    const nSteps = await evalJs(`Number(document.querySelector("[data-model-scrub]")?.max ?? 0)`);
+    console.log(`  工序步骤数: ${nSteps}`);
+    for (let step = 1; step <= nSteps; step++) {
+      const applied = await evalJs(`new Promise((resolve) => {
+        const scrub = document.querySelector("[data-model-scrub]");
+        scrub.value = "${step}";
+        scrub.dispatchEvent(new Event("input", { bubbles: true }));
+        requestAnimationFrame(() => {
+          const current = document.querySelector("[data-mf-model]")?.dataset.modelStep;
+          resolve(Number(current) === ${step});
+        });
+      })`);
+      if (!applied) throw new Error(t.slug + " 未切换到工序 " + step);
+      await shotCanvas(`timeline-${t.slug}-s${step}`);
     }
   }
   console.log(`控制台 error: ${consoleErrors.length}`);

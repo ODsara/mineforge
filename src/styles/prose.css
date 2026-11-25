@@ -134,10 +134,10 @@
 
 /* 表格：正文中信息密度最高的元素，样式优先级也最高 */
 .mf-prose table:not([data-ui]) {
-  display: block;
+  /* 表体撑满正文栏：display:block 会让列宽塌缩成内容宽度，右侧留一条空白 */
+  display: table;
   width: 100%;
   margin: 8px 0 20px;
-  overflow-x: auto;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-card);
   font-size: 13px;
@@ -152,12 +152,20 @@
   white-space: nowrap;
 }
 
+/* 两列键值表：首列按内容收紧，把宽度留给内容列 */
+.mf-prose table:not([data-ui]) thead th:first-child,
+.mf-prose table:not([data-ui]) tbody td:first-child {
+  white-space: nowrap;
+}
+
 .mf-prose table:not([data-ui]) th,
 .mf-prose table:not([data-ui]) td {
   padding: 7px 12px;
   border-bottom: 1px solid var(--color-line-soft);
   text-align: left;
   vertical-align: top;
+  /* 长编号/长英文串允许断行，避免单元格把整表撑出正文栏 */
+  overflow-wrap: anywhere;
 }
 
 .mf-prose table:not([data-ui]) thead th {

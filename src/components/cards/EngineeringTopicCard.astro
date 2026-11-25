@@ -1,6 +1,5 @@
 ---
 /** 工程专题卡片：序号 + 名称 + 说明 + 收录条目数 */
-import StatusDot from "../content/StatusDot.astro";
 import { engineeringHref, type EngineeringTopic } from "../../lib/taxonomy";
 
 interface Props {
@@ -20,7 +19,6 @@ const { topic, span = false } = Astro.props;
     <span class="font-mono text-[12px] tracking-wider text-accent">
       {span ? "贯穿" : String(topic.order).padStart(2, "0")}
     </span>
-    <StatusDot status={topic.status} />
   </div>
 
   <h3

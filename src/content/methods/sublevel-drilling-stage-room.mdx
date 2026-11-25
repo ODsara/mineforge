@@ -7,8 +7,8 @@ terms: [矿房, 间柱, 顶柱, 底柱, 分段凿岩巷道, 切割槽, 拉底, �
 ---
 
 import ParameterTable from "../../components/content/ParameterTable.astro";
-import FigureGallery from "../../components/content/FigureGallery.astro";
 import FoldSection from "../../components/content/FoldSection.astro";
+import FigureGallery from "../../components/content/FigureGallery.astro";
 import CaseCards from "../../components/content/CaseCards.astro";
 import ModelViewer from "../../components/model/ModelViewer.astro";
 
@@ -100,14 +100,6 @@ import ModelViewer from "../../components/model/ModelViewer.astro";
 
 ## 回采工艺
 
-<div class="mf-split">
-<div class="mf-split__figure">
-<img src="/assets/figures/fig-stope-sublevel-long.webp" width="1100" height="1100" alt="分段凿岩阶段矿房法纵向剖面：上下分段凿岩巷道与矿房、底部漏斗的相对位置" loading="lazy" decoding="async" />
-<p class="mf-split__cap">纵向剖面 · 自产渲染。左图随右侧步骤滚动保持可见。</p>
-</div>
-<div class="mf-split__body">
-
-
 ### 第一步：采准
 
 沿矿体下盘接触线掘阶段运输巷道 → 在间柱中掘通风人行天井 → 自天井掘进各分段凿岩巷道 → 掘电耙巷道 → 掘溜井、漏斗颈与拉底巷道。
@@ -140,10 +132,6 @@ import ModelViewer from "../../components/model/ModelViewer.astro";
 
 按 GB 16423-2020 第 6.3.1.15 条，应采取充填、隔离或强制崩落围岩的措施及时处理采空区。
 
-
-</div>
-</div>
-
 ## 主要工程结构
 
 先把矿体沿**高度**切成阶段（50～70 m），再把阶段内两翼留成间柱、顶部留成顶柱、底部留成底柱，中间即矿房。矿房内部再沿高度划出若干**分段**（8～15 m 一道），每个分段打一条沿走向的分段凿岩巷道。
@@ -167,7 +155,7 @@ import ModelViewer from "../../components/model/ModelViewer.astro";
 4. **矿房与矿柱尺寸必须经计算或类比确定。** 规范要求严格保持矿柱的尺寸、形状和直立度（GB 16423-2020 第 6.3.1.6 条）。
 
 
-<ModelViewer slug="sublevel-drilling-stage-room" />
+<ModelViewer slug="sublevel-drilling-stage-room" scrolly />
 ## 优缺点分析
 
 ### 优点
@@ -200,11 +188,10 @@ import ModelViewer from "../../components/model/ModelViewer.astro";
 
 </FoldSection>
 
+
 <FoldSection summary="工程示意图">
 
 <FigureGallery slug="sublevel-drilling-stage-room" />
-
-图解为自产渲染，依据教材对结构的文字描述与参数表重建，不作为施工依据，也不替代教材原图。
 
 </FoldSection>
 

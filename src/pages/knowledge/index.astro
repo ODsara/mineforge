@@ -8,12 +8,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/layout/PageHero.astro";
 import SectionHeader from "../../components/layout/SectionHeader.astro";
 import KnowledgeTree from "../../components/nav/KnowledgeTree.astro";
-import StatusDot from "../../components/content/StatusDot.astro";
 import taxonomy from "../../data/taxonomy.json";
 import {
   domains,
   domainHref,
-  engineeringTopics,
   engineeringHref,
   getDomain,
   relatedEngineering,
@@ -32,7 +30,7 @@ const path = taxonomy.learningPath;
   <PageHero
     eyebrow="知识体系"
     title="采矿工程知识体系"
-    description="按学科方向组织的分类索引与学习路径。知识体系回答「先学什么、按什么顺序学」，专业正文分别归入采矿方法与工程技术板块，全站不重复建设同一内容。"
+    description="从井筒、巷道和采场的空间关系入门，再学习采矿方法、通风运输与矿山设计。露天开采用于了解相关工艺和露天转地下的衔接。"
   >
     <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
       {
@@ -80,7 +78,6 @@ const path = taxonomy.learningPath;
                   <span class="font-mono text-[11px] tracking-wide text-ink-4">
                     {domain.nameEn}
                   </span>
-                  <StatusDot status={domain.status} class="ml-auto" />
                 </div>
 
                 <p class="mt-3 max-w-2xl text-[13.5px] leading-7 text-ink-2">
@@ -102,11 +99,11 @@ const path = taxonomy.learningPath;
                               {topic.label}
                             </a>
                           ) : (
-                            <span class="text-ink-4">
-                              {topic.label}
-                              <span class="ml-1.5 rounded-card border border-line-soft px-1 py-px text-[10.5px]">
-                                待补充
-                              </span>
+                            <span class="text-ink-2">{topic.label}</span>
+                          )}
+                          {!topic.href && (
+                            <span class="rounded-card border border-line-soft px-1 py-px text-[10.5px] text-ink-3">
+                              {topic.body?.length ? "知识要点" : ""}
                             </span>
                           )}
                         </li>
@@ -132,7 +129,11 @@ const path = taxonomy.learningPath;
                       </ul>
                     ) : (
                       <p class="mt-2.5 text-[12.5px] leading-6 text-ink-4">
-                        该方向的工程专题尚未建立，内容建设中。
+                        {domain.slug === "open-pit"
+                          ? "在知识要点中阅读台阶开采与露天转地下。"
+                          : domain.slug === "underground-mining"
+                            ? "本方向直接进入采矿方法库，不单设工程专题。"
+                            : "查看本方向的知识要点。"}
                       </p>
                     )}
                   </div>
@@ -164,7 +165,7 @@ const path = taxonomy.learningPath;
         description="从约束条件出发，先建立边界意识，再进入方法体系，最后落到设计与校核。"
       />
 
-      <ol class="mt-9 grid gap-px overflow-hidden rounded-card border border-line bg-line md:grid-cols-3">
+      <ol data-reveal="stagger" class="mt-9 grid gap-px overflow-hidden rounded-card border border-line bg-line md:grid-cols-3">
         {
           path.map((step, i) => (
             <li class="bg-bg p-6">
@@ -197,9 +198,6 @@ const path = taxonomy.learningPath;
         }
       </ol>
 
-      <p class="mt-6 text-[12px] leading-6 text-ink-4">
-        工程专题共 {engineeringTopics.length} 个，分类与入口已建立，正文将在后续版本逐步补充。
-      </p>
     </div>
   </section>
 </BaseLayout>

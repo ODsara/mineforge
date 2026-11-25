@@ -7,8 +7,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/layout/PageHero.astro";
 import SectionHeader from "../../components/layout/SectionHeader.astro";
 import SubNav from "../../components/nav/SubNav.astro";
-import StatusDot from "../../components/content/StatusDot.astro";
-import { resourceTypes, resourceHref, resourceCount, tierMeta, resourcesUpdated } from "../../lib/resources";
+import { resourceTypes, resourceHref, resourceCount, tierMeta } from "../../lib/resources";
 
 const count = resourceCount();
 const unitOf = (slug: string) =>
@@ -31,7 +30,7 @@ const totalParams = count.formulas;
   <PageHero
     eyebrow="资料中心"
     title="专业资料"
-    description="术语、参数、图纸与文献集中在这里。每条资料都带出处：条文标条号，参数标页码，图片标建模依据。来源可追溯是本站的基本要求，不是附加功能。"
+    description="查找地下开采的术语、公式、参数、工程图解、教材与参考文献。根据图注、参数来源或标准条号继续查阅。"
   >
     <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
       <div class="flex items-baseline gap-1.5">
@@ -65,10 +64,10 @@ const totalParams = count.formulas;
         id="sec-types"
         index="01 / 资料类型"
         title="六类资料"
-        description="术语与方法正文共用一份数据；参数按性质分组；规范只摘条文不替代原文。"
+        description="查术语释义、按来源比较参数，或按条号查阅相关标准。"
       />
 
-      <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div data-reveal="stagger" class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {
           resourceTypes.map((type) => (
             <a
@@ -79,7 +78,6 @@ const totalParams = count.formulas;
                 <span class="font-mono text-[11px] tracking-wider text-ink-4">
                   {String(type.order).padStart(2, "0")}
                 </span>
-                <StatusDot status={type.status} />
               </div>
 
               <h3 class="mt-3 flex items-baseline gap-2 text-[15px] leading-6 font-medium text-ink transition-colors duration-100 group-hover:text-accent">
@@ -127,7 +125,7 @@ const totalParams = count.formulas;
         }
       </ul>
 
-      <div class="mt-8 grid gap-4 sm:grid-cols-3">
+      <div data-reveal="stagger" class="mt-8 grid gap-4 sm:grid-cols-3">
         {
           [
             {
@@ -140,7 +138,7 @@ const totalParams = count.formulas;
             },
             {
               title: "图片不转载",
-              text: "外部图集只标来源不转载；本站图解均为自产渲染，并注明建模依据。",
+              text: "图解标明视图、关键结构和教材来源，点击图面可查看原图。",
             },
           ].map((item) => (
             <div class="rounded-card border border-line bg-surface p-4">
@@ -151,7 +149,6 @@ const totalParams = count.formulas;
         }
       </div>
 
-      <p class="mt-6 font-mono text-[11px] text-ink-4">资料库更新：{resourcesUpdated}</p>
     </div>
   </section>
 </BaseLayout>

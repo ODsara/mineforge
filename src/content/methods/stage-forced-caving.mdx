@@ -8,7 +8,6 @@ terms: [阶段全高, 补偿空间, 水平深孔, 垂直深孔挤压爆破, 连�
 
 import ParameterTable from "../../components/content/ParameterTable.astro";
 import FoldSection from "../../components/content/FoldSection.astro";
-import PendingBlock from "../../components/content/PendingBlock.astro";
 import FigureGallery from "../../components/content/FigureGallery.astro";
 import ModelViewer from "../../components/model/ModelViewer.astro";
 
@@ -108,7 +107,7 @@ import ModelViewer from "../../components/model/ModelViewer.astro";
 4. **下盘漏斗型式由下盘倾角定**：倾角小于 70° 考虑间隔式、小于 50° 应设密集式——不是设计偏好，是损失控制（p266）。
 
 
-<ModelViewer slug="stage-forced-caving" />
+<ModelViewer slug="stage-forced-caving" scrolly />
 ## 优缺点分析
 
 ### 评价（教材 10.5.1.6，p266）
@@ -120,17 +119,7 @@ import ModelViewer from "../../components/model/ModelViewer.astro";
 | 对比对象 | 本方法的相对位置 |
 | --- | --- |
 | 与有底柱分段崩落法比 | 采准更小、成本更低；但灵活性差、放矿管理要求严、大块多 |
-| 与阶段自然崩落法比 | 本方法强制落矿、对矿石可崩性无苛刻要求；自然崩落法成本低但条件苛刻（铜矿峪是我国唯一大规模成功应用者） |
-
-<FoldSection summary="典型工程案例">
-
-<PendingBlock
-  label="CASE"
-  title="案例待补充"
-  text="教材 10.5.1.2 节提及「下面简述我国矿山使用阶段强制崩落法情况」，但本节正文未列具体矿山指标。案例卡片需可追溯的矿山名称、矿体条件与实测指标，核对后写入。"
-/>
-
-</FoldSection>
+| 与阶段自然崩落法比 | 本方法强制落矿、对矿石可崩性无苛刻要求；自然崩落法成本低但条件苛刻（可结合铜矿峪矿案例理解） |
 
 <FoldSection summary="工程示意图">
 
