@@ -45,6 +45,7 @@ export interface ModelAnchor {
   label: string;
   /** three 世界坐标（米）。程序化锚点即 three 原生 Y-up，无需再转换 */
   pos: [number, number, number];
+  layer?: LayerName;
 }
 
 export interface BBox {

@@ -19,7 +19,7 @@ import { readFileSync } from "node:fs";
 import * as THREE from "three";
 import { registry } from "./registry.ts";
 import { LAYER_NAMES } from "./types.ts";
-import { getEngine } from "./engine/bootstrap.js";
+
 
 interface ModelJson {
   status: string;
@@ -136,7 +136,7 @@ test("工艺阶段：builder STAGES 与 methods.json stages 逐字一致，档�
   }
 });
 
-test("阶段推进：首末档可见对象集不同、中段逐档推进（末档采场处理允许为概念步）", () => {
+test("阶段推进：各工序都改变可见几何或构筑物", () => {
   const visSet = (group: THREE.Object3D): Set<string> => {
     const s = new Set<string>();
     group.traverse((o) => {
@@ -147,7 +147,11 @@ test("阶段推进：首末档可见对象集不同、中段逐档推进（末�
         if (!p.visible) return;
         p = p.parent;
       }
-      s.add(String(mesh.userData?.object_id ?? "anon"));
+      if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
+      const box = mesh.geometry.boundingBox?.clone().applyMatrix4(mesh.matrixWorld);
+      const bounds = box ? [...box.min.toArray(), ...box.max.toArray()].map(n => n.toFixed(3)).join(",") : "";
+      s.add(String(mesh.userData?.name ?? "") + "|" + bounds);
+
     });
     return s;
   };
@@ -185,7 +189,7 @@ test("原始工序可逐步构建，概览终帧与逐步回放终帧一致", ()
     const final = builder.build({ step: model.steps.length });
     assert.equal(visibleMeshCount(summary.group), visibleMeshCount(final.group), slug);
   }
-  assert.equal(total, 243);
+  assert.equal(total, 101);
 });
 
 test("过程演示数据契约：phases 覆盖全部 step.phase、stepDuration/defaults 数值域", () => {
@@ -211,32 +215,45 @@ test("过程演示数据契约：phases 覆盖全部 step.phase、stepDuration/d
   }
 });
 
-test("B-3 逐层开挖与逐层充填，标注跟随工序和剖面", () => {
-  const builder = registry["downward-slice"];
-  const cut = builder.build({ step: 3 });
-  const fill = builder.build({ step: 4 });
-  const next = builder.build({ step: 5 });
-  const cross = builder.build({ step: 5, variant: "cross" });
-  const counts = [cut, fill, next].map(({ group }) => {
-    let voids = 0;
-    let fills = 0;
-    group.traverseVisible((object) => {
-      if (object.userData.type_code === "STOPE-A") voids += 1;
-      if (object.userData.type_code === "FILL") fills += 1;
-    });
-    return [voids, fills];
+test("房柱法保留完整圆柱形点柱，有底柱与无底柱崩落拥有各自的出矿结构", () => {
+  const { group } = registry["room-pillar"].build({ step: 5 });
+  const columns: THREE.Mesh[] = [];
+  group.getObjectByName("L_矿柱")?.traverse(object => {
+    if (object instanceof THREE.Mesh && object.userData.name === "规则圆柱形点柱") columns.push(object);
   });
-  assert.deepEqual(counts, [[1, 0], [0, 1], [1, 1]]);
-  assert.ok(fill.anchors.some(({ label }) => label === "充填体"));
-  assert.ok(!fill.anchors.some(({ label }) => label.startsWith("人工假顶")));
-  assert.ok(next.anchors.some(({ label }) => label.startsWith("人工假顶")));
-  const midpoint = (cross.bbox.min[0] + cross.bbox.max[0]) / 2;
-  assert.ok(cross.anchors.every(({ pos }) => pos[0] <= midpoint));
+  assert.equal(columns.length, 9);
+  assert.ok(columns.every(({ geometry }) =>
+    geometry instanceof THREE.CylinderGeometry && geometry.parameters.radiusTop === geometry.parameters.radiusBottom));
+
+  const hasBell = (group: THREE.Group) => {
+    let result = false;
+    group.traverse(object => { if (String(object.userData.name).includes("漏斗及斗颈")) result = true; });
+    return result;
+  };
+  assert.ok(hasBell(registry["sublevel-caving-bottom-pillar"].build({ step: 7 }).group));
+  assert.ok(!hasBell(registry["sublevel-caving-no-pillar"].build({ step: 6 }).group));
+});
+
+test("B-3 下向水力充填保留人工假顶，剖面范围同步筛选标注", () => {
+  const builder = registry["downward-slice"];
+  const early = builder.build({ step: 3 });
+  const fill = builder.build({ step: 5 });
+  const next = builder.build({ step: 6 });
+  const section = builder.build({ step: 6, variant: "cross" });
+  const hasFoundation = (group: THREE.Group) => {
+    let found = false;
+    group.traverse(object => { if (String(object.userData.name).includes("人工假顶")) found = true; });
+    return found;
+  };
+  assert.ok(!hasFoundation(early.group) && hasFoundation(fill.group) && hasFoundation(next.group));
+  assert.ok(fill.anchors.some(({ label }) => label === "充填下料口"));
+  const midpoint = (section.bbox.min[0] + section.bbox.max[0]) / 2;
+  assert.ok(section.anchors.every(({ pos }) => pos[0] <= midpoint));
 });
 
 test("自由探索按视角切换剖切轴，回到过程演示恢复预设剖面", () => {
   const session = registry["upward-horizontal-slice"].createLive({ variant: "long", step: 1 });
-  const { clipPlane } = getEngine();
+  const { clipPlane } = session;
   try {
     session.setCut(0.25);
     session.explore(0.55);

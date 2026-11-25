@@ -10,9 +10,10 @@ interface Props {
 
 const { slug, catalog = false, scrolly = false } = Astro.props;
 const scopeNotes: Record<string, string> = {
-  "stage-room": "模型展示阶段矿房法的通用结构。正文另有 VCR 变体示例。",
-  "sublevel-backfill": "模型展示分段空场嗣后充填的概念。",
-  "sublevel-room": "模型以水平带近似表达分段之间的斜顶柱。",
+  "stage-room": "模型采用教材图 11-31 的垂直深孔阶段矿房方案。",
+  "sublevel-backfill": "模型演示分段空场嗣后充填的出净、封堵与充填。",
+  "sublevel-room": "模型以阶梯剖切表示分段之间的斜顶柱。",
+  "single-layer-caving": "模型采用教材图 10-17 的直线长壁方案。",
 };
 const toData = (method: Method) => ({
   slug: method.slug,
@@ -220,9 +221,8 @@ const keyMin = !initial
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
   import { disposeTree } from "../../lib/models/theme.ts";
   import { registry } from "../../lib/models/registry.ts";
-  import { getEngine } from "../../lib/models/engine/bootstrap.js";
   import { STATE_INFO } from "../../lib/models/engine/states.js";
-  import type { LiveSession } from "../../lib/models/adapt.ts";
+  import type { ReviewedSession } from "../../lib/models/reviewed.ts";
   import type { BBox, BuildVariant, ModelAnchor } from "../../lib/models/types.ts";
 
   interface ViewPreset {
@@ -319,25 +319,21 @@ const keyMin = !initial
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.22;
+    renderer.toneMappingExposure = 1.04;
     renderer.localClippingEnabled = true;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0e1318);
-    const engine = list.some((item) => item.source === "procedural") ? getEngine() : null;
-    if (engine?.env) {
-      scene.environment = engine.env;
-      scene.environmentIntensity = 0.72;
-    }
-    scene.add(new THREE.HemisphereLight(0xc2d8ea, 0x1f1b18, 0.92));
+    const stageColor = getComputedStyle(root).getPropertyValue("--color-model-stage").trim();
+    scene.background = new THREE.Color(stageColor || "#211711");
+    scene.add(new THREE.HemisphereLight(0xf1dfc6, 0x665345, 1.45));
     function addDirectional(color: number, intensity: number, x: number, y: number, z: number) {
       const light = new THREE.DirectionalLight(color, intensity);
       light.position.set(x, y, z);
       scene.add(light);
     }
-    addDirectional(0xfff0dc, 2.35, 110, 170, 90);
-    addDirectional(0x8fb2d0, 1.05, -140, 70, -110);
-    addDirectional(0xffb070, 0.95, 30, 60, -170);
+    addDirectional(0xffedd6, 2.10, 110, 170, 90);
+    addDirectional(0xe1ddcf, 0.82, -140, 70, -110);
+    addDirectional(0xffc78a, 0.50, 30, 60, -170);
 
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 3200);
     const controls = new OrbitControls(camera, canvas);
@@ -368,26 +364,26 @@ const keyMin = !initial
     let scrollSuppressUntil = 0;
     // 过程演示/自由探索（2026-11-24 迁移轮）：live 会话一次构建，逐步即时切换
     let mode: "process" | "explore" = "process";
-    let live: LiveSession | null = null;
+    let live: ReviewedSession | null = null;
     let progress = 0.55;
     let cutValue = 0;
     let speed = 1;
     let autoOn = true;
     let paused = false;
     let disposed = false;
-    let labelItems: { node: HTMLElement; point: THREE.Vector3 }[] = [];
+    let labelItems: { node: HTMLElement; point: THREE.Vector3; layer?: string }[] = [];
     const hiddenLayers = new Set<string>();
     const ray = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
 
     function applyLabels(anchors: ModelAnchor[]) {
       labelsBox!.replaceChildren();
-      labelItems = anchors.map(({ label, pos }) => {
+      labelItems = anchors.map(({ label, pos, layer }) => {
         const node = document.createElement("span");
         node.className = "studio-label";
         node.textContent = label;
         labelsBox!.append(node);
-        return { node, point: new THREE.Vector3(...pos) };
+        return { node, point: new THREE.Vector3(...pos), layer };
       });
     }
 
@@ -396,6 +392,7 @@ const keyMin = !initial
       frame = 0;
       if (paused || disposed) return;
       controls.update();
+      const animated = live?.animate(performance.now(), reducedMotion.matches);
       renderer.render(scene, camera);
       const occupied: { x: number; y: number; width: number }[] = [];
       const hudBounds = hud && !hud.hidden ? {
@@ -404,7 +401,7 @@ const keyMin = !initial
         top: hud.offsetTop,
         bottom: hud.offsetTop + hud.offsetHeight,
       } : null;
-      for (const { node, point } of labelItems) {
+      for (const { node, point, layer } of labelItems) {
         projected.copy(point).project(camera);
         const x = (projected.x + 1) * stage!.clientWidth / 2;
         const y = (1 - projected.y) * stage!.clientHeight / 2;
@@ -414,13 +411,17 @@ const keyMin = !initial
         const overlapsHud = hudBounds &&
           x + width / 2 > hudBounds.left - 4 && x - width / 2 < hudBounds.right + 4 &&
           y + node.offsetHeight / 2 > hudBounds.top - 4 && y - node.offsetHeight / 2 < hudBounds.bottom + 4;
-        const visible = annotations!.checked && !outside && !collision && !overlapsHud;
+        const visible = annotations!.checked && (!layer || !hiddenLayers.has(layer)) && !outside && !collision && !overlapsHud;
         node.style.visibility = visible ? "visible" : "hidden";
         if (visible) {
           node.style.left = Math.round(x) + "px";
           node.style.top = Math.round(y) + "px";
           occupied.push({ x, y, width });
         }
+      }
+      if (animated) {
+        const rect = stage!.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) requestFrame();
       }
     }
 
@@ -460,12 +461,13 @@ const keyMin = !initial
 
       box.getCenter(controls.target);
       if (focus) controls.target.set(...focus);
+      else if (live) controls.target.y -= 0.42;
       const az = THREE.MathUtils.degToRad(preset.az);
       const el = THREE.MathUtils.degToRad(THREE.MathUtils.clamp(preset.el, -85, 85));
       const dir = new THREE.Vector3(Math.cos(el) * Math.sin(az), Math.sin(el), Math.cos(el) * Math.cos(az));
       const right = new THREE.Vector3().crossVectors(camera.up, dir).normalize();
       const up = new THREE.Vector3().crossVectors(dir, right);
-      const slope = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 0.78;
+      const slope = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * (live ? 1.0 : 0.78);
       const corner = new THREE.Vector3();
       let distance = controls.minDistance;
       for (const x of [box.min.x, box.max.x]) {
@@ -488,28 +490,34 @@ const keyMin = !initial
       }
     }
 
-    function replaceModel(group: THREE.Object3D) {
+    function clearModel() {
       if (model) {
         scene.remove(model);
-        disposeTree(model);
+        if (live?.group === model) live.dispose();
+        else disposeTree(model);
       }
+      live = null;
+      model = null;
+    }
+
+    function replaceModel(group: THREE.Object3D) {
+      clearModel();
       model = group;
       scene.add(group);
       syncLayers();
       selection!.hidden = true;
     }
 
-    /** 会话按方法持有：切换方法才 createLive 全量构建，步/进程/剖面即时切换 */
-
     function openLive() {
       const builder = registry[data.slug];
-      if (!builder || typeof builder.createLive !== "function") throw new Error("Missing model " + data.slug);
-      live = builder.createLive({ variant: preset.variant ?? "iso", step: activeStep });
+      if (!builder) throw new Error("Missing model " + data.slug);
+      const session = builder.createLive({ variant: preset.variant ?? "iso", step: activeStep });
       bounds = {
-        min: [live.bounds.min.x, live.bounds.min.y, live.bounds.min.z],
-        max: [live.bounds.max.x, live.bounds.max.y, live.bounds.max.z],
+        min: session.bounds.min.toArray(),
+        max: session.bounds.max.toArray(),
       };
-      replaceModel(live.group);
+      replaceModel(session.group);
+      live = session;
       root.dataset.modelActive = data.slug;
     }
 
@@ -517,7 +525,6 @@ const keyMin = !initial
     function buildStageFallback(resetCamera: boolean) {
       const builder = registry[data.slug];
       if (!builder) throw new Error("Missing model " + data.slug);
-      live = null;
       const result = builder.build({ variant: preset.variant ?? "iso", focus: preset.focus, stage: activeStep });
       bounds = result.bbox;
       replaceModel(result.group);
@@ -926,11 +933,7 @@ const keyMin = !initial
     /** 探索态下按连续进程映射出当前回采步骤并高亮：回采（stope）档步骤内线性映射，
      *  与引擎 update(progress) 语义一致；无回采档的方法退化为全步骤线性映射。 */
     function highlightFromProgress() {
-      const working = data.steps.map((s, i) => (s.phase === "stope" ? i + 1 : 0)).filter(Boolean);
-      const idx = working.length
-        ? working[THREE.MathUtils.clamp(Math.round(progress * (working.length - 1)), 0, working.length - 1)]
-        : THREE.MathUtils.clamp(Math.round(progress * (data.steps.length || 1)) || 1, 1, data.steps.length || 1);
-      markActiveStep(idx);
+      if (live) markActiveStep(live.progressStep(progress));
     }
     progressSlider.addEventListener("input", () => {
       progress = progressSlider.valueAsNumber / 100;
@@ -976,6 +979,7 @@ const keyMin = !initial
       }
     }
     window.addEventListener("scroll", () => {
+      requestFrame();
       if (!driveRaf) driveRaf = requestAnimationFrame(driveStepFromScroll);
     }, { passive: true });
 
@@ -1005,7 +1009,7 @@ const keyMin = !initial
       camera.updateMatrixWorld();
       ray.setFromCamera(pointer, camera);
       const hit = ray.intersectObject(model, true).find((candidate) => {
-        if (!candidate.object.userData.object_id || (engine && engine.clipPlane.distanceToPoint(candidate.point) < 0)) return false;
+        if (!candidate.object.userData.object_id || (live && live.clipPlane.distanceToPoint(candidate.point) < 0)) return false;
         for (let object: THREE.Object3D | null = candidate.object; object; object = object.parent) {
           if (!object.visible) return false;
         }
@@ -1061,7 +1065,7 @@ const keyMin = !initial
       row("尺寸", String(u.dimensions ?? ""));
       row("标高", u.elevation_z != null ? u.elevation_z + " m" : "—");
       row("连通", Array.isArray(u.connectivity) && u.connectivity.length ? u.connectivity.join("、") : "—");
-      if (u.assumption === true) row("说明", "展示性表达（assumption=true）");
+      if (u.assumption === true) row("说明", "教学剖切和示意比例");
       wrap.append(dl);
       sel.append(wrap);
       sel.hidden = false;
@@ -1112,8 +1116,7 @@ const keyMin = !initial
       cancelAnimationFrame(pendingSlider);
       controls.dispose();
       resize.disconnect();
-      if (model) disposeTree(model);
-      live = null;
+      clearModel();
       renderer.dispose();
     }, { once: true });
 

@@ -348,7 +348,7 @@ export function build(M) {
     type_code: 'PASS', name: '行人通风天井',
     source_tier: '【图】', textbook_ref: '图10-26；§7.6',
     dimensions: '2.2×2.2m', stage: '开拓',
-    connectivity: ['阶段运输巷道', '上水平回风巷道', '行人通风联络巷'],
+    connectivity: ['阶段运输巷道', '上水平回风巷道', '行人通风联络巷'], 
   }, registry);
 
   // ---------------- 状态控制 ----------------

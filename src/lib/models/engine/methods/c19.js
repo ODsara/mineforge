@@ -171,7 +171,7 @@ export function build(M) {
         elevation_z: sl.y,
         dimensions: `断面4.0×3.3m，长${(zEnd - HAUL_Z).toFixed(1)}m`,
         stage: '采准/回采',
-        connectivity: ['分段运输平巷 ⑥', '切割平巷 ⑨'],
+        connectivity: ['分段运输平巷 ⑥', '切割平巷 ⑨'], 
       }, registry);
       driftMeshes[i].push(dm);
       const drawFace = new THREE.Line(drawProfile, drawMaterial);
