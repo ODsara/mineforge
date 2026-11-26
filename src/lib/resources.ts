@@ -3,7 +3,7 @@
  * 与 lib/taxonomy.ts 同样的约定：页面只调用本模块，不直接读 JSON。
  *
  * 资料的三个来源合并在这里：
- *   1. resources.json          —— 术语、规范清单、教材、公式待收录清单
+ *   1. resources.json          —— 术语、规范清单、公式待收录清单
  *   2. data/engineering/*.json —— 各方法已冻结的文献、条文摘录与参数（新增方法自动进资料中心）
  *   3. data/figures.json       —— 工程图纸索引
  * 因此新增一篇方法正文后，资料中心不需要任何改动。
@@ -88,20 +88,6 @@ export interface Param {
   pid?: string;
 }
 
-export interface Textbook {
-  title: string;
-  edition: string;
-  authors: string[];
-  publisher: string;
-  year: number | null;
-  isbn: string | null;
-  pages: string | null;
-  scope: string;
-  status: string;
-  note: string;
-  verified: boolean;
-}
-
 interface EngineeringBundle {
   references?: Omit<Reference, "key" | "methodSlug" | "methodName">[];
   standards?: { code: string; name: string; clause: string; text: string }[];
@@ -148,7 +134,6 @@ export const plannedFormulas = resourcesData.formulas.planned as {
 }[];
 export const formulaIntro = resourcesData.formulas.intro;
 export const standardDocs = resourcesData.standards as StandardDoc[];
-export const textbooks = resourcesData.textbooks as Textbook[];
 export const resourcesUpdated = resourcesData.updated;
 
 export function resourceType(slug: string): ResourceType | undefined {
@@ -229,7 +214,6 @@ export function resourceCount(): Record<string, number> {
     drawings: drawings.length,
     references: references.length,
     standards: standardDocs.length + clauses.length,
-    textbooks: textbooks.length,
   };
 }
 

@@ -1,7 +1,8 @@
 ---
 /**
  * 知识体系总览
- * 分类树（左栏粘性）+ 六个方向的导读 + 推荐学习路径
+ * 分类树（左栏粘性）+ 四个方向的导读 + 推荐学习路径
+ * （矿井通风与安全、矿山机械与运输两个方向已移出站点，备份见工作区 扩展备份/ 目录，留作后期扩展）
  * 本页只做索引与导读，不承载专业正文
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -24,13 +25,13 @@ const path = taxonomy.learningPath;
 
 <BaseLayout
   title="知识体系"
-  description="采矿工程知识体系：按学科方向组织的分类树与学习路径，覆盖地下采矿方法、露天开采、矿床开拓与采准、通风与安全、机械运输、设计与数字化。"
+  description="采矿工程知识体系：按学科方向组织的分类树与学习路径，覆盖地下采矿方法、露天开采、矿床开拓与采准、设计与数字化。"
   activePath="/knowledge/"
 >
   <PageHero
     eyebrow="知识体系"
     title="采矿工程知识体系"
-    description="从井筒、巷道和采场的空间关系入门，再学习采矿方法、通风运输与矿山设计。露天开采用于了解相关工艺和露天转地下的衔接。"
+    description="从井筒、巷道和采场的空间关系入门，再学习采矿方法与矿山设计。露天开采用于了解相关工艺和露天转地下的衔接。"
   >
     <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
       {
@@ -57,7 +58,7 @@ const path = taxonomy.learningPath;
     <div class="lg:col-span-9">
       <SectionHeader
         index="01 / 分类树"
-        title="六个学科方向"
+        title={`${domains.length} 个学科方向`}
         description="每个方向给出定位、知识要点与对应的工程专题入口。地下采矿方法直接进入方法库。"
       />
 

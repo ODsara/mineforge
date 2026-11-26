@@ -110,76 +110,8 @@
       ]
     },
     {
-      "slug": "ventilation-safety",
-      "order": 4,
-      "name": "矿井通风与安全",
-      "nameEn": "Mine Ventilation & Safety",
-      "summary": "涵盖矿井通风系统、风量计算与安全管理，是井下作业环境保障与事故防治的基础，也是采矿方法选择必须校核的约束条件。",
-      "status": "complete",
-      "href": "/knowledge/ventilation-safety/",
-      "topics": [
-        {
-          "label": "通风系统与网络",
-          "href": "/engineering/ventilation/"
-        },
-        {
-          "label": "风量计算",
-          "href": "/engineering/ventilation/"
-        },
-        {
-          "label": "局部通风",
-          "href": "/engineering/ventilation/#ventilation-4"
-        },
-        {
-          "label": "粉尘与有害气体",
-          "href": "/engineering/safety/"
-        },
-        {
-          "label": "安全规程与要求",
-          "href": "/engineering/safety/"
-        }
-      ],
-      "related": [
-        "underground-mining"
-      ]
-    },
-    {
-      "slug": "machinery-transport",
-      "order": 5,
-      "name": "矿山机械与运输",
-      "nameEn": "Mining Machinery & Haulage",
-      "summary": "凿岩、装载、运输与提升设备的选型与配套，直接影响采矿方法的机械化程度、生产能力与作业安全。",
-      "status": "complete",
-      "href": "/knowledge/machinery-transport/",
-      "topics": [
-        {
-          "label": "凿岩设备",
-          "href": "/engineering/haulage/"
-        },
-        {
-          "label": "装载与铲运",
-          "href": "/engineering/haulage/"
-        },
-        {
-          "label": "井下运输",
-          "href": "/engineering/haulage/"
-        },
-        {
-          "label": "矿井提升",
-          "href": "/engineering/development/#development-6"
-        },
-        {
-          "label": "设备配套",
-          "href": "/engineering/haulage/#haulage-3"
-        }
-      ],
-      "related": [
-        "underground-mining"
-      ]
-    },
-    {
       "slug": "design-digital",
-      "order": 6,
+      "order": 4,
       "name": "矿山设计与数字化",
       "nameEn": "Mine Design & Digitalization",
       "summary": "矿山设计流程、采矿制图标准与数字化技术，包括三维地质建模、数值模拟与数字矿山建设，用于理解井下工程的空间表达与分析方法。",
@@ -288,7 +220,9 @@
       "relatedMethods": [
         "sublevel-drilling-stage-room"
       ],
-      "relatedFigures": ["fig-sublevel-drilling-stage-room-01"],
+      "relatedFigures": [
+        "fig-sublevel-drilling-stage-room-01"
+      ],
       "xrefNote": "具体布置随采矿方法而变，方法详情页的「采准与切割工程」一节给出该方法的实际布置。"
     },
     {
@@ -326,7 +260,9 @@
       "relatedMethods": [
         "sublevel-drilling-stage-room"
       ],
-      "relatedFigures": ["fig-sublevel-drilling-stage-room-01"],
+      "relatedFigures": [
+        "fig-sublevel-drilling-stage-room-01"
+      ],
       "xrefNote": "回采工艺是采矿方法正文的组成部分，本专题只抽出跨方法共用的作业环节。"
     },
     {
@@ -358,9 +294,7 @@
           "note": "网络解算与阻力测定"
         }
       ],
-      "relatedDomains": [
-        "ventilation-safety"
-      ],
+      "relatedDomains": [],
       "relatedMethods": [],
       "relatedFigures": [],
       "xrefNote": "风量计算所需的规程限值以现行国家标准为准，本站不提供替代规范的取值表。"
@@ -395,7 +329,6 @@
         }
       ],
       "relatedDomains": [
-        "machinery-transport",
         "development"
       ],
       "relatedMethods": [],
@@ -431,9 +364,7 @@
           "note": "采空区、矿柱与顶板情形"
         }
       ],
-      "relatedDomains": [
-        "ventilation-safety"
-      ],
+      "relatedDomains": [],
       "relatedMethods": [
         "sublevel-drilling-stage-room"
       ],
@@ -530,8 +461,6 @@
       "title": "联系工程系统",
       "description": "结合通风、运输、安全与设计，理解采场怎样接入整座矿山的生产系统。",
       "domains": [
-        "ventilation-safety",
-        "machinery-transport",
         "design-digital"
       ]
     }

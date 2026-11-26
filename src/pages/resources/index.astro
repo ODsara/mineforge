@@ -11,7 +11,7 @@ import { resourceTypes, resourceHref, resourceCount, tierMeta } from "../../lib/
 
 const count = resourceCount();
 const unitOf = (slug: string) =>
-  slug === "drawings" ? "幅" : slug === "references" ? "篇" : slug === "textbooks" ? "本" : "条";
+  slug === "drawings" ? "幅" : slug === "references" ? "篇" : "条";
 
 const navItems = [
   { label: "全部资料", href: "/resources/", active: true },
@@ -24,13 +24,13 @@ const totalParams = count.formulas;
 
 <BaseLayout
   title="资料中心"
-  description="采矿工程专业资料：术语库、公式与参数、工程图纸、参考文献、标准规范与推荐教材。每条资料标注来源，可追溯到页码或条号。"
+  description="采矿工程专业资料：术语库、公式与参数、工程图纸、参考文献与标准规范。每条资料标注来源，可追溯到页码或条号。"
   activePath="/resources/"
 >
   <PageHero
     eyebrow="资料中心"
     title="专业资料"
-    description="查找地下开采的术语、公式、参数、工程图解、教材与参考文献。根据图注、参数来源或标准条号继续查阅。"
+    description="查找地下开采的术语、公式、参数、工程图解与参考文献。根据图注、参数来源或标准条号继续查阅。"
   >
     <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
       <div class="flex items-baseline gap-1.5">
@@ -63,7 +63,7 @@ const totalParams = count.formulas;
       <SectionHeader
         id="sec-types"
         index="01 / 资料类型"
-        title="六类资料"
+        title={`${resourceTypes.length} 类资料`}
         description="查术语释义、按来源比较参数，或按条号查阅相关标准。"
       />
 

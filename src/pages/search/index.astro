@@ -30,7 +30,7 @@ const hot = methods.filter((m) => m.status === "complete").slice(0, 1);
 
   <section class="mf-container py-10 md:py-14">
     <div class="max-w-[880px]">
-      <form role="search" onsubmit="return false">
+      <form role="search">
         <label for="search-input" class="sr-only">关键词</label>
         <div class="flex items-stretch gap-2">
           <div class="relative flex-1">
@@ -140,6 +140,7 @@ const hot = methods.filter((m) => m.status === "complete").slice(0, 1);
     const parsed: Doc[] = indexEl ? JSON.parse(indexEl.textContent || "[]") : [];
     const docs: Doc[] = parsed.filter((d) => d && d.t && d.h);
     const input = document.getElementById("search-input") as HTMLInputElement | null;
+    const form = input?.closest("form") ?? null;
     const resultsEl = document.getElementById("search-results") as HTMLElement | null;
     const summaryEl = document.getElementById("search-summary") as HTMLElement | null;
     const emptyEl = document.getElementById("search-empty") as HTMLElement | null;
@@ -312,12 +313,35 @@ const hot = methods.filter((m) => m.status === "complete").slice(0, 1);
       });
     });
 
-    input?.addEventListener("input", (event) => {
-      if (event instanceof InputEvent && event.isComposing) return;
+    /** 把当前关键词写回 URL，供刷新 / 再次进入本页时经 initial q 恢复结果 */
+    const syncUrl = (): void => {
+      if (!input) return;
       const url = new URL(window.location.href);
       if (input.value.trim()) url.searchParams.set("q", input.value.trim());
       else url.searchParams.delete("q");
       history.replaceState(null, "", url);
+    };
+
+    input?.addEventListener("input", (event) => {
+      // 拼音/日文等输入法的合成中途不渲染，避免拿未上屏的字母串出结果；
+      // 上屏后的最终文本由 compositionend 负责触发一次渲染。
+      if (event instanceof InputEvent && event.isComposing) return;
+      syncUrl();
+      render();
+    });
+
+    input?.addEventListener("compositionend", () => {
+      // Chrome 在按回车上屏候选词时只发一次 isComposing=true 的 input 事件，
+      // 之后没有第二次 input——不在这里补一次 render，中文关键词就会「提交了却不显示」。
+      syncUrl();
+      render();
+    });
+
+    form?.addEventListener("submit", (event) => {
+      // 按回车提交：静态站没有服务端可查，就地拦截并强制按当前值渲染一次，
+      // 覆盖粘贴、自动填充等不产生 input 事件的输入路径。
+      event.preventDefault();
+      syncUrl();
       render();
     });
 
@@ -326,9 +350,7 @@ const hot = methods.filter((m) => m.status === "complete").slice(0, 1);
       input.value = "";
       activeGroup = "全部";
       chips.forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.filter === "全部")));
-      const url = new URL(window.location.href);
-      url.searchParams.delete("q");
-      history.replaceState(null, "", url);
+      syncUrl();
       render();
       input.focus();
     });

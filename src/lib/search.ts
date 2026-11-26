@@ -1,7 +1,7 @@
 /**
  * 检索索引
  * 构建期生成静态索引，运行时在浏览器里过滤：不依赖服务端，也不引入搜索库。
- * 覆盖四类对象：方法条目与方法正文小节、知识体系/工程专题、资料中心（术语/文献/规范/教材/图解/公式/参数）。
+ * 覆盖四类对象：方法条目与方法正文小节、知识体系/工程专题、资料中心（术语/文献/规范/图解/公式/参数）。
  * 正文小节从 MDX 源文件抽取标题与首句，锚点规则与 Astro 标题 id 保持一致。
  */
 import methodSectionsData from "../data/method-sections.json";
@@ -18,7 +18,6 @@ import {
   glossary,
   references,
   standardDocs,
-  textbooks,
   resourceTypes,
   resourceHref,
   clauses,
@@ -182,17 +181,6 @@ for (const c of clauses) {
   });
 }
 
-for (const book of textbooks) {
-  docs.push({
-    t: book.title,
-    s: book.edition,
-    d: [book.publisher, book.authors.join("、")].filter(Boolean).join(" · "),
-    g: "推荐教材",
-    h: "/resources/textbooks/",
-    k: book.authors.join(" "),
-  });
-}
-
 for (const fig of figures) {
   docs.push({
     t: fig.title,
@@ -242,7 +230,6 @@ export const searchGroups = [
   "规范条文",
   "公式与参数",
   "参考文献",
-  "推荐教材",
   "工程图解",
   "资料中心",
 ];

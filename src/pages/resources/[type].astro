@@ -1,7 +1,7 @@
 ---
 /**
  * 资料分类页
- * 六个类型共用同一路由模板，正文区按类型派发到对应列表组件。
+ * 各类型共用同一路由模板，正文区按类型派发到对应列表组件。
  * 新增一类资料只需在 resources.json 加一条并在 COMPONENTS 里登记，无需改模板结构。
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -13,7 +13,6 @@ import ParameterLibrary from "../../components/content/ParameterLibrary.astro";
 import DrawingIndex from "../../components/content/DrawingIndex.astro";
 import ReferenceIndex from "../../components/content/ReferenceIndex.astro";
 import StandardIndex from "../../components/content/StandardIndex.astro";
-import TextbookIndex from "../../components/content/TextbookIndex.astro";
 import {
   resourceTypes,
   resourceHref,
@@ -35,7 +34,6 @@ const COMPONENTS: Record<string, any> = {
   drawings: DrawingIndex,
   references: ReferenceIndex,
   standards: StandardIndex,
-  textbooks: TextbookIndex,
 };
 
 const Body = COMPONENTS[type.slug];
@@ -49,7 +47,7 @@ const navItems = [
   })),
 ];
 
-const units: Record<string, string> = { drawings: "幅", references: "篇", textbooks: "本" };
+const units: Record<string, string> = { drawings: "幅", references: "篇" };
 const unit = units[type.slug] ?? "条";
 ---
 

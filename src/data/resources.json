@@ -40,14 +40,6 @@
       "nameEn": "Standards & Codes",
       "summary": "现行国家标准与部门规章，条文按条号摘录；摘录不替代原文，涉及设计取值以原文为准。",
       "status": "draft"
-    },
-    {
-      "slug": "textbooks",
-      "order": 6,
-      "name": "推荐教材",
-      "nameEn": "Textbooks",
-      "summary": "地下开采课程的主要教材与拓展读物，可按书名、版本和章节范围查阅。",
-      "status": "draft"
     }
   ],
   "glossary": [
@@ -471,97 +463,6 @@
       "effective": null,
       "scope": "井下爆破、安全距离与振动控制",
       "note": "版次和条文请查阅正式发布的原文。",
-      "verified": false
-    }
-  ],
-  "textbooks": [
-    {
-      "title": "采矿学",
-      "edition": "第 2 版",
-      "authors": [
-        "王青",
-        "任凤玉"
-      ],
-      "publisher": "冶金工业出版社",
-      "year": 2011,
-      "isbn": "9787502454906",
-      "pages": "521 页",
-      "scope": "4 篇 23 章；第 2 篇地下开采含崩落、空场、充填三大类采矿方法",
-      "status": "已入库",
-      "note": "第 11 章为课堂学习空场采矿法的主要参考。",
-      "verified": true
-    },
-    {
-      "title": "金属矿床地下开采",
-      "edition": "第 3 版",
-      "authors": [
-        "任凤玉"
-      ],
-      "publisher": "冶金工业出版社",
-      "year": 2018,
-      "isbn": "9787502477417",
-      "pages": null,
-      "scope": "4 篇 18 章；第 4 篇 13—18 章为采矿方法，含空场采矿法专章与方法选择",
-      "status": "仅核书目",
-      "note": "解世俊版教材的修订延续，空场法分类体系与典型方案图以此本为准。",
-      "verified": true
-    },
-    {
-      "title": "非煤固体矿床地下开采",
-      "edition": "第 1 版",
-      "authors": [
-        "张东升",
-        "马立强",
-        "万志军"
-      ],
-      "publisher": "中国矿业大学出版社",
-      "year": 2010,
-      "isbn": null,
-      "pages": null,
-      "scope": "非煤矿床地下开采，与金属矿地下开采最为接近",
-      "status": "仅核书目",
-      "note": "作为非煤方向的对照教材。",
-      "verified": false
-    },
-    {
-      "title": "现代采矿工程案例",
-      "edition": "第 1 版",
-      "authors": [
-        "屠世浩"
-      ],
-      "publisher": "中国矿业大学出版社",
-      "year": 2012,
-      "isbn": null,
-      "pages": null,
-      "scope": "工程案例集，可用于补充方法详情页的案例一节",
-      "status": "仅核书目",
-      "note": "可用于比较不同地下开采方法的适用条件。",
-      "verified": false
-    },
-    {
-      "title": "采矿工程设计手册",
-      "edition": "版次待确认",
-      "authors": [],
-      "publisher": "待确认",
-      "year": null,
-      "isbn": null,
-      "pages": null,
-      "scope": "设计参数与结构尺寸的常用查表来源",
-      "status": "待补",
-      "note": "引用时请按手头版本查对出版信息与页码。",
-      "verified": false
-    },
-    {
-      "title": "中国冶金百科全书 · 采矿卷",
-      "edition": "版次待确认",
-      "authors": [],
-      "publisher": "待确认",
-      "year": null,
-      "isbn": null,
-      "pages": null,
-      "scope": "术语定义的权威表述来源",
-      "status": "待补",
-      "note": "用于查阅专业术语及定义。",
       "verified": false
     }
   ]
