@@ -1,0 +1,60 @@
+---
+/**
+ * 区块抬头：编号 + 标题 + 说明 + 右侧动作链接
+ *
+ * 编号语法移植自外部模板（`01 / WHERE WE ARE SENDING PEOPLE`）：
+ * 金色 mono 数字 + 前置细线 + 小字标签。`index` 兼容两种写法——
+ * 「01 / 工序关系」拆成编号与标签，纯文本则只用细线开头。
+ */
+interface Props {
+  id?: string;
+  index?: string;
+  title: string;
+  description?: string;
+  action?: { label: string; href: string };
+}
+
+const { id, index, title, description, action } = Astro.props;
+
+const parsed = index?.match(/^(\d{1,2})\s*\/\s*(.+)$/);
+const no = parsed?.[1]?.padStart(2, "0");
+const label = parsed?.[2]?.trim() ?? index;
+---
+
+<div data-reveal class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+  <div class="min-w-0">
+    {
+      label && (
+        <p class="mf-sec mb-2.5">
+          {no && <span class="mf-sec__no">{no}</span>}
+          {label}
+        </p>
+      )
+    }
+    <h2 id={id} class="text-[22px] leading-tight font-semibold tracking-[-0.01em] md:text-[26px]">
+      {title}
+    </h2>
+    {
+      description && (
+        <p class="mt-2.5 max-w-2xl text-[13.5px] leading-6 text-ink-3">{description}</p>
+      )
+    }
+  </div>
+
+  {
+    action && (
+      <a href={action.href} class="mf-more">
+        {action.label}
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path
+            d="M4 10L10 4M10 4H5M10 4V9"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </a>
+    )
+  }
+</div>

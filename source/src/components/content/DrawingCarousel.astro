@@ -1,0 +1,92 @@
+---
+import { figures } from "../../lib/taxonomy";
+
+const drawings = figures.filter((figure) => figure.kind === "drawing");
+const slides = [
+  ...drawings.filter((figure) => figure.featured),
+  ...drawings.filter((figure) => !figure.featured),
+];
+---
+
+{slides.length > 0 && (
+  <section class="min-w-0" data-drawing-carousel aria-label="工程图纸轮播" aria-roledescription="轮播">
+    {slides.map((figure, index) => (
+      <div
+        data-carousel-slide
+        hidden={index !== 0}
+        role="group"
+        aria-roledescription="图纸"
+        aria-label={`${index + 1} / ${slides.length}`}
+      >
+        <a
+          href={figure.src}
+          class="carousel-art block focus-visible:outline-offset-[-4px]"
+          aria-label={`查看原图：${figure.title}`}
+        >
+          <img
+            src={figure.src}
+            width={figure.width}
+            height={figure.height}
+            alt={figure.title}
+            class="block h-auto w-full"
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+          />
+        </a>
+      </div>
+    ))}
+  </section>
+)}
+
+<style>
+  .carousel-art {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-stage);
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-carousel-slide]:not([hidden]) img {
+      animation: drawing-fade-in 350ms ease-out both;
+    }
+  }
+
+  @keyframes drawing-fade-in {
+    from { opacity: 0.8; }
+    to { opacity: 1; }
+  }
+</style>
+
+<script>
+  const autoplayDelay = 6500;
+
+  for (const carousel of document.querySelectorAll<HTMLElement>("[data-drawing-carousel]")) {
+    const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-carousel-slide]"));
+    if (slides.length < 2) continue;
+
+    let index = 0;
+    let visible = false;
+    let timer: number | undefined;
+
+    function schedule() {
+      window.clearTimeout(timer);
+      if (!visible || document.hidden || carousel.matches(":focus-within")) return;
+
+      timer = window.setTimeout(() => {
+        slides[index].hidden = true;
+        index = (index + 1) % slides.length;
+        slides[index].hidden = false;
+        schedule();
+      }, autoplayDelay);
+    }
+
+    carousel.addEventListener("focusin", schedule);
+    carousel.addEventListener("focusout", () => queueMicrotask(schedule));
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      schedule();
+    }).observe(carousel);
+    document.addEventListener("visibilitychange", schedule);
+  }
+</script>

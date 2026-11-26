@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+<title id="title">全面采矿法 · 矿层平面</title>
+<desc id="desc">工作面自切割上山沿走向推进，采空区内保留不规则矿柱支撑顶板。观察矿柱与工作面的相对位置。</desc>
+<defs>
+<pattern id="ore" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#efd9b2"/><path d="M-6 6L6-6M0 12L12 0M6 18L18 6" stroke="#b37d43" stroke-width="1"/></pattern>
+<pattern id="rock" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="#e1e5e2"/><path d="M0 7h7m4 8h7" stroke="#a4afac" stroke-width="1"/></pattern>
+<pattern id="rubble" width="22" height="20" patternUnits="userSpaceOnUse"><rect width="22" height="20" fill="#e7bc88"/><path d="M3 4l4-2 3 5-5 4ZM13 13l5-2 2 5-5 2Z" fill="none" stroke="#966041" stroke-width="1"/></pattern>
+<pattern id="waste" width="27" height="24" patternUnits="userSpaceOnUse"><rect width="27" height="24" fill="#b9c4c6"/><path d="M2 3l6-1 4 6-5 5-4-3ZM15 15l6-4 4 5-3 5-6-1Z" fill="none" stroke="#6d7e83" stroke-width="1.2"/></pattern>
+<pattern id="fill" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#b8d9ce"/><circle cx="4" cy="4" r="1.5" fill="#598b84"/><circle cx="11" cy="11" r="1.5" fill="#598b84"/></pattern>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 10 8"><path d="M0 0L9 4 0 8Z" fill="#166369"/></marker>
+</defs>
+<g font-family="'Noto Sans CJK SC','Microsoft YaHei','PingFang SC',sans-serif">
+<rect x="0" y="0" width="1400" height="820" fill="#faf8f0" stroke="none" stroke-width="2"/>
+<text x="57" y="78" text-anchor="start" fill="#263844" font-size="42" font-weight="700">全面采矿法</text>
+<text x="1343" y="72" text-anchor="end" fill="#61737c" font-size="25" font-weight="500">矿层平面</text>
+<path d="M57 105 L1343 105" fill="none" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M952 135 L952 678" fill="none" stroke="#b5bfba" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="80" y="173" width="810" height="427" fill="url(#ore)" stroke="#61737c" stroke-width="2"/>
+<rect x="80" y="187" width="27" height="394" fill="#fffdf7" stroke="#61737c" stroke-width="2"/>
+<path d="M107 187H575V230L605 270 575 312 613 357 583 402 613 452 582 492V581H107Z" fill="#fffdf7" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M164 238l54-13 22 35-20 35-61-6-14-26Z" fill="url(#ore)" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M333 352l63 9 22 38-53 29-58-19Z" fill="url(#ore)" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M215 484l65-17 27 39-28 27-69-10Z" fill="url(#ore)" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M471 241l50 12 10 51-51 11-27-43Z" fill="url(#ore)" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M481 476l41-15 24 41-39 21-32-13Z" fill="url(#ore)" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="80" y="581" width="810" height="22" fill="#fffdf7" stroke="#61737c" stroke-width="2"/>
+<path d="M632 382H795" fill="none" stroke="#166369" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<circle cx="94" cy="218" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="94" y="224" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">1</text>
+<circle cx="197" cy="263" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="197" y="269" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">2</text>
+<circle cx="610" cy="356" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="610" y="362" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">3</text>
+<circle cx="373" cy="593" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="373" y="599" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">4</text>
+<circle cx="992" cy="179" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="185" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">1</text>
+<text x="1020" y="185" text-anchor="start" fill="#263844" font-size="25" font-weight="700">切割上山</text>
+<text x="1020" y="216" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">提供初始工作面</text>
+<circle cx="992" cy="265" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="271" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">2</text>
+<text x="1020" y="271" text-anchor="start" fill="#263844" font-size="25" font-weight="700">不规则矿柱</text>
+<text x="1020" y="302" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">留在采空区内支撑顶板</text>
+<circle cx="992" cy="351" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="357" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">3</text>
+<text x="1020" y="357" text-anchor="start" fill="#263844" font-size="25" font-weight="700">壁式工作面</text>
+<text x="1020" y="388" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">沿走向全面推进</text>
+<circle cx="992" cy="437" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="443" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">4</text>
+<text x="1020" y="443" text-anchor="start" fill="#263844" font-size="25" font-weight="700">下部切割平巷</text>
+<text x="1020" y="474" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">与上山相连</text>
+<path d="M57 705 L1343 705" fill="none" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="62" y="733" width="31" height="21" fill="url(#ore)" stroke="#61737c" stroke-width="2"/>
+<text x="103" y="751" text-anchor="start" fill="#263844" font-size="20" font-weight="500">矿石与矿柱</text>
+<rect x="233" y="733" width="31" height="21" fill="#fffdf7" stroke="#61737c" stroke-width="2"/>
+<text x="274" y="751" text-anchor="start" fill="#263844" font-size="20" font-weight="500">采空区或巷道</text>
+<text x="1343" y="751" text-anchor="end" fill="#61737c" font-size="21" font-weight="500">示意 · 非比例</text>
+</g>
+</svg>

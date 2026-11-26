@@ -1,0 +1,37 @@
+---
+/**
+ * 折叠区块（3 分钟层）
+ *
+ * 深读内容默认收起：不展开就不占首屏信息量，也不打断"3 秒定去留"。
+ * 用原生 <details>，不依赖 JS——断网演示、无 JS 环境下照样能展开。
+ * 样式在 styles/base.css 的 .mf-fold，因为 slot 内容来自父组件、拿不到作用域样式。
+ */
+interface Props {
+  /** 折叠标题，通常是"参数表（32 项）"这种带量的短句 */
+  summary: string;
+  /** 右侧灰色注记，如"教材 19 项 / 实测 12 项" */
+  meta?: string;
+  /** 序号（"01"）；给了就在标题前加 mono 编号，让折叠区读起来像档案目录 */
+  index?: string;
+  open?: boolean;
+  class?: string;
+}
+
+const { summary, meta, index, open = false, class: className = "" } = Astro.props;
+---
+
+<details class:list={["mf-fold", className]} open={open} data-reveal>
+  <summary class="mf-fold__summary">
+    {index && <span class="mf-fold__no">{index}</span>}
+    <span class="mf-fold__label">{summary}</span>
+    {meta && <span class="mf-fold__meta">{meta}</span>}
+    <span class="mf-fold__chev" aria-hidden="true">
+      <svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </span>
+  </summary>
+  <div class="mf-fold__body">
+    <slot />
+  </div>
+</details>

@@ -1,0 +1,200 @@
+---
+/**
+ * 工程技术总览
+ * 七个工序专题全部来自 taxonomy.json 的 engineeringTopics，专题页由 [topic].astro 统一生成。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import SectionHeader from "../../components/layout/SectionHeader.astro";
+import SubNav from "../../components/nav/SubNav.astro";
+import EngineeringFlow from "../../components/content/EngineeringFlow.astro";
+import EngineeringTopicCard from "../../components/cards/EngineeringTopicCard.astro";
+import { engineeringTopics, domains } from "../../lib/taxonomy";
+import { clauses, standardDocs, parameterGroups } from "../../lib/resources";
+
+const stepSlugs = ["development", "preparation-cutting", "stoping", "haulage"];
+const steps = engineeringTopics.filter((t) => stepSlugs.includes(t.slug));
+const spans = engineeringTopics.filter((t) => !stepSlugs.includes(t.slug));
+
+const clauseCount = clauses.length;
+const paramCount = parameterGroups.reduce((n, g) => n + g.items.length, 0);
+
+const navItems = [
+  { label: "全部专题", href: "/engineering/", active: true },
+  ...engineeringTopics.map((t) => ({ label: t.name, href: `/engineering/${t.slug}/` })),
+];
+---
+
+<BaseLayout
+  title="工程技术"
+  description="采矿工程技术专题：矿床开拓、采准与切割、回采工艺、矿山通风、矿山运输、矿山安全、矿山设计。按施工工序组织，与知识体系互补。"
+  activePath="/engineering/"
+>
+  <PageHero
+    eyebrow="工程技术"
+    title="工程技术专题"
+    description="沿井下生产流程认识开拓、采准切割、回采和运输，再看通风、安全与设计如何贯穿各环节。"
+  >
+    <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[15px] font-medium text-ink">{engineeringTopics.length}</dd>
+        <dt class="text-ink-4">个工序专题</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[15px] font-medium text-ink">{standardDocs.length}</dd>
+        <dt class="text-ink-4">部相关标准</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[15px] font-medium text-ink">{clauseCount}</dd>
+        <dt class="text-ink-4">条条文摘录</dt>
+      </div>
+      <div class="flex items-baseline gap-1.5">
+        <dd class="font-mono text-[15px] font-medium text-ink">{paramCount}</dd>
+        <dt class="text-ink-4">条工程参数</dt>
+      </div>
+    </dl>
+  </PageHero>
+
+  <div class="border-b border-line bg-bg md:sticky md:top-16 md:z-30">
+    <div class="mf-container">
+      <SubNav label="工程技术专题" items={navItems} />
+    </div>
+  </div>
+
+  <section aria-labelledby="sec-chain">
+    <div class="mf-container py-12 md:py-16">
+      <SectionHeader
+        id="sec-chain"
+        index="01 / 工序关系"
+        title="地下矿山生产流程"
+        description="沿主线看矿石如何从采场到达地面，再学习各工序共用的工程系统。"
+      />
+      <div class="mt-8">
+        <EngineeringFlow />
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-seq" class="border-t border-line">
+    <div class="mf-container py-12 md:py-16">
+      <SectionHeader
+        id="sec-seq"
+        index="02 / 顺序工序"
+        title="按施工顺序推进"
+        description="这四项在时间上先后相承：开拓建立通道，采准切割创造作业条件，回采完成矿石采出，运输把矿石送到井底或地面。"
+      />
+      <div data-reveal="stagger" class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {steps.map((topic) => <EngineeringTopicCard topic={topic} />)}
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-span" class="border-t border-line">
+    <div class="mf-container py-12 md:py-16">
+      <SectionHeader
+        id="sec-span"
+        index="03 / 贯穿支撑"
+        title="贯穿全过程的三个专题"
+        description="这三项不占单独的施工阶段，但每一道工序都要用它们校核：通风定环境、安全定红线、设计定表达。"
+      />
+      <div data-reveal="stagger" class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {spans.map((topic) => <EngineeringTopicCard topic={topic} span />)}
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-xref" class="border-t border-line">
+    <div class="mf-container py-12 md:py-16">
+      <SectionHeader
+        id="sec-xref"
+        index="04 / 交叉引用"
+        title="关联知识方向"
+        description="从工序回到相关的原理、术语与布置方式。"
+        action={{ label: "进入知识体系", href: "/knowledge/" }}
+      />
+      <ul class="mt-8 divide-y divide-line border-y border-line">
+        {
+          domains.map((domain) => (
+            <li class="grid gap-x-8 gap-y-2 py-3.5 md:grid-cols-12">
+              <a
+                href={`/knowledge/${domain.slug}/`}
+                class="text-[13.5px] text-ink transition-colors duration-100 hover:text-accent md:col-span-3"
+              >
+                {domain.name}
+              </a>
+              <p class="text-[12px] leading-6 text-ink-4 md:col-span-6">{domain.summary}</p>
+              <div class="flex flex-wrap gap-x-3 gap-y-1 md:col-span-3 md:justify-end">
+                {engineeringTopics
+                  .filter((t) => t.relatedDomains.includes(domain.slug))
+                  .map((t) => (
+                    <a
+                      href={`/engineering/${t.slug}/`}
+                      class="text-[11.5px] text-accent transition-colors duration-100 hover:text-accent-strong"
+                    >
+                      {t.name}
+                    </a>
+                  ))}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-data" class="border-t border-line">
+    <div class="mf-container py-12 md:py-16">
+      <SectionHeader
+        id="sec-data"
+        index="05 / 支撑资料"
+        title="专题背后的规范与参数"
+        description="每个专题引用的条文、参数与图解都可追到出处。摘录不替代规范原文，设计取值以现行版本为准。"
+        action={{ label: "进入资料中心", href: "/resources/" }}
+      />
+      <div data-reveal="stagger" class="mt-8 grid gap-4 sm:grid-cols-3">
+        {
+          [
+            {
+              title: "相关标准",
+              value: standardDocs.length,
+              unit: "部",
+              desc: "含 GB 16423、GB 50830、GB/T 50564 与重大隐患判定标准",
+              href: "/resources/standards/",
+            },
+            {
+              title: "条文摘录",
+              value: clauseCount,
+              unit: "条",
+              desc: "按条号摘录，标注所属方法与原文出处",
+              href: "/resources/standards/",
+            },
+            {
+              title: "工程参数",
+              value: paramCount,
+              unit: "条",
+              desc: "分教材值、实测值与国际实践值三组列出",
+              href: "/resources/formulas/",
+            },
+          ].map((item) => (
+            <a
+              href={item.href}
+              class="group rounded-button border border-line bg-bg p-5 transition-colors duration-100 hover:border-line-strong"
+            >
+              <p class="text-[12px] text-ink-4">{item.title}</p>
+              <p class="mt-2 flex items-baseline gap-1">
+                <span class="font-mono text-[26px] leading-none font-medium text-ink">
+                  {item.value}
+                </span>
+                <span class="text-[11.5px] text-ink-4">{item.unit}</span>
+              </p>
+              <p class="mt-3 text-[11.5px] leading-5 text-ink-3">{item.desc}</p>
+              <span class="mt-3 inline-block text-[11.5px] text-ink-4 transition-colors duration-100 group-hover:text-accent">
+                查看 →
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

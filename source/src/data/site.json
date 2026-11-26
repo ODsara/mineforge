@@ -1,0 +1,132 @@
+{
+  "name": "MineForge",
+  "nameZh": "矿山知识工场",
+  "tagline": "金属矿床地下开采教学",
+  "description": "MineForge 面向采矿工程学习者，结合工程图解与三维工序演示，讲解金属矿床地下开采方法、开拓采准、通风和运输。",
+  "version": "1.1.0",
+  "nav": [
+    {
+      "label": "首页",
+      "href": "/"
+    },
+    {
+      "label": "知识体系",
+      "href": "/knowledge/"
+    },
+    {
+      "label": "采矿方法",
+      "href": "/methods/"
+    },
+    {
+      "label": "工程技术",
+      "href": "/engineering/"
+    },
+    {
+      "label": "资料中心",
+      "href": "/resources/"
+    },
+    {
+      "label": "关于",
+      "href": "/about/"
+    }
+  ],
+  "search": {
+    "href": "/search/",
+    "label": "搜索知识库",
+    "shortcut": "/"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "浏览",
+        "links": [
+          {
+            "label": "知识体系",
+            "href": "/knowledge/"
+          },
+          {
+            "label": "采矿方法",
+            "href": "/methods/"
+          },
+          {
+            "label": "工程技术",
+            "href": "/engineering/"
+          },
+          {
+            "label": "资料中心",
+            "href": "/resources/"
+          },
+          {
+            "label": "搜索知识库",
+            "href": "/search/"
+          }
+        ]
+      },
+      {
+        "title": "采矿方法",
+        "links": [
+          {
+            "label": "空场采矿法",
+            "href": "/methods/open-stope/"
+          },
+          {
+            "label": "充填采矿法",
+            "href": "/methods/backfill/"
+          },
+          {
+            "label": "崩落采矿法",
+            "href": "/methods/caving/"
+          },
+          {
+            "label": "速查对比表",
+            "href": "/methods/#compare"
+          }
+        ]
+      },
+      {
+        "title": "资料中心",
+        "links": [
+          {
+            "label": "专业术语库",
+            "href": "/resources/glossary/"
+          },
+          {
+            "label": "公式与参数",
+            "href": "/resources/formulas/"
+          },
+          {
+            "label": "工程图解",
+            "href": "/resources/drawings/"
+          },
+          {
+            "label": "参考文献",
+            "href": "/resources/references/"
+          },
+          {
+            "label": "标准与规范",
+            "href": "/resources/standards/"
+          }
+        ]
+      },
+      {
+        "title": "关于",
+        "links": [
+          {
+            "label": "关于 MineForge",
+            "href": "/about/"
+          },
+          {
+            "label": "内容来源与引用原则",
+            "href": "/about/#principles"
+          },
+          {
+            "label": "学习指南",
+            "href": "/about/#roadmap"
+          }
+        ]
+      }
+    ],
+    "note": "本站用于地下开采课程学习。图解用于理解空间关系，工程设计请采用现场资料与现行标准。",
+    "copyright": "MineForge · 采矿工程知识平台"
+  }
+}

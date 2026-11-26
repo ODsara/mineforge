@@ -1,0 +1,34 @@
+---
+/**
+ * 三大入口的示意图
+ *
+ * 三个 kind 各对应一个独立 SVG 文件：
+ *   method      —— 空场法立面：矿房与矿柱的间隔关系
+ *   engineering —— 井巷系统：竖井 + 三个中段平巷 + 通风井
+ *   knowledge   —— 分层结构：一个主干分出三条知识支线
+ *
+ * 三张图共用同一套画法（细线 navy、金色强调、浅色填充），尺寸一致，
+ * 所以三张入口卡并排时能读出「同一套图纸」的关系，而不是三张拼凑的配图。
+ */
+interface Props {
+  kind: "method" | "engineering" | "knowledge";
+  class?: string;
+}
+
+const { kind, class: className = "" } = Astro.props;
+
+const labels: Record<string, string> = {
+  method: "空场法立面示意：矿房与矿柱的间隔关系",
+  engineering: "井巷系统示意：竖井、三个中段平巷与通风井",
+  knowledge: "知识分层结构示意：主干分出三条支线",
+};
+---
+
+<img
+  src={`/assets/visuals/glyph-${kind}.svg`}
+  alt={labels[kind]}
+  width="480"
+  height="280"
+  class:list={["h-full w-full object-cover", className]}
+  decoding="async"
+/>

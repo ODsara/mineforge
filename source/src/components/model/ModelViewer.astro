@@ -1,0 +1,1668 @@
+---
+import { figures, methodCategories, methodHref, methods, type Method } from "../../lib/taxonomy";
+
+interface Props {
+  slug: string;
+  catalog?: boolean;
+  /** 工序滚动演示：模型吸顶，工序卡自上而下滚动并驱动模型 */
+  scrolly?: boolean;
+}
+
+const { slug, catalog = false, scrolly = false } = Astro.props;
+const scopeNotes: Record<string, string> = {
+  "stage-room": "模型采用教材图 11-31 的垂直深孔阶段矿房方案。",
+  "sublevel-backfill": "模型演示分段空场嗣后充填的出净、封堵与充填。",
+  "sublevel-room": "模型以阶梯剖切表示分段之间的斜顶柱。",
+  "single-layer-caving": "模型采用教材图 10-17 的直线长壁方案。",
+};
+const toData = (method: Method) => ({
+  slug: method.slug,
+  name: method.name,
+  code: method.model?.engineCode,
+  href: methodHref(method),
+  scope: scopeNotes[method.slug],
+  source: method.model?.source ?? "glb",
+  glb: method.model?.glb,
+  poster: method.model?.poster ?? figures.find((f) => f.method === method.slug && f.kind === "render")?.src,
+  presets: method.model?.presets ?? [],
+  layers: method.model?.layers ?? [],
+  layersOff: method.model?.layersOff ?? ["围岩"],
+  anchors: method.model?.anchors ?? [],
+  steps: method.model?.steps ?? method.model?.stages ?? [],
+  rawSteps: Boolean(method.model?.steps?.length),
+  phases: method.model?.phases ?? [],
+  stepDuration: method.model?.stepDuration ?? 2.5,
+  defaults: method.model?.defaults ?? { cut: 0, progress: 0.55 },
+});
+const ready = methods.filter((method) => method.model?.status === "ready" && (catalog || method.slug === slug));
+const data = ready.map(toData);
+const initial = data.find((method) => method.slug === slug) ?? data[0];
+/** 工序卡最小高度：步数越多卡越矮，避免长流程占十几屏 */
+const keyMin = !initial
+  ? "40vh"
+  : initial.steps.length > 24
+    ? "24vh"
+    : initial.steps.length > 17
+      ? "30vh"
+      : initial.steps.length > 12
+        ? "34vh"
+        : "40vh";
+---
+
+{initial && (
+  <section
+    id="mf-model"
+    class:list={[
+      "mf-model",
+      "model-studio",
+      catalog && "model-studio--catalog",
+      scrolly && "model-studio--scrolly",
+    ]}
+    data-mf-model
+    data-scrolly={scrolly ? "1" : undefined}
+    data-model-json={JSON.stringify(data)}
+    data-model-default={initial.slug}
+    aria-label={catalog ? "采矿模型查看器" : initial.name + "三维模型"}
+  >
+    {catalog && (
+      <header class="studio-nav">
+        <label>
+          <span class="studio-field">采矿方法</span>
+          <select data-model-select aria-label="采矿方法">
+            {methodCategories.map((category) => (
+              <optgroup label={category.name}>
+                {ready.filter((method) => method.category === category.slug).map((method) => (
+                  <option value={method.slug} selected={method.slug === initial.slug}>
+                    {method.name}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </label>
+        <a class="studio-article" data-model-article href={initial.href}>
+          方法详解 <span aria-hidden="true">↗</span>
+        </a>
+      </header>
+    )}
+
+    {scrolly && !catalog && (
+      <div class="studio-scrolly-head">
+        <span class="studio-scrolly-eyebrow">工序滚动演示</span>
+        <p>向下滚动，左侧模型按工序逐步推进；也可拖动旋转、切换视角与图层核对结构。</p>
+        <span class="studio-scrolly-count">{initial.steps.length} 道工序</span>
+      </div>
+    )}
+
+    <div class="studio-body">
+    <div class="studio-main">
+    <div class="mf-model__stage studio-stage">
+      <img class="studio-fallback" data-model-poster src={initial.poster} alt="" hidden={!initial.poster} />
+      <canvas class="mf-model__canvas" role="img" tabindex="0" aria-label={initial.name + "三维模型"}></canvas>
+      <div class="mf-model__labels" data-model-labels aria-hidden="true"></div>
+      {scrolly && !catalog && (
+        <div class="studio-step-hud" data-model-hud hidden aria-hidden="true">
+          <span class="studio-step-hud__phase" data-model-hud-phase></span>
+          <span class="studio-step-hud__count" data-model-hud-count></span>
+          <strong class="studio-step-hud__title" data-model-hud-title></strong>
+        </div>
+      )}
+      <p class="studio-status" data-model-status role="status">正在加载三维模型…</p>
+      <span class="studio-hint" aria-hidden="true">拖动旋转 <span>· 滚轮缩放</span></span>
+    </div>
+
+    <div class="studio-controls" data-model-controls hidden>
+      <div class="studio-modes" data-model-modes hidden role="group" aria-label="演示模式">
+        <button type="button" class="is-active" data-model-mode="process" aria-pressed="true">过程演示</button>
+        <button type="button" data-model-mode="explore" aria-pressed="false">自由探索</button>
+      </div>
+
+      <div class="studio-view">
+        <label>
+          <span class="studio-field">视角</span>
+          <select data-model-view aria-label="视角"></select>
+        </label>
+        <details class="studio-layers">
+          <summary>结构图层</summary>
+          <div class="studio-layer-panel">
+            <div class="studio-layer-list" data-model-layers></div>
+            <label class="studio-layer-option"><input type="checkbox" data-model-annotations checked />显示标注</label>
+          </div>
+        </details>
+      </div>
+
+      <div class="studio-process" data-model-process hidden>
+        <div class="studio-process__heading">
+          <div class="studio-playback" role="group" aria-label="回采工序控制">
+            <button type="button" class="mf-press" data-model-prev aria-label="上一步" title="上一步">‹</button>
+            <button type="button" class="mf-press" data-model-play aria-label="播放工序" title="播放工序">
+              <span aria-hidden="true">▶</span>
+            </button>
+            <button type="button" class="mf-press" data-model-next aria-label="下一步" title="下一步">›</button>
+          </div>
+          <div class="studio-step" aria-live="polite">
+            <span class="studio-phase" data-model-step-phase></span>
+            <span data-model-step-count></span>
+            <strong data-model-step-title></strong>
+          </div>
+          <div class="studio-playback-opts">
+            <label class="studio-layer-option"><input type="checkbox" data-model-auto checked />自动播放</label>
+            <select data-model-speed aria-label="播放速度" title="播放速度">
+              <option value="0.5">0.5×</option>
+              <option value="1" selected>1×</option>
+              <option value="1.5">1.5×</option>
+              <option value="2">2×</option>
+            </select>
+          </div>
+        </div>
+        <input type="range" data-model-scrub min="1" max="1" value="1" aria-label="工序进度" />
+        <p data-model-step-note></p>
+      </div>
+
+      <div class="studio-explore" data-model-explore hidden>
+        <div class="studio-explore__row">
+          <label>
+            <span class="studio-field">回采进程</span>
+            <output data-model-progress-val>55%</output>
+          </label>
+          <span class="studio-phase" data-model-progress-name></span>
+        </div>
+        <input type="range" data-model-progress min="0" max="100" step="1" value="55" aria-label="连续回采进程" />
+        <div class="studio-explore__row">
+          <label>
+            <span class="studio-field">沿 Z 剖切</span>
+            <output data-model-cut-val>关闭</output>
+          </label>
+        </div>
+        <input type="range" data-model-cut min="0" max="100" step="1" value="0" aria-label="剖切深度" />
+        <p class="studio-explore__hint">拖动滑杆连续推进回采进程或剖开岩体查看内部；点选构件查看对象信息。</p>
+      </div>
+
+      <p class="studio-scope" data-model-scope hidden></p>
+      <div class="studio-selection" data-model-selection hidden aria-live="polite"></div>
+    </div>
+    </div>
+
+    <aside class="studio-rail" data-model-rail aria-label="开采过程" hidden={!scrolly}>
+      <h3 class="studio-rail__title">开采过程<span class="studio-rail__count" data-model-steps-total></span></h3>
+      <div class="studio-steps__body" data-model-steps>
+        {scrolly && !catalog && (
+          <div class="studio-scrolly-list" style={`--mf-key-min:${keyMin};`}>
+            {initial.steps.map((step, i) => {
+              const phase = initial.phases.find((item) => item.id === (step as { phase?: string }).phase);
+              return (
+                <button type="button" class="studio-scrolly-key" data-step={i + 1}>
+                  <span class="studio-scrolly-key__meta">
+                    <span class="studio-scrolly-key__no">
+                      {String(i + 1).padStart(2, "0")} / {String(initial.steps.length).padStart(2, "0")}
+                    </span>
+                    {phase && (
+                      <span class="studio-scrolly-key__phase" style={`--pc:${phase.color};`}>
+                        {phase.name}
+                      </span>
+                    )}
+                  </span>
+                  <strong class="studio-scrolly-key__title">{step.label}</strong>
+                  <span class="studio-scrolly-key__note">{step.note}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+      <p class="studio-rail__hint">点击工序可返回模型并查看这一步，也可使用播放器播放和调速。</p>
+    </aside>
+    </div>
+  </section>
+)}
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { disposeTree } from "../../lib/models/theme.ts";
+  import { registry } from "../../lib/models/registry.ts";
+  import { STATE_INFO } from "../../lib/models/engine/states.js";
+  import type { ReviewedSession } from "../../lib/models/reviewed.ts";
+  import type { BBox, BuildVariant, ModelAnchor } from "../../lib/models/types.ts";
+
+  interface ViewPreset {
+    id: string;
+    label: string;
+    az: number;
+    el: number;
+    variant?: BuildVariant;
+    focus?: string;
+  }
+
+  interface ViewStep { label: string; note?: string; phase?: string; }
+  interface ViewPhase { id: string; name: string; color: string; }
+  interface ViewData {
+    slug: string;
+    name: string;
+    href: string;
+    scope?: string;
+    source: "procedural" | "glb";
+    glb?: string;
+    poster?: string;
+    presets: ViewPreset[];
+    layers: string[];
+    layersOff: string[];
+    anchors: ModelAnchor[];
+    steps: ViewStep[];
+    rawSteps: boolean;
+    phases: ViewPhase[];
+    stepDuration: number;
+    defaults: { cut: number; progress: number };
+  }
+
+  const defaultView: ViewPreset = { id: "iso", label: "等轴测", az: 34, el: 26 };
+
+  function initViewer(root: HTMLElement): void {
+    const select = root.querySelector<HTMLSelectElement>("[data-model-select]");
+    const canvas = root.querySelector<HTMLCanvasElement>("canvas");
+    const stage = canvas?.parentElement;
+    const status = root.querySelector<HTMLElement>("[data-model-status]");
+    const poster = root.querySelector<HTMLImageElement>("[data-model-poster]");
+    const labelsBox = root.querySelector<HTMLElement>("[data-model-labels]");
+    const settings = root.querySelector<HTMLElement>("[data-model-controls]");
+    const scope = root.querySelector<HTMLElement>("[data-model-scope]");
+    const process = root.querySelector<HTMLElement>("[data-model-process]");
+    const modelLink = root.querySelector<HTMLAnchorElement>("[data-model-article]");
+    const view = root.querySelector<HTMLSelectElement>("[data-model-view]");
+    const layers = root.querySelector<HTMLElement>("[data-model-layers]");
+    const annotations = root.querySelector<HTMLInputElement>("[data-model-annotations]");
+    const prev = root.querySelector<HTMLButtonElement>("[data-model-prev]");
+    const play = root.querySelector<HTMLButtonElement>("[data-model-play]");
+    const next = root.querySelector<HTMLButtonElement>("[data-model-next]");
+    const scrub = root.querySelector<HTMLInputElement>("[data-model-scrub]");
+    const count = root.querySelector<HTMLElement>("[data-model-step-count]");
+    const title = root.querySelector<HTMLElement>("[data-model-step-title]");
+    const note = root.querySelector<HTMLElement>("[data-model-step-note]");
+    const selection = root.querySelector<HTMLElement>("[data-model-selection]");
+    const modesBox = root.querySelector<HTMLElement>("[data-model-modes]");
+    const stepPhase = root.querySelector<HTMLElement>("[data-model-step-phase]");
+    const speedSel = root.querySelector<HTMLSelectElement>("[data-model-speed]");
+    const autoBox = root.querySelector<HTMLInputElement>("[data-model-auto]");
+    const stepsBox = root.querySelector<HTMLElement>("[data-model-steps]");
+    const rail = root.querySelector<HTMLElement>("[data-model-rail]");
+    const stepsTotal = root.querySelector<HTMLElement>("[data-model-steps-total]");
+    const explore = root.querySelector<HTMLElement>("[data-model-explore]");
+    const progressSlider = root.querySelector<HTMLInputElement>("[data-model-progress]");
+    const progressVal = root.querySelector<HTMLElement>("[data-model-progress-val]");
+    const progressName = root.querySelector<HTMLElement>("[data-model-progress-name]");
+    const cutSlider = root.querySelector<HTMLInputElement>("[data-model-cut]");
+    const cutVal = root.querySelector<HTMLElement>("[data-model-cut-val]");
+    const hud = root.querySelector<HTMLElement>("[data-model-hud]");
+    const hudPhase = root.querySelector<HTMLElement>("[data-model-hud-phase]");
+    const hudCount = root.querySelector<HTMLElement>("[data-model-hud-count]");
+    const hudTitle = root.querySelector<HTMLElement>("[data-model-hud-title]");
+    const modeButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-model-mode]"));
+    if (!canvas || !stage || !status || !settings || !process || !view || !layers || !prev || !play || !next || !scrub || !count || !title || !note || !labelsBox || !annotations || !selection || !modesBox || !stepPhase || !speedSel || !autoBox || !stepsBox || !rail || !stepsTotal || !explore || !progressSlider || !progressVal || !progressName || !cutSlider || !cutVal) return;
+
+    /** 工序滚动演示：模型吸顶、工序卡随页面滚动驱动 step */
+    const scrolly = root.classList.contains("model-studio--scrolly");
+    const sideBySide = window.matchMedia("(min-width: 48rem)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const list = JSON.parse(root.dataset.modelJson ?? "[]") as ViewData[];
+    const models = new Map(list.map((item) => [item.slug, item]));
+    let data = models.get(select ? new URLSearchParams(location.search).get("method") ?? "" : "") ??
+      models.get(root.dataset.modelDefault ?? "") ?? list[0];
+    if (!data) return;
+
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance", preserveDrawingBuffer: true });
+    } catch {
+      status.textContent = "此浏览器无法运行三维模型。";
+      return;
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.04;
+    renderer.localClippingEnabled = true;
+
+    const scene = new THREE.Scene();
+    const stageColor = getComputedStyle(root).getPropertyValue("--color-model-stage").trim();
+    scene.background = new THREE.Color(stageColor || "#211711");
+    scene.add(new THREE.HemisphereLight(0xf1dfc6, 0x665345, 1.45));
+    function addDirectional(color: number, intensity: number, x: number, y: number, z: number) {
+      const light = new THREE.DirectionalLight(color, intensity);
+      light.position.set(x, y, z);
+      scene.add(light);
+    }
+    addDirectional(0xffedd6, 2.10, 110, 170, 90);
+    addDirectional(0xe1ddcf, 0.82, -140, 70, -110);
+    addDirectional(0xffc78a, 0.50, 30, 60, -170);
+
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 3200);
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.09;
+    controls.minDistance = 7;
+    controls.maxDistance = 1000;
+    controls.listenToKeyEvents(canvas);
+    canvas.addEventListener("keydown", (event) => {
+      if (event.key !== "+" && event.key !== "=" && event.key !== "-") return;
+      const factor = event.key === "-" ? 1.16 : 0.86;
+      const offset = camera.position.clone().sub(controls.target);
+      offset.setLength(THREE.MathUtils.clamp(offset.length() * factor, controls.minDistance, controls.maxDistance));
+      camera.position.copy(controls.target).add(offset);
+      requestFrame();
+      event.preventDefault();
+    });
+
+    let model: THREE.Object3D | null = null;
+    let bounds: BBox | undefined;
+    let preset = defaultView;
+    let activeStep = 1;
+    let stepSelected = false;
+    let frame = 0;
+    let pendingSlider = 0;
+    let playing: number | undefined;
+    /** 滚动驱动的抑制窗：代码自身引发的 scrollIntoView 不应再回头改步骤 */
+    let scrollSuppressUntil = 0;
+    // 过程演示/自由探索（2026-11-24 迁移轮）：live 会话一次构建，逐步即时切换
+    let mode: "process" | "explore" = "process";
+    let live: ReviewedSession | null = null;
+    let progress = 0.55;
+    let cutValue = 0;
+    let speed = 1;
+    let autoOn = true;
+    let paused = false;
+    let disposed = false;
+    let labelItems: { node: HTMLElement; point: THREE.Vector3; layer?: string }[] = [];
+    const hiddenLayers = new Set<string>();
+    const ray = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+
+    function applyLabels(anchors: ModelAnchor[]) {
+      labelsBox!.replaceChildren();
+      labelItems = anchors.map(({ label, pos, layer }) => {
+        const node = document.createElement("span");
+        node.className = "studio-label";
+        node.textContent = label;
+        labelsBox!.append(node);
+        return { node, point: new THREE.Vector3(...pos), layer };
+      });
+    }
+
+    const projected = new THREE.Vector3();
+    function render() {
+      frame = 0;
+      if (paused || disposed) return;
+      controls.update();
+      const animated = live?.animate(performance.now(), reducedMotion.matches);
+      renderer.render(scene, camera);
+      const occupied: { x: number; y: number; width: number }[] = [];
+      const hudBounds = hud && !hud.hidden ? {
+        left: hud.offsetLeft,
+        right: hud.offsetLeft + hud.offsetWidth,
+        top: hud.offsetTop,
+        bottom: hud.offsetTop + hud.offsetHeight,
+      } : null;
+      for (const { node, point, layer } of labelItems) {
+        projected.copy(point).project(camera);
+        const x = (projected.x + 1) * stage!.clientWidth / 2;
+        const y = (1 - projected.y) * stage!.clientHeight / 2;
+        const width = node.offsetWidth || 88;
+        const outside = Math.abs(projected.z) > 1 || x < width / 2 + 5 || x > stage!.clientWidth - width / 2 - 5 || y < 14 || y > stage!.clientHeight - 38;
+        const collision = occupied.some((peer) => Math.abs(peer.x - x) < (peer.width + width) / 2 + 7 && Math.abs(peer.y - y) < 25);
+        const overlapsHud = hudBounds &&
+          x + width / 2 > hudBounds.left - 4 && x - width / 2 < hudBounds.right + 4 &&
+          y + node.offsetHeight / 2 > hudBounds.top - 4 && y - node.offsetHeight / 2 < hudBounds.bottom + 4;
+        const visible = annotations!.checked && (!layer || !hiddenLayers.has(layer)) && !outside && !collision && !overlapsHud;
+        node.style.visibility = visible ? "visible" : "hidden";
+        if (visible) {
+          node.style.left = Math.round(x) + "px";
+          node.style.top = Math.round(y) + "px";
+          occupied.push({ x, y, width });
+        }
+      }
+      if (animated) {
+        const rect = stage!.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) requestFrame();
+      }
+    }
+
+    /** 按需渲染：不做视口门控。IntersectionObserver 在部分页面/跳转后不回调，曾导致画布停在旧帧。 */
+    function requestFrame() {
+      if (!disposed && !paused && !frame) frame = requestAnimationFrame(render);
+    }
+    controls.addEventListener("change", requestFrame);
+
+    function adjustSize() {
+      const w = stage!.clientWidth;
+      const h = stage!.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      requestFrame();
+    }
+    const resize = new ResizeObserver(adjustSize);
+    resize.observe(stage);
+    adjustSize();
+
+    function fitCamera(focus?: [number, number, number]) {
+      if (!model) return;
+      const box = new THREE.Box3();
+      const part = new THREE.Box3();
+      model.updateMatrixWorld(true);
+      model.traverseVisible((o) => {
+        if (!(o instanceof THREE.Mesh)) return;
+        box.union(part.setFromObject(o));
+      });
+      if (box.isEmpty() && bounds) {
+        box.min.set(...bounds.min);
+        box.max.set(...bounds.max);
+      }
+      if (box.isEmpty()) return;
+
+      box.getCenter(controls.target);
+      if (focus) controls.target.set(...focus);
+      else if (live) controls.target.y -= 0.42;
+      const az = THREE.MathUtils.degToRad(preset.az);
+      const el = THREE.MathUtils.degToRad(THREE.MathUtils.clamp(preset.el, -85, 85));
+      const dir = new THREE.Vector3(Math.cos(el) * Math.sin(az), Math.sin(el), Math.cos(el) * Math.cos(az));
+      const right = new THREE.Vector3().crossVectors(camera.up, dir).normalize();
+      const up = new THREE.Vector3().crossVectors(dir, right);
+      const slope = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * (live ? 1.0 : 0.78);
+      const corner = new THREE.Vector3();
+      let distance = controls.minDistance;
+      for (const x of [box.min.x, box.max.x]) {
+        for (const y of [box.min.y, box.max.y]) {
+          for (const z of [box.min.z, box.max.z]) {
+            corner.set(x, y, z).sub(controls.target);
+            const span = Math.max(Math.abs(corner.dot(right)) / camera.aspect, Math.abs(corner.dot(up)));
+            distance = Math.max(distance, corner.dot(dir) + span / slope);
+          }
+        }
+      }
+      camera.position.copy(controls.target).addScaledVector(dir, focus ? Math.max(12, distance * 0.47) : distance);
+      controls.update();
+    }
+
+    function syncLayers() {
+      for (const layer of data.layers) {
+        const node = model?.getObjectByName("L_" + layer);
+        if (node) node.visible = !hiddenLayers.has(layer);
+      }
+    }
+
+    function clearModel() {
+      if (model) {
+        scene.remove(model);
+        if (live?.group === model) live.dispose();
+        else disposeTree(model);
+      }
+      live = null;
+      model = null;
+    }
+
+    function replaceModel(group: THREE.Object3D) {
+      clearModel();
+      model = group;
+      scene.add(group);
+      syncLayers();
+      selection!.hidden = true;
+    }
+
+    function openLive() {
+      const builder = registry[data.slug];
+      if (!builder) throw new Error("Missing model " + data.slug);
+      const session = builder.createLive({ variant: preset.variant ?? "iso", step: activeStep });
+      bounds = {
+        min: session.bounds.min.toArray(),
+        max: session.bounds.max.toArray(),
+      };
+      replaceModel(session.group);
+      live = session;
+      root.dataset.modelActive = data.slug;
+    }
+
+    /** 旧 stage 概览路径（无 steps 数据的兼容位；当前 15 法均不走） */
+    function buildStageFallback(resetCamera: boolean) {
+      const builder = registry[data.slug];
+      if (!builder) throw new Error("Missing model " + data.slug);
+      const result = builder.build({ variant: preset.variant ?? "iso", focus: preset.focus, stage: activeStep });
+      bounds = result.bbox;
+      replaceModel(result.group);
+      applyLabels(result.anchors);
+      if (resetCamera) fitCamera(preset.focus ? result.focusPoints?.[preset.focus] : undefined);
+      root.dataset.modelActive = data.slug;
+      root.dataset.modelStep = String(activeStep);
+      requestFrame();
+    }
+
+    /** 应用当前模式/预设到会话：过程演示走 step，自由探索走 progress+cut */
+    function refreshTrack(resetCamera = false) {
+      if (!live) return;
+      live.setVariant(preset.variant ?? "iso");
+      let anchors: ModelAnchor[];
+      if (mode === "explore") {
+        live.setCut(cutValue);
+        anchors = live.explore(progress);
+      } else {
+        anchors = live.step(activeStep);
+      }
+      syncLayers();
+      selection!.hidden = true;
+      applyLabels(anchors);
+      if (resetCamera) fitCamera(preset.focus ? live.focusPoints()[preset.focus] : undefined);
+      root.dataset.modelStep = String(activeStep);
+      requestFrame();
+    }
+
+    function syncTimeline() {
+      const step = data.steps[activeStep - 1];
+      process!.hidden = data.source !== "procedural" || !step || mode !== "process";
+      explore!.hidden = data.source !== "procedural" || mode !== "explore";
+      scrub!.max = String(data.steps.length || 1);
+      scrub!.value = String(activeStep);
+      scrub!.setAttribute("aria-valuetext", step ? activeStep + " / " + data.steps.length + " " + step.label : "");
+      count!.textContent = activeStep + " / " + data.steps.length;
+      const ph = data.phases.find((p) => p.id === step?.phase);
+      stepPhase!.textContent = ph?.name ?? "";
+      stepPhase!.style.setProperty("--pc", ph?.color ?? "var(--color-ink-3)");
+      if (title!.textContent !== (step?.label ?? "")) {
+        const label = document.createElement("span");
+        label.className = "mf-feedback-in inline-block";
+        label.textContent = step?.label ?? "";
+        title!.replaceChildren(label);
+      }
+      note!.textContent = step?.note ?? "";
+      note!.hidden = !step?.note;
+      if (hud) {
+        hud.hidden = mode !== "process" || !step;
+        hud.style.setProperty("--pc", ph?.color ?? "var(--color-accent)");
+        if (hudPhase) hudPhase.textContent = ph?.name ?? "";
+        if (hudCount) hudCount.textContent = `${activeStep} / ${data.steps.length}`;
+        if (hudTitle) hudTitle.textContent = step?.label ?? "";
+      }
+      prev!.disabled = activeStep <= 1;
+      next!.disabled = activeStep >= data.steps.length;
+      play!.disabled = !autoOn;
+      if (mode === "explore") highlightFromProgress();
+      else highlightStep();
+    }
+
+    function setStep(index: number) {
+      const nr = THREE.MathUtils.clamp(index, 1, data.steps.length || 1);
+      if (nr === activeStep && mode === "process") return;
+      activeStep = nr;
+      if (mode === "explore") {
+        setMode("process");
+        return; // setMode 内已 refreshTrack + syncTimeline
+      }
+      if (live) refreshTrack(false);
+      else buildStageFallback(false);
+      syncTimeline();
+    }
+
+    function syncModeButtons() {
+      for (const button of modeButtons) {
+        const selected = button.dataset.modelMode === mode;
+        button.classList.toggle("is-active", selected);
+        button.setAttribute("aria-pressed", String(selected));
+      }
+    }
+
+    function setMode(m: "process" | "explore") {
+      if (data.source !== "procedural" || !data.rawSteps || mode === m) return;
+      stopPlaying();
+      mode = m;
+      if (m === "explore") {
+        progressSlider!.value = String(Math.round(progress * 100));
+        progressVal!.textContent = Math.round(progress * 100) + "%";
+        progressName!.textContent = live?.progressLabel(progress) ?? "";
+        cutSlider!.value = String(Math.round(cutValue * 100));
+        syncCutLabel();
+      }
+      if (live) refreshTrack(false);
+      syncModeButtons();
+      syncTimeline();
+      requestFrame();
+    }
+
+    function playDelay() {
+      return Math.max(300, Math.round(data.stepDuration * 1000 / speed));
+    }
+
+    function stopPlaying() {
+      if (playing !== undefined) window.clearInterval(playing);
+      playing = undefined;
+      play!.setAttribute("aria-label", "播放工序");
+      play!.title = "播放工序";
+      play!.querySelector("span")!.textContent = "▶";
+    }
+
+    function bindScrollyCard(card: HTMLElement, index: number) {
+      card.addEventListener("click", () => {
+        stopPlaying();
+        stepSelected = true;
+        setStep(index + 1);
+        // 点远端的工序：把该卡滚到阅读线，避免下一次滚动又跳回邻近工序
+        scrollSuppressUntil = performance.now() + 700;
+        const target = sideBySide.matches ? card : stage!;
+        target.scrollIntoView({
+          block: sideBySide.matches ? "center" : "start",
+          behavior: reducedMotion.matches ? "instant" : "smooth",
+        });
+      });
+    }
+
+    function buildScrollySteps() {
+      const existing = stepsBox!.querySelectorAll<HTMLElement>(".studio-scrolly-key");
+      if (existing.length) {
+        existing.forEach((card) => bindScrollyCard(card, Number(card.dataset.step) - 1));
+        return;
+      }
+      const list = document.createElement("div");
+      list.className = "studio-scrolly-list";
+      data.steps.forEach((s, i) => {
+        const phase = data.phases.find((p) => p.id === s.phase);
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "studio-scrolly-key";
+        card.dataset.step = String(i + 1);
+
+        const meta = document.createElement("span");
+        meta.className = "studio-scrolly-key__meta";
+        const no = document.createElement("span");
+        no.className = "studio-scrolly-key__no";
+        no.textContent = `${String(i + 1).padStart(2, "0")} / ${String(data.steps.length).padStart(2, "0")}`;
+        meta.append(no);
+        if (phase) {
+          const chip = document.createElement("span");
+          chip.className = "studio-scrolly-key__phase";
+          chip.style.setProperty("--pc", phase.color);
+          chip.textContent = phase.name;
+          meta.append(chip);
+        }
+
+        const title = document.createElement("strong");
+        title.className = "studio-scrolly-key__title";
+        title.textContent = s.label;
+
+        const note = document.createElement("span");
+        note.className = "studio-scrolly-key__note";
+        note.textContent = s.note ?? "";
+
+        card.append(meta, title, note);
+        bindScrollyCard(card, i);
+        list.append(card);
+      });
+      stepsBox!.append(list);
+    }
+
+    function hydrateControls() {
+      if (select) select.value = data.slug;
+      if (modelLink) modelLink.href = data.href;
+      if (scope) {
+        scope.textContent = data.scope ?? "";
+        scope.hidden = !data.scope;
+      }
+      canvas!.setAttribute("aria-label", data.name + "三维模型");
+      if (poster) {
+        poster.hidden = !data.poster;
+        if (data.poster) poster.src = data.poster;
+      }
+      const presets = data.presets.length ? data.presets : [defaultView];
+      preset = presets[0];
+      view!.replaceChildren(...presets.map((p) => new Option(p.label, p.id)));
+      hiddenLayers.clear();
+      data.layersOff.forEach((layer) => hiddenLayers.add(layer));
+      layers!.replaceChildren(...data.layers.map((layer) => {
+        const option = document.createElement("label");
+        option.className = "studio-layer-option";
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.dataset.layer = layer;
+        input.checked = !hiddenLayers.has(layer);
+        input.addEventListener("change", () => {
+          if (input.checked) hiddenLayers.delete(layer);
+          else hiddenLayers.add(layer);
+          syncLayers();
+          selection!.hidden = true;
+          requestFrame();
+        });
+        option.append(input, layer);
+        return option;
+      }));
+      // 模式切换与工序步骤列表（过程演示迁移轮）
+      modesBox!.hidden = data.source !== "procedural" || !data.rawSteps;
+      syncModeButtons();
+      speedSel!.value = String(speed);
+      autoBox!.checked = autoOn;
+      stepsBox!.replaceChildren();
+      // 步骤越多，单卡越矮：35 步的方法也控制在整个演示区的合理页数内
+      const n = data.steps.length;
+      root.style.setProperty("--mf-key-min", n > 24 ? "24vh" : n > 17 ? "30vh" : n > 12 ? "34vh" : "40vh");
+      if (scrolly && data.rawSteps && data.steps.length) {
+        buildScrollySteps();
+      } else if (data.rawSteps && data.phases.length) {
+        for (const ph of data.phases) {
+          const rows = data.steps.map((s, i) => [s, i] as const).filter(([s]) => (s.phase ?? "_") === ph.id);
+          if (!rows.length) continue;
+          const sec = document.createElement("div");
+          sec.className = "studio-step-phase";
+          const hd = document.createElement("div");
+          hd.className = "studio-step-phase__name";
+          hd.style.setProperty("--pc", ph.color);
+          hd.textContent = ph.name;
+          sec.append(hd);
+          for (const [s, i] of rows) {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "studio-step-row";
+            b.dataset.step = String(i + 1);
+            const no = document.createElement("span");
+            no.className = "studio-step-row__no";
+            no.textContent = String(i + 1).padStart(2, "0");
+            const label = document.createElement("span");
+            label.textContent = s.label;
+            b.append(no, label);
+            b.addEventListener("click", () => {
+              stopPlaying();
+              stepSelected = true;
+              setStep(i + 1);
+            });
+            sec.append(b);
+          }
+          stepsBox!.append(sec);
+        }
+      }
+      // 右侧「开采过程」栏：有步骤才出现；计数标注总步数
+      rail!.hidden = stepsBox!.childElementCount === 0;
+      stepsTotal!.textContent = data.steps.length ? String(data.steps.length) + " 步" : "";
+    }
+
+    function markActiveStep(index: number) {
+      for (const element of stepsBox!.querySelectorAll<HTMLElement>("[data-step]")) {
+        const active = Number(element.dataset.step) === index;
+        element.classList.toggle("is-active", active);
+        if (active) element.setAttribute("aria-current", "step");
+        else element.removeAttribute("aria-current");
+      }
+      const activeRow = stepsBox!.querySelector(".is-active");
+      if (activeRow instanceof HTMLElement && !scrolly) {
+        scrollSuppressUntil = performance.now() + 600;
+        activeRow.scrollIntoView({ block: "nearest" });
+      }
+    }
+
+    function highlightStep() {
+      markActiveStep(activeStep);
+    }
+
+    async function loadModel(item: ViewData) {
+      stopPlaying();
+      data = item;
+      settings!.hidden = true;
+      status!.hidden = false;
+      status!.textContent = "正在加载三维模型…";
+      mode = "process";
+      progress = data.defaults.progress;
+      cutValue = data.defaults.cut;
+      hydrateControls();
+      stepSelected = false;
+      const working = data.steps.flatMap((s, i) => s.phase === "stope" ? [i + 1] : []);
+      // 滚动演示从第一步开始：模型状态必须与首张工序卡一致
+      activeStep = scrolly ? 1 : (working[Math.floor(working.length / 2)] ?? Math.max(1, data.steps.length));
+      try {
+        if (data.source === "procedural") {
+          if (data.rawSteps) {
+            openLive();
+            refreshTrack(true);
+          } else {
+            buildStageFallback(true);
+          }
+        } else if (item.glb) {
+          const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
+          const { scene: group } = await new GLTFLoader().loadAsync(item.glb);
+          if (data !== item || disposed) {
+            disposeTree(group);
+            return;
+          }
+          replaceModel(group);
+          applyLabels(item.anchors.map((a) => ({ ...a, pos: [a.pos[0], a.pos[2], -a.pos[1]] })));
+          fitCamera();
+          requestFrame();
+        } else throw new Error("Missing model asset");
+        status!.hidden = true;
+        settings!.hidden = false;
+        if (poster) poster.hidden = true;
+        syncTimeline();
+        // 深链/刷新时页面可能直接停在工序中段：模型加载完成后按当前阅读位置对齐一次
+        if (scrolly) requestAnimationFrame(() => driveStepFromScroll());
+      } catch (err) {
+        status!.textContent = "三维模型加载失败。";
+        console.error("[MineForge]", err);
+      }
+    }
+
+    select?.addEventListener("change", () => {
+      const item = models.get(select.value);
+      if (!item) return;
+      const url = new URL(location.href);
+      url.searchParams.set("method", item.slug);
+      history.replaceState(null, "", url);
+      void loadModel(item);
+    });
+
+    view.addEventListener("change", () => {
+      preset = data.presets.find((p) => p.id === view.value) ?? defaultView;
+      if (data.source === "procedural" && live) {
+        refreshTrack(true);
+        if (mode === "explore") syncCutLabel();
+      } else if (data.source === "procedural") buildStageFallback(true);
+      else {
+        fitCamera();
+        requestFrame();
+      }
+    });
+    annotations.addEventListener("change", requestFrame);
+
+    function moveStep(offset: number) {
+      stopPlaying();
+      stepSelected = true;
+      setStep(activeStep + offset);
+    }
+    prev.addEventListener("click", () => moveStep(-1));
+    next.addEventListener("click", () => moveStep(1));
+    scrub.addEventListener("input", () => {
+      stopPlaying();
+      stepSelected = true;
+      if (pendingSlider) cancelAnimationFrame(pendingSlider);
+      pendingSlider = requestAnimationFrame(() => setStep(scrub.valueAsNumber));
+    });
+    play.addEventListener("click", () => {
+      if (!autoOn) return; // 与独立版一致：关闭自动后播放键失效，仅手动步进
+      if (playing !== undefined) {
+        stopPlaying();
+        return;
+      }
+      if (!stepSelected || activeStep >= data.steps.length) setStep(1);
+      stepSelected = true;
+      play.setAttribute("aria-label", "暂停工序");
+      play.title = "暂停工序";
+      play.querySelector("span")!.textContent = "Ⅱ";
+      playing = window.setInterval(playTick, playDelay());
+    });
+    function playTick() {
+      if (activeStep < data.steps.length) setStep(activeStep + 1);
+      if (activeStep >= data.steps.length) stopPlaying();
+    }
+    speedSel.addEventListener("change", () => {
+      speed = Number(speedSel.value) || 1;
+      if (playing !== undefined) {
+        window.clearInterval(playing);
+        playing = window.setInterval(playTick, playDelay());
+      }
+    });
+    autoBox.addEventListener("change", () => {
+      autoOn = autoBox.checked;
+      if (!autoOn) stopPlaying();
+      syncTimeline();
+    });
+    for (const button of modeButtons) {
+      button.addEventListener("click", () => setMode(button.dataset.modelMode === "explore" ? "explore" : "process"));
+    }
+
+    /** 自由探索：连续进程 + 连续 Z 剖切（独立版 update/applyCut 通道） */
+    function syncCutLabel() {
+      const direction = preset.variant === "cross" ? "横剖" : "纵剖";
+      cutVal!.textContent = cutValue <= 0.005 ? "关闭（全显示）" : `${direction} ${Math.round(cutValue * 100)}%`;
+    }
+
+    function applyExplore() {
+      if (!live || mode !== "explore") return;
+      live.setCut(cutValue);
+      applyLabels(live.explore(progress));
+      syncLayers();
+      selection!.hidden = true;
+      progressVal!.textContent = Math.round(progress * 100) + "%";
+      progressName!.textContent = live.progressLabel(progress) || "—";
+      syncCutLabel();
+      // 自由探索：右侧「开采过程」栏高亮跟随进程
+      highlightFromProgress();
+      requestFrame();
+    }
+
+    /** 探索态下按连续进程映射出当前回采步骤并高亮：回采（stope）档步骤内线性映射，
+     *  与引擎 update(progress) 语义一致；无回采档的方法退化为全步骤线性映射。 */
+    function highlightFromProgress() {
+      if (live) markActiveStep(live.progressStep(progress));
+    }
+    progressSlider.addEventListener("input", () => {
+      progress = progressSlider.valueAsNumber / 100;
+      applyExplore();
+    });
+    cutSlider.addEventListener("input", () => {
+      cutValue = cutSlider.valueAsNumber / 100;
+      applyExplore();
+    });
+
+    /* ── 滚动驱动（独立版「开采过程」交互的核心）──────────────────────────
+     * 页面下滚时，右侧离视口焦点线（45% 高度）最近的步骤行即当前工序，
+     * 左侧模型跟着切换。自保护的三条边界：
+     *   1) 只在过程演示模式驱动（自由探索由进程滑杆负责）；
+     *   2) 代码自身 scrollIntoView 引发的滚动在抑制窗内跳过，避免回环；
+     *   3) 展台尚未进入或已滚出视口时不驱动。
+     * 用户在自动播放中途滚动 → 交还控制权：停播，按阅读位置推进。
+     */
+    let driveRaf = 0;
+    function driveStepFromScroll() {
+      driveRaf = 0;
+      if (!root.dataset.modelActive || mode !== "process" || !sideBySide.matches) return;
+      if (performance.now() < scrollSuppressUntil) return;
+      const boxRect = stepsBox!.getBoundingClientRect();
+      if (boxRect.bottom < 0 || boxRect.top > innerHeight) return;
+      const stageRect = stage!.getBoundingClientRect();
+      if (stageRect.bottom < 120 || stageRect.top > innerHeight - 120) return;
+      const band = innerHeight * 0.45;
+      let best: HTMLElement | null = null;
+      let bestD = Infinity;
+      for (const el of stepsBox!.querySelectorAll<HTMLElement>("[data-step]")) {
+        const rc = el.getBoundingClientRect();
+        if (rc.bottom < 60 || rc.top > innerHeight - 60) continue;
+        const d = Math.abs(rc.top + rc.height / 2 - band);
+        if (d < bestD) { bestD = d; best = el; }
+      }
+      if (!best) return;
+      const idx = Number(best.dataset.step);
+      // 用户一旦滚动，就交还控制权：即使当前工序没变也先停播，避免自动播放继续抢占
+      if (playing !== undefined) stopPlaying();
+      if (idx >= 1 && idx !== activeStep) {
+        setStep(idx);
+      }
+    }
+    window.addEventListener("scroll", () => {
+      requestFrame();
+      if (!driveRaf) driveRaf = requestAnimationFrame(driveStepFromScroll);
+    }, { passive: true });
+
+    let pointerDown: [number, number] | undefined;
+    canvas.addEventListener("pointerdown", (event) => {
+      if (event.isPrimary && event.button === 0) pointerDown = [event.clientX, event.clientY];
+    });
+    canvas.addEventListener("pointerup", (event) => {
+      if (!event.isPrimary) return;
+      const origin = pointerDown;
+      pointerDown = undefined;
+      if (!origin || !model || Math.hypot(origin[0] - event.clientX, origin[1] - event.clientY) > 5) return;
+      const hit = pickAt(event.clientX, event.clientY);
+      if (hit) showInfo(hit.userData as Record<string, unknown>);
+      else { selection!.hidden = true; selection!.replaceChildren(); }
+    });
+
+    canvas.addEventListener("pointercancel", (event) => {
+      if (event.isPrimary) pointerDown = undefined;
+    });
+
+    /** 屏幕坐标 → 首个带 object_id 的可见拾取对象（剖切面后的对象不算中）；供点击与验收钩子共用 */
+    function pickAt(clientX: number, clientY: number): THREE.Object3D | null {
+      if (!model) return null;
+      const rect = canvas!.getBoundingClientRect();
+      pointer.set((clientX - rect.left) / rect.width * 2 - 1, 1 - (clientY - rect.top) / rect.height * 2);
+      camera.updateMatrixWorld();
+      ray.setFromCamera(pointer, camera);
+      const hit = ray.intersectObject(model, true).find((candidate) => {
+        if (!candidate.object.userData.object_id || (live && live.clipPlane.distanceToPoint(candidate.point) < 0)) return false;
+        for (let object: THREE.Object3D | null = candidate.object; object; object = object.parent) {
+          if (!object.visible) return false;
+        }
+        return true;
+      });
+      return hit ? hit.object : null;
+    }
+
+    /** 对象信息卡：独立版 showInfo 全字段适配（状态徽章/依据等级/溯源/标高/连通） */
+    function showInfo(u: Record<string, unknown>): void {
+      const sel = selection!;
+      sel.replaceChildren();
+      if (!u.object_id) { sel.hidden = true; return; }
+      const wrap = document.createElement("div");
+      wrap.className = "mf-info mf-feedback-in";
+      const head = document.createElement("div");
+      head.className = "mf-info__head";
+      const name = document.createElement("strong");
+      name.textContent = String(u.name ?? u.object_id);
+      head.append(name);
+      const st = (STATE_INFO as Record<string, { label?: string; short?: string; color?: string }>)[String(u.mining_state ?? "")];
+      if (st) {
+        const badge = document.createElement("span");
+        badge.className = "mf-badge";
+        badge.style.setProperty("--sc", st.color ?? "#716D64");
+        badge.append(document.createElement("i"), document.createTextNode(st.label ?? String(u.mining_state)));
+        head.append(badge);
+      }
+      wrap.append(head);
+      const id = document.createElement("p");
+      id.className = "mf-info__id";
+      id.textContent = String(u.object_id);
+      wrap.append(id);
+      const dl = document.createElement("dl");
+      const yn = (v: unknown) => (v === true ? "是" : v === false ? "否" : "—");
+      const row = (k: string, v: string, cls?: string) => {
+        const dt = document.createElement("dt");
+        dt.textContent = k;
+        const dd = document.createElement("dd");
+        dd.textContent = v || "—";
+        if (cls) dd.className = cls;
+        dl.append(dt, dd);
+      };
+      const tier = String(u.source_tier ?? "");
+      const tierChar = tier.replace(/[【】]/g, "") || "—";
+      row("开采状态", st ? st.label ?? "" : String(u.mining_state ?? ""));
+      row("已回采", yn(u.mined));
+      row("已充填", yn(u.backfilled));
+      row("所属阶段", String(u.stage ?? ""));
+      row("对象类型", String(u.type_code ?? ""));
+      row("依据等级", tier || "—", "mf-tier mf-tier--" + tierChar);
+      row("教材出处", [u.textbook_ref, u.figure_ref].filter(Boolean).join(" · ") as string);
+      row("尺寸", String(u.dimensions ?? ""));
+      row("标高", u.elevation_z != null ? u.elevation_z + " m" : "—");
+      row("连通", Array.isArray(u.connectivity) && u.connectivity.length ? u.connectivity.join("、") : "—");
+      if (u.assumption === true) row("说明", "教学剖切和示意比例");
+      wrap.append(dl);
+      sel.append(wrap);
+      sel.hidden = false;
+    }
+
+    const hook = root as HTMLElement & {
+      __mfPause?: (pause: boolean) => void;
+      __mfCam?: (pos: [number, number, number], target: [number, number, number]) => void;
+      __mfModel?: Record<string, unknown>;
+    };
+    hook.__mfPause = (pause) => {
+      paused = !!pause;
+      if (!paused) requestFrame();
+    };
+    hook.__mfCam = (pos, target) => {
+      camera.position.set(...pos);
+      controls.target.set(...target);
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    // 验收钩子（对齐独立版 window.__mineforge）：供 process-shots 等脚本驱动播放器
+    hook.__mfModel = {
+      get state() {
+        return {
+          slug: data.slug, mode, step: activeStep, stepCount: data.steps.length,
+          progress: Math.round(progress * 100), cut: Math.round(cutValue * 100),
+          speed, auto: autoOn, playing: playing !== undefined,
+          stepTitle: data.steps[activeStep - 1]?.label ?? "",
+        };
+      },
+      setStep: (i: number) => { stepSelected = true; setStep(i); },
+      setMode: (m: string) => setMode(m === "explore" ? "explore" : "process"),
+      setProgress: (v: number) => { if (mode === "explore") { progress = THREE.MathUtils.clamp(v, 0, 100) / 100; progressSlider.value = String(Math.round(v)); applyExplore(); } },
+      setCut: (v: number) => { if (mode === "explore") { cutValue = THREE.MathUtils.clamp(v, 0, 100) / 100; cutSlider.value = String(Math.round(v)); applyExplore(); } },
+      setSpeed: (v: number) => { speed = v; speedSel.value = String(v); },
+      setAuto: (v: boolean) => { autoOn = !!v; autoBox.checked = autoOn; syncTimeline(); },
+      play: () => play!.click(),
+      pickAt: (x: number, y: number) => {
+        const hit = pickAt(x, y);
+        return hit ? { object_id: String(hit.userData.object_id ?? ""), name: String(hit.userData.name ?? "") } : null;
+      },
+    };
+    window.addEventListener("pagehide", (event) => {
+      if (event.persisted) return;
+      disposed = true;
+      stopPlaying();
+      cancelAnimationFrame(frame);
+      cancelAnimationFrame(pendingSlider);
+      controls.dispose();
+      resize.disconnect();
+      clearModel();
+      renderer.dispose();
+    }, { once: true });
+
+    void loadModel(data);
+  }
+
+  const lazy = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting || !(entry.target instanceof HTMLElement)) continue;
+      lazy.unobserve(entry.target);
+      initViewer(entry.target);
+    }
+  }, { rootMargin: "250px" });
+
+  document.querySelectorAll<HTMLElement>("[data-mf-model][data-model-json]").forEach((node) => lazy.observe(node));
+</script>
+
+
+<style>
+  .model-studio {
+    padding: 0;
+    margin: 0;
+    background: var(--color-surface);
+    overflow: clip;
+    scroll-margin-top: calc(var(--mf-header-h) + 12px);
+  }
+
+  .studio-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+    padding: .65rem 1rem;
+  }
+
+  .studio-nav label, .studio-view label {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: .6rem;
+  }
+
+  .studio-field {
+    flex: none;
+    font-size: .8125rem;
+    font-weight: 600;
+    color: var(--color-ink-3);
+  }
+
+  .studio-nav select, .studio-view select, .studio-layers summary {
+    min-height: 42px;
+    min-width: 0;
+    max-width: 100%;
+    padding: .42rem .65rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 8px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-size: .9rem;
+  }
+
+  .studio-nav select { max-width: min(25rem, 68vw); }
+  .studio-article {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    min-height: 42px;
+    color: var(--color-accent-strong);
+    font-size: .875rem;
+    font-weight: 600;
+  }
+  .studio-article:hover { text-decoration: underline; }
+
+  .studio-stage {
+    height: clamp(310px, 55vh, 580px);
+    aspect-ratio: unset;
+    border: 0;
+    border-radius: 0;
+    background: var(--color-model-stage);
+  }
+
+  .model-studio--catalog .studio-stage { height: clamp(315px, 47vh, 580px); }
+
+  /* 左右分栏（复刻独立版）：左=三维模型与播放器，钉住不动；右=「开采过程」，随页面正常滚动。
+     独立演示页与详情页内嵌统一生效（≥992px）；当前步 scrollIntoView(nearest) 自动滚入视野。
+     详情页 xl 下由 base.css 的 .mf-model 破栏到容器全宽，lg 下在正文栏内分栏（正文栏 916px 仍容得下）。 */
+  @media (min-width: 62rem) {
+    .model-studio .studio-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 17rem;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .model-studio--catalog .studio-body { grid-template-columns: minmax(0, 1fr) 20.5rem; }
+
+    .model-studio .studio-main {
+      position: sticky;
+      top: calc(var(--mf-header-h) + 16px);
+    }
+
+    .model-studio .studio-rail { margin-top: 0; }
+    .model-studio .studio-rail [data-model-steps] { max-height: none; overflow: visible; }
+
+    /* 内嵌时展台收矮一档：sticky 的展台+播放器整块要落进常见视口（900px 高） */
+    .model-studio:not(.model-studio--catalog) .studio-stage { height: clamp(300px, 44vh, 520px); }
+  }
+  .studio-fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .studio-status {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    margin: 0;
+    place-items: center;
+    color: var(--color-stage-ink);
+    font-size: .9rem;
+    pointer-events: none;
+  }
+
+  .studio-hint {
+    position: absolute;
+    bottom: .65rem;
+    left: .85rem;
+    padding: .24rem .45rem;
+    border-radius: 4px;
+    color: var(--color-stage-ink);
+    background: var(--color-model-stage);
+    font-size: .75rem;
+    pointer-events: none;
+  }
+
+  /* 吸顶演示时贴在模型上的当前工序条，让模型和右侧工序卡的关系一眼可见 */
+  .studio-step-hud {
+    position: absolute;
+    top: .7rem;
+    left: .8rem;
+    z-index: 2;
+    display: grid;
+    gap: .14rem;
+    max-width: min(66%, 21rem);
+    padding: .55rem .75rem .62rem .82rem;
+    border-left: 2px solid var(--pc, var(--color-accent));
+    border-radius: 0 6px 6px 0;
+    background: rgb(20 18 16 / 88%);
+    color: #f2eadc;
+    pointer-events: none;
+  }
+  .studio-step-hud[hidden] { display: none; }
+  .studio-step-hud__phase {
+    color: color-mix(in srgb, var(--pc, var(--color-accent)) 62%, #ffffff);
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .1em;
+  }
+  .studio-step-hud__count {
+    color: #f2eadc;
+    font-family: var(--font-mono);
+    font-size: .66rem;
+    letter-spacing: .06em;
+    opacity: .72;
+  }
+  .studio-step-hud__title {
+    color: #fbf6ec;
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.45;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 35%);
+  }
+
+  .model-studio :global(.studio-label) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    padding: .22rem .42rem;
+    visibility: hidden;
+    border: 1px solid var(--color-stage-line);
+    border-radius: 5px;
+    background: var(--color-model-stage);
+    color: var(--color-stage-ink);
+    font-size: .75rem;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .studio-controls { padding: .82rem 1rem 1rem; }
+  .studio-view {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: .45rem 1.1rem;
+  }
+
+  .studio-layers summary { cursor: pointer; }
+  .studio-layers[open] { flex: 1 0 100%; order: 1; }
+  .studio-layers[open] summary { width: fit-content; }
+  .studio-layer-panel {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .4rem 1.1rem;
+    padding-top: .5rem;
+  }
+  .studio-layer-list { display: flex; flex-wrap: wrap; gap: .15rem .85rem; }
+  .model-studio :global(.studio-layer-option) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    gap: .38rem;
+    color: var(--color-ink-2);
+    font-size: .83rem;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  input { accent-color: var(--color-accent-strong); }
+  .studio-process { margin-top: .75rem; border-top: 1px solid var(--color-line); padding-top: .78rem; }
+  .studio-process__heading { display: flex; align-items: center; gap: .7rem 1rem; flex-wrap: wrap; }
+  .studio-playback { display: flex; gap: .3rem; }
+  .studio-playback button {
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 8px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .studio-playback button:hover:not(:disabled) { background: var(--color-panel); }
+  .studio-playback button[data-model-play] {
+    border-color: var(--color-navy);
+    background: var(--color-navy);
+    color: var(--color-on-navy);
+    font-size: .85rem;
+  }
+  .studio-playback button[data-model-play]:hover { background: var(--color-accent-strong); }
+  .studio-playback button:disabled { opacity: .45; cursor: default; }
+
+  .studio-step { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .7rem; }
+  .studio-step span { color: var(--color-ink-3); font: .8rem var(--font-mono); }
+  .studio-step strong { color: var(--color-ink); font-size: .95rem; }
+  .studio-process input[type="range"] {
+    display: block;
+    width: 100%;
+    min-height: 34px;
+    cursor: pointer;
+  }
+  .studio-process p, .studio-selection {
+    margin: 0;
+    color: var(--color-ink-2);
+    font-size: .855rem;
+    line-height: 1.7;
+  }
+  .studio-scope { margin-top: .8rem; color: var(--color-ink-3); font-size: .8rem; line-height: 1.6; }
+  .studio-selection { border-top: 1px solid var(--color-line); padding-top: .65rem; margin-top: .65rem; }
+
+  /* 过程演示迁移轮（2026-11-24）：模式切换 / 步骤列表 / 阶段徽章 / 自由探索 / 对象信息卡 */
+  .studio-modes { display: flex; gap: .3rem; margin-bottom: .6rem; }
+  .studio-modes button {
+    min-height: 36px;
+    padding: .3rem 1rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-ink-2);
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .studio-modes button.is-active {
+    border-color: var(--color-navy);
+    background: var(--color-navy);
+    color: var(--color-on-navy);
+  }
+
+  .studio-playback-opts { display: flex; align-items: center; gap: .7rem; margin-left: auto; }
+  .studio-playback-opts select {
+    min-height: 34px;
+    padding: .28rem .5rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 8px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-size: .82rem;
+  }
+
+  .studio-phase {
+    padding: .12rem .5rem;
+    border: 1px solid var(--pc, var(--color-line));
+    border-radius: 999px;
+    color: var(--pc, var(--color-ink-3));
+    font-size: .76rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .studio-phase:empty { display: none; }
+
+  /* 「开采过程」栏（原播放器下方的折叠列表）：独立演示页里是右侧固定栏，详情页嵌入时落在播放器之后 */
+  .studio-rail {
+    margin-top: .8rem;
+    border: 1px solid var(--color-line);
+    border-radius: 12px;
+    background: var(--color-surface);
+    padding: .85rem .95rem .95rem;
+  }
+  .studio-rail[hidden] { display: none; }
+  .studio-rail__title {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    color: var(--color-navy);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 650;
+  }
+  .studio-rail__count { color: var(--color-ink-4); font: .74rem var(--font-mono); }
+  .studio-rail [data-model-steps] {
+    display: grid;
+    gap: .55rem;
+    margin-top: .55rem;
+    max-height: 15.5rem;
+    overflow-y: auto;
+    padding: .1rem .25rem;
+    overscroll-behavior: contain;
+  }
+  .studio-rail__hint {
+    margin-top: .6rem;
+    padding-top: .55rem;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-ink-3);
+    font-size: .74rem;
+    line-height: 1.65;
+  }
+  /* 动态生成的步骤行/信息卡不带作用域属性，按既有约定走 :global */
+  .model-studio :global(.studio-step-phase) { display: grid; gap: .12rem; }
+  .model-studio :global(.studio-step-phase__name) {
+    padding: .1rem 0;
+    color: var(--pc, var(--color-ink-3));
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  .model-studio :global(.studio-step-row) {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    padding: .28rem .45rem;
+    border: 0;
+    border-left: 2px solid transparent;
+    border-radius: 0 6px 6px 0;
+    background: none;
+    color: var(--color-ink-2);
+    font: inherit;
+    font-size: .83rem;
+    text-align: left;
+    cursor: pointer;
+  }
+  .model-studio :global(.studio-step-row:hover) { background: var(--color-panel); }
+  .model-studio :global(.studio-step-row.is-active) {
+    border-left-color: var(--color-accent-strong, var(--color-navy));
+    background: var(--color-panel);
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .model-studio :global(.studio-step-row__no) { flex: none; color: var(--color-ink-4, var(--color-ink-3)); font: .72rem var(--font-mono); }
+
+  .studio-explore { margin-top: .75rem; border-top: 1px solid var(--color-line); padding-top: .78rem; }
+  .studio-explore__row { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+  .studio-explore__row label { display: inline-flex; align-items: baseline; gap: .6rem; }
+  .studio-explore__row output { font: .8rem var(--font-mono); color: var(--color-ink-2); }
+  .studio-explore input[type="range"] { display: block; width: 100%; min-height: 34px; margin-top: .2rem; cursor: pointer; }
+  .studio-explore__hint { margin: .35rem 0 0; color: var(--color-ink-3); font-size: .78rem; line-height: 1.6; }
+
+  .model-studio :global(.mf-info) { display: grid; gap: .35rem; }
+  .model-studio :global(.mf-info__head) { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+  .model-studio :global(.mf-info__head strong) { color: var(--color-ink); font-size: .95rem; }
+  .model-studio :global(.mf-info__id) { margin: 0; color: var(--color-ink-3); font: .74rem var(--font-mono); }
+  .model-studio :global(.mf-info dl) { display: grid; grid-template-columns: auto 1fr; gap: .14rem .8rem; margin: .1rem 0 0; }
+  .model-studio :global(.mf-info dt) { color: var(--color-ink-3); font-size: .78rem; white-space: nowrap; }
+  .model-studio :global(.mf-info dd) { margin: 0; color: var(--color-ink-2); font-size: .8rem; }
+  .model-studio :global(.mf-badge) {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .1rem .5rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--color-panel);
+    color: var(--color-ink-2);
+    font-size: .76rem;
+    font-weight: 600;
+  }
+  .model-studio :global(.mf-badge i) { width: .6rem; height: .6rem; border-radius: 50%; background: var(--sc, var(--color-ink-3)); }
+  .model-studio :global(.mf-tier) { font: .78rem var(--font-mono); }
+  .model-studio :global(.mf-tier--假), .model-studio :global(.mf-tier--推) { color: var(--color-accent-strong, var(--color-ink-2)); }
+
+  .model-studio [hidden] { display: none; }
+
+  @media (max-width: 600px) {
+    .studio-hint span, .studio-nav .studio-field { display: none; }
+    .model-studio .studio-stage { height: clamp(276px, 41vh, 415px); }
+    .studio-nav, .studio-controls { padding-inline: .75rem; }
+  }
+
+  /* ── 工序滚动演示（scrollytelling）：模型吸顶，工序卡自上而下推进 ── */
+  .studio-scrolly-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .3rem .8rem;
+    margin: 0 0 .9rem;
+    padding: 0 .15rem;
+  }
+  .studio-scrolly-eyebrow {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    color: var(--color-accent-strong);
+  }
+  .studio-scrolly-head p {
+    flex: 1 1 18rem;
+    margin: 0;
+    color: var(--color-ink-3);
+    font-size: .8rem;
+    line-height: 1.65;
+  }
+  .studio-scrolly-count {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--color-ink-4);
+  }
+
+  .model-studio :global(.studio-scrolly-list) { display: grid; gap: .5rem; }
+  .model-studio :global(.studio-scrolly-key) {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    padding: .8rem .9rem;
+    border: 1px solid var(--color-line);
+    border-left: 3px solid var(--color-line);
+    border-radius: 0 8px 8px 0;
+    background: var(--color-bg);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .18s ease, background-color .18s ease;
+  }
+  .model-studio :global(.studio-scrolly-key:hover) { background: var(--color-panel); }
+  .model-studio :global(.studio-scrolly-key.is-active) {
+    border-left-color: var(--color-accent);
+    background: var(--color-panel);
+  }
+  .model-studio :global(.studio-scrolly-key__meta) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .45rem;
+  }
+  .model-studio :global(.studio-scrolly-key__no) { color: var(--color-ink-4); font: .7rem var(--font-mono); }
+  .model-studio :global(.studio-scrolly-key__phase) {
+    padding: .05rem .45rem;
+    border: 1px solid var(--pc, var(--color-line));
+    border-radius: 999px;
+    color: var(--pc, var(--color-ink-3));
+    font-size: .68rem;
+    line-height: 1.6;
+  }
+  .model-studio :global(.studio-scrolly-key__title) {
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: .98rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .model-studio :global(.studio-scrolly-key.is-active .studio-scrolly-key__title) {
+    color: var(--color-accent-strong);
+  }
+  .model-studio :global(.studio-scrolly-key__note) {
+    color: var(--color-ink-3);
+    font-size: .8rem;
+    line-height: 1.75;
+  }
+
+  @media (min-width: 48rem) {
+    .model-studio--scrolly .studio-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 17rem;
+      gap: 1.6rem;
+      align-items: start;
+    }
+    .model-studio--scrolly:not(.model-studio--catalog) .studio-stage {
+      height: clamp(300px, 42vh, 460px);
+    }
+    .model-studio--scrolly .studio-main {
+      position: sticky;
+      top: calc(var(--mf-header-h) + 12px);
+    }
+    .model-studio--scrolly .studio-rail {
+      margin-top: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+    .model-studio--scrolly .studio-rail__title,
+    .model-studio--scrolly .studio-rail__hint { display: none; }
+    .model-studio--scrolly .studio-rail [data-model-steps] {
+      margin-top: 0;
+      padding: 0;
+      max-height: none;
+      overflow: visible;
+    }
+    .model-studio--scrolly :global(.studio-scrolly-list) { gap: 0; padding: 2vh 0 26vh; }
+    .model-studio--scrolly :global(.studio-scrolly-key) {
+      justify-content: center;
+      min-height: var(--mf-key-min, 34vh);
+      padding: 2rem 1rem 2.2rem 1.3rem;
+      border: 0;
+      border-left: 2px solid var(--color-line);
+      border-radius: 0;
+      background: transparent;
+    }
+    .model-studio--scrolly :global(.studio-scrolly-key:hover) {
+      background: transparent;
+      border-left-color: var(--color-ink-3);
+    }
+    .model-studio--scrolly :global(.studio-scrolly-key.is-active) {
+      background: transparent;
+      border-left-color: var(--color-accent);
+    }
+    .model-studio--scrolly :global(.studio-scrolly-key__title) { font-size: 1.28rem; line-height: 1.4; }
+    .model-studio--scrolly :global(.studio-scrolly-key__note) {
+      max-width: 34ch;
+      font-size: .85rem;
+      line-height: 1.8;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .model-studio--scrolly .studio-body {
+      grid-template-columns: minmax(0, 1fr) 24rem;
+      gap: 2.2rem;
+    }
+    .model-studio--scrolly :global(.studio-scrolly-key__note) { max-width: 38ch; }
+  }
+</style>

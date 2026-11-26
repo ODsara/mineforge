@@ -1,0 +1,38 @@
+---
+/**
+ * 可信度行（Trust row）
+ *
+ * 语法移植自外部模板 hero 下的三项勾选承诺；本站换成内容纪律的三条硬声明。
+ * 只放「能被页面本身验证」的话：参数有出处、未核实留白、条文有条号——
+ * 不写「权威」「专业」这类无法证伪的形容词。
+ */
+interface Props {
+  items?: string[];
+  class?: string;
+}
+
+const {
+  items = ["参数逐条标出处", "未核实处留白", "条文标到条号"],
+  class: className = "",
+} = Astro.props;
+---
+
+<ul class:list={["not-prose flex flex-wrap items-center gap-x-5 gap-y-1.5", className]}>
+  {
+    items.map((text) => (
+      <li class="inline-flex items-center gap-1.5 text-[12px] leading-5 text-ink-3">
+        <svg
+          class="h-3 w-3 shrink-0 text-accent"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"
+        >
+          <path d="M2.2 6.4 4.6 8.8 9.8 3.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        {text}
+      </li>
+    ))
+  }
+</ul>

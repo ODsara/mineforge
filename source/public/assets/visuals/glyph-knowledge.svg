@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" width="480" height="280" role="img" aria-hidden="true">
+  <defs>
+    <pattern id="gkGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#EDEAE1" stroke-width="0.6"/>
+    </pattern>
+  </defs>
+  <rect width="480" height="280" fill="#FFFEFA"/>
+  <rect width="480" height="280" fill="url(#gkGrid)"/>
+  <path d="M74 46V234" stroke="#152a45" stroke-width="2"/>
+  <g stroke="#152a45" stroke-width="1.6" fill="none">
+    <path d="M74 140L74 70H132"/>
+    <path d="M74 140H132"/>
+    <path d="M74 140L74 210H132"/>
+  </g>
+  <circle cx="74" cy="140" r="5.5" fill="#9a6b15"/>
+  <rect x="132" y="55" width="300" height="30" fill="#FFFEFA" stroke="#C9D0D8" stroke-width="1.2"/>
+  <rect x="132" y="125" width="262" height="30" fill="#FFFEFA" stroke="#C9D0D8" stroke-width="1.2"/>
+  <rect x="132" y="195" width="224" height="30" fill="#FFFEFA" stroke="#C9D0D8" stroke-width="1.2"/>
+  <g fill="#9a6b15">
+    <rect x="132" y="55" width="4" height="30"/>
+    <rect x="132" y="125" width="4" height="30"/>
+    <rect x="132" y="195" width="4" height="30"/>
+  </g>
+  <g stroke="#E4E0D5" stroke-width="0.8" stroke-dasharray="3 4">
+    <path d="M156 55V42H420"/>
+    <path d="M156 225V238H386"/>
+  </g>
+</svg>

@@ -1,0 +1,89 @@
+---
+/** 参考文献索引：按可信度分级排序，每条标注适用边界 */
+import { references, tierMeta } from "../../lib/resources";
+import { methodBySlug, methodHref } from "../../lib/taxonomy";
+
+const tiers = Object.keys(tierMeta)
+  .map(Number)
+  .map((tier) => ({ tier, items: references.filter((r) => r.tier === tier) }))
+  .filter((t) => t.items.length > 0);
+
+/** 文献归属方法的详情页地址，方法不存在时退回方法总览 */
+const hrefOf = (slug: string) => {
+  const method = methodBySlug(slug);
+  return method ? methodHref(method) : "/methods/";
+};
+
+const cite = (r: (typeof references)[number]) => {
+  const parts: string[] = [];
+  if (r.authors?.length) parts.push(r.authors.join(", "));
+  if (r.journal) parts.push(`${r.journal}${r.year ? `, ${r.year}` : ""}`);
+  if (r.school) parts.push(`${r.school}${r.year ? `, ${r.year}` : ""}`);
+  if (r.institution) parts.push(r.institution);
+  if (r.publisher) parts.push(`${r.publisher}${r.year ? `, ${r.year}` : ""}`);
+  if (r.pages) parts.push(`p${r.pages}`);
+  if (r.chapter) parts.push(r.chapter);
+  if (r.isbn) parts.push(`ISBN ${r.isbn}`);
+  return parts.join(" · ");
+};
+---
+
+<div class="space-y-10">
+  {
+    tiers.map(({ tier, items }) => (
+      <section>
+        <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-line pb-2">
+          <h2 class="text-[14px] font-medium text-ink">{tierMeta[tier].label}</h2>
+          <span class="text-[11.5px] text-ink-4">
+            {tierMeta[tier].desc} · {items.length} 条
+          </span>
+        </div>
+
+        <ol class="divide-y divide-line-soft">
+          {items.map((ref) => (
+            <li class="grid gap-x-8 gap-y-1.5 py-4 md:grid-cols-12">
+              <div class="flex items-baseline gap-2 md:col-span-2">
+                <span class="font-mono text-[10.5px] text-ink-4">{ref.id}</span>
+                <span class="rounded-card border border-line px-1.5 py-0.5 text-[10.5px] text-ink-3">
+                  {ref.type}
+                </span>
+              </div>
+
+              <div class="md:col-span-8">
+                <p class="text-[13.5px] leading-6 text-ink">{ref.title}</p>
+                <p class="mt-1 text-[11.5px] leading-5 text-ink-4">
+                  {cite(ref) || "详见原文"}
+                </p>
+                {ref.url && (
+                  <a
+                    href={ref.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mt-1 inline-block font-mono text-[10.5px] text-accent transition-colors duration-100 hover:text-accent-strong"
+                  >
+                    原文链接 ↗
+                  </a>
+                )}
+              </div>
+
+              <div class="md:col-span-2 md:text-right">
+                <a
+                  href={hrefOf(ref.methodSlug)}
+                  class="text-[11px] text-ink-4 transition-colors duration-100 hover:text-accent"
+                >
+                  {ref.methodName} →
+                </a>
+              </div>
+
+              {ref.caveat && (
+                <p class="text-[11px] leading-5 text-ink-4 md:col-span-10 md:col-start-3">
+                  适用边界：{ref.caveat}
+                </p>
+              )}
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))
+  }
+</div>

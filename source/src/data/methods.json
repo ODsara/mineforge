@@ -1,0 +1,2367 @@
+{
+  "updated": "2026-11-24",
+  "methods": [
+    {
+      "slug": "comprehensive",
+      "category": "open-stope",
+      "order": 1,
+      "name": "全面采矿法",
+      "nameEn": "Comprehensive Mining Method",
+      "status": "complete",
+      "summary": "在矿房内全面回采，依靠矿柱与围岩自身稳固性维护采空区，适用于厚度较小的缓倾斜矿体。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "在矿层低侧布置阶段运输巷与放矿溜井，上部设置联络回风通道。"
+          },
+          {
+            "label": "切割",
+            "note": "掘进切割平巷及边界切割上山，使初始工作面横贯矿层。"
+          },
+          {
+            "label": "全面推进",
+            "note": "以矿层全厚沿走向推进，保留局部支撑矿柱。矿石耙至低侧切割平巷，经溜井进入运输巷。"
+          },
+          {
+            "label": "采完留柱",
+            "note": "工作面推进到矿块边界。排空待运矿石，保留支撑矿柱。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "A-1",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "在矿层低侧布置阶段运输巷与放矿溜井，上部设置联络回风通道。",
+            "phase": "prep"
+          },
+          {
+            "label": "切割",
+            "note": "掘进切割平巷及边界切割上山，使初始工作面横贯矿层。",
+            "phase": "cut"
+          },
+          {
+            "label": "全面推进",
+            "note": "以矿层全厚沿走向推进，保留局部支撑矿柱。矿石耙至低侧切割平巷，经溜井进入运输巷。",
+            "phase": "stope"
+          },
+          {
+            "label": "采完留柱",
+            "note": "工作面推进到矿块边界。排空待运矿石，保留支撑矿柱。",
+            "phase": "post"
+          }
+        ],
+        "stepCount": 5,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          },
+          {
+            "id": "post",
+            "name": "采场处理",
+            "color": "#8D7563"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.75
+        }
+      }
+    },
+    {
+      "slug": "room-pillar",
+      "category": "open-stope",
+      "order": 2,
+      "name": "房柱采矿法",
+      "nameEn": "Room and Pillar Method",
+      "status": "complete",
+      "summary": "矿房与矿柱交错布置，以规则矿柱支撑顶板，适用于倾角平缓、顶板较稳固的矿体。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "plan",
+            "label": "俯视平面",
+            "az": 0,
+            "el": 84,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 6,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 6,
+            "variant": "cross"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "切割工程",
+          "围岩"
+        ],
+        "updated": "2026-11-25",
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "由底板运输巷接入放矿溜井及矿房中心上山，并布置矿房上部联络平巷。"
+          },
+          {
+            "label": "切割",
+            "note": "从低侧切割平巷和各矿房中心上山展开初始自由面。"
+          },
+          {
+            "label": "回采矿房",
+            "note": "沿各矿房的上山扩采，逐房形成开敞空间。矿石沿各自矿房运至低侧放矿溜井。"
+          },
+          {
+            "label": "规则留柱",
+            "note": "回采完所示矿房，规则圆柱形点柱继续承载顶板。"
+          }
+        ],
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "A-2",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "由底板运输巷接入放矿溜井及矿房中心上山，并布置矿房上部联络平巷。",
+            "phase": "prep"
+          },
+          {
+            "label": "切割",
+            "note": "从低侧切割平巷和各矿房中心上山展开初始自由面。",
+            "phase": "cut"
+          },
+          {
+            "label": "回采矿房",
+            "note": "沿各矿房的上山扩采，逐房形成开敞空间。矿石沿各自矿房运至低侧放矿溜井。",
+            "phase": "stope"
+          },
+          {
+            "label": "规则留柱",
+            "note": "回采完所示矿房，规则圆柱形点柱继续承载顶板。",
+            "phase": "post"
+          }
+        ],
+        "stepCount": 5,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          },
+          {
+            "id": "post",
+            "name": "采场处理",
+            "color": "#8D7563"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.75
+        }
+      }
+    },
+    {
+      "slug": "shrinkage",
+      "category": "open-stope",
+      "order": 3,
+      "name": "留矿采矿法",
+      "nameEn": "Shrinkage Stoping",
+      "status": "complete",
+      "summary": "分层自下而上回采，部分崩落矿石暂留矿房作工作平台，矿房采完后集中放矿。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "由阶段运输巷开掘底部漏斗颈和两侧人行通风天井，天井通过分层联络口进入矿房。"
+          },
+          {
+            "label": "拉底辟漏",
+            "note": "拉开矿房底部切割空间，并使其贯通漏斗。"
+          },
+          {
+            "label": "分层上采、局部放矿",
+            "note": "从留矿堆上方继续回采。只放出维持作业空间所需的矿量。"
+          },
+          {
+            "label": "采至顶柱",
+            "note": "逐层抬高工作面至顶柱下，房内仍保留大部分松散矿石。"
+          },
+          {
+            "label": "最终放矿",
+            "note": "人员撤离矿房。暂留矿石从漏斗集中放出，留下空场。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "S-3",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "由阶段运输巷开掘底部漏斗颈和两侧人行通风天井，天井通过分层联络口进入矿房。",
+            "phase": "prep"
+          },
+          {
+            "label": "拉底辟漏",
+            "note": "拉开矿房底部切割空间，并使其贯通漏斗。",
+            "phase": "cut"
+          },
+          {
+            "label": "分层上采、局部放矿",
+            "note": "从留矿堆上方继续回采。只放出维持作业空间所需的矿量。",
+            "phase": "stope"
+          },
+          {
+            "label": "采至顶柱",
+            "note": "逐层抬高工作面至顶柱下，房内仍保留大部分松散矿石。",
+            "phase": "stope"
+          },
+          {
+            "label": "最终放矿",
+            "note": "人员撤离矿房。暂留矿石从漏斗集中放出，留下空场。",
+            "phase": "stope"
+          }
+        ],
+        "stepCount": 6,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.8
+        }
+      }
+    },
+    {
+      "slug": "stage-room",
+      "category": "open-stope",
+      "order": 4,
+      "name": "阶段矿房法",
+      "nameEn": "Stage Room Stoping",
+      "status": "complete",
+      "summary": "以阶段为单位划分矿房，在矿房内进行中深孔落矿，矿柱随后单独回采。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "从上部通道开凿岩硐室，下部建立装运横巷与阶段出矿系统。"
+          },
+          {
+            "label": "底部拉底",
+            "note": "由拉底巷扩出水平补偿空间，形成矿房下部自由面。"
+          },
+          {
+            "label": "分层落矿",
+            "note": "从顶部布置垂直深孔；靠近底部的矿层先落下，其后落矿面逐层向上推移。"
+          },
+          {
+            "label": "最终出矿",
+            "note": "矿石由底部装运横巷送入溜井，矿房成为阶段全高空场。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "A-4",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "从上部通道开凿岩硐室，下部建立装运横巷与阶段出矿系统。",
+            "phase": "prep"
+          },
+          {
+            "label": "底部拉底",
+            "note": "由拉底巷扩出水平补偿空间，形成矿房下部自由面。",
+            "phase": "cut"
+          },
+          {
+            "label": "分层落矿",
+            "note": "从顶部布置垂直深孔；靠近底部的矿层先落下，其后落矿面逐层向上推移。",
+            "phase": "stope"
+          },
+          {
+            "label": "最终出矿",
+            "note": "矿石由底部装运横巷送入溜井，矿房成为阶段全高空场。",
+            "phase": "stope"
+          }
+        ],
+        "stepCount": 5,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 1
+        }
+      }
+    },
+    {
+      "slug": "sublevel-room",
+      "category": "open-stope",
+      "order": 5,
+      "name": "分段矿房法",
+      "nameEn": "Sublevel Room Stoping",
+      "status": "complete",
+      "summary": "沿阶段划分分段，各分段独立凿岩与出矿，以独立出矿为与阶段矿房法的判别界线。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "斜坡道连通各分段，从分段运输巷分别掘进装运横巷、堑沟平巷和凿岩平巷。"
+          },
+          {
+            "label": "切割",
+            "note": "从堑沟一侧形成切割天井及切割槽，保留分段间的斜顶柱。"
+          },
+          {
+            "label": "上分段回采",
+            "note": "从切割槽侧逐排回采上分段，通过本分段的装运横巷出矿。"
+          },
+          {
+            "label": "回收上段间柱",
+            "note": "上分段矿房采完后先回收一侧间柱，矿石经该分段装运横巷运出。"
+          },
+          {
+            "label": "回收上段顶柱",
+            "note": "间柱矿石运完后回收上段顶柱，顶柱矿石落到同一分段的堑沟。"
+          },
+          {
+            "label": "下分段接续",
+            "note": "上分段空区处理后，下分段从独立切割槽展开，经下分段装运横巷和溜井出矿。"
+          },
+          {
+            "label": "回收下段间柱",
+            "note": "下分段矿房采完后，先回收紧邻矿房的一侧间柱。"
+          },
+          {
+            "label": "回收斜顶柱",
+            "note": "最后回收下分段的斜顶柱，分段底部装运其矿石并进行本区采空处理。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "A-5",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "斜坡道连通各分段，从分段运输巷分别掘进装运横巷、堑沟平巷和凿岩平巷。",
+            "phase": "prep"
+          },
+          {
+            "label": "切割",
+            "note": "从堑沟一侧形成切割天井及切割槽，保留分段间的斜顶柱。",
+            "phase": "cut"
+          },
+          {
+            "label": "上分段回采",
+            "note": "从切割槽侧逐排回采上分段，通过本分段的装运横巷出矿。",
+            "phase": "stope"
+          },
+          {
+            "label": "回收上段间柱",
+            "note": "上分段矿房采完后先回收一侧间柱，矿石经该分段装运横巷运出。",
+            "phase": "stope"
+          },
+          {
+            "label": "回收上段顶柱",
+            "note": "间柱矿石运完后回收上段顶柱，顶柱矿石落到同一分段的堑沟。",
+            "phase": "stope"
+          },
+          {
+            "label": "下分段接续",
+            "note": "上分段空区处理后，下分段从独立切割槽展开，经下分段装运横巷和溜井出矿。",
+            "phase": "stope"
+          },
+          {
+            "label": "回收下段间柱",
+            "note": "下分段矿房采完后，先回收紧邻矿房的一侧间柱。",
+            "phase": "stope"
+          },
+          {
+            "label": "回收斜顶柱",
+            "note": "最后回收下分段的斜顶柱，分段底部装运其矿石并进行本区采空处理。",
+            "phase": "stope"
+          }
+        ],
+        "stepCount": 9,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.75
+        }
+      }
+    },
+    {
+      "slug": "sublevel-drilling-stage-room",
+      "category": "open-stope",
+      "order": 6,
+      "name": "分段凿岩阶段矿房法",
+      "nameEn": "Sublevel Drilling Stage Room Stoping",
+      "status": "complete",
+      "variantOf": "stage-room",
+      "summary": "分段仅布置凿岩巷道，中深孔落矿后矿石下移至阶段底部集中出矿，是阶段矿房法的主要变体。",
+      "updated": "2026-11-21",
+      "variantNote": "分段只布置凿岩巷道、不独立出矿，崩落矿石下移至阶段底部集中放出。",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "从通风人行天井掘进各凿岩分段，阶段底部布置电耙巷、漏斗颈及溜井。"
+          },
+          {
+            "label": "拉底与切割",
+            "note": "形成底部拉底空间，通过切割天井形成矿房侧的竖直切割槽。"
+          },
+          {
+            "label": "分段凿岩落矿",
+            "note": "由各分段凿岩巷向同一侧向自由面落矿，上部分段略超前，下部共同出矿。"
+          },
+          {
+            "label": "阶段底部出矿",
+            "note": "各分段落矿下汇，经漏斗、电耙巷和溜井集中送到阶段运输巷。"
+          },
+          {
+            "label": "阶段矿房采毕",
+            "note": "矿房全高贯通，保留顶柱和间柱。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "A-6",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "从通风人行天井掘进各凿岩分段，阶段底部布置电耙巷、漏斗颈及溜井。",
+            "phase": "prep"
+          },
+          {
+            "label": "拉底与切割",
+            "note": "形成底部拉底空间，通过切割天井形成矿房侧的竖直切割槽。",
+            "phase": "cut"
+          },
+          {
+            "label": "分段凿岩落矿",
+            "note": "由各分段凿岩巷向同一侧向自由面落矿，上部分段略超前，下部共同出矿。",
+            "phase": "stope"
+          },
+          {
+            "label": "阶段底部出矿",
+            "note": "各分段落矿下汇，经漏斗、电耙巷和溜井集中送到阶段运输巷。",
+            "phase": "stope"
+          },
+          {
+            "label": "阶段矿房采毕",
+            "note": "矿房全高贯通，保留顶柱和间柱。",
+            "phase": "post"
+          }
+        ],
+        "stepCount": 6,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          },
+          {
+            "id": "post",
+            "name": "采场处理",
+            "color": "#8D7563"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.8
+        }
+      },
+      "flagship": true,
+      "headline": [
+        {
+          "name": "分段高度",
+          "type": "教材值"
+        },
+        {
+          "name": "矿房长度",
+          "type": "实测值"
+        },
+        {
+          "name": "矿块生产能力",
+          "type": "实测值"
+        },
+        {
+          "name": "阶段高度",
+          "type": "教材值"
+        }
+      ],
+      "conditions": {
+        "dip": [
+          "steep"
+        ],
+        "thickness": [
+          "medium",
+          "thick"
+        ],
+        "rock": [
+          "stable",
+          "moderate"
+        ],
+        "source": "据 engineering_data.json → applicability 逐条对照"
+      }
+    },
+    {
+      "slug": "single-layer",
+      "category": "backfill",
+      "order": 1,
+      "name": "单层充填采矿法",
+      "nameEn": "Single Layer Backfilling",
+      "status": "complete",
+      "summary": "一次充填形成单层，用于薄矿体或分层回采后即时充填的场合。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "充填体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "在矿层低侧布置放矿溜井，高侧布置上阶段联络和充填管路入口。"
+          },
+          {
+            "label": "切割",
+            "note": "以低侧切割平巷和边界上山形成初始工作面。"
+          },
+          {
+            "label": "全厚推进",
+            "note": "壁式工作面沿走向推进，边出矿边支护。矿石先至切割平巷，再经溜井外运。"
+          },
+          {
+            "label": "后方充填",
+            "note": "沿采空带布置充填管和砂门。料浆经上阶段沿脉巷与条带支管送达，从低侧向高侧分区充填。"
+          },
+          {
+            "label": "推进与充填循环",
+            "note": "工作面移至下一条带，上一轮充填体留在采空区内。"
+          },
+          {
+            "label": "采毕充填",
+            "note": "最后一条带出矿后补填，各轮充填带连成整体。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "B-1",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "在矿层低侧布置放矿溜井，高侧布置上阶段联络和充填管路入口。",
+            "phase": "prep"
+          },
+          {
+            "label": "切割",
+            "note": "以低侧切割平巷和边界上山形成初始工作面。",
+            "phase": "cut"
+          },
+          {
+            "label": "全厚推进",
+            "note": "壁式工作面沿走向推进，边出矿边支护。矿石先至切割平巷，再经溜井外运。",
+            "phase": "stope"
+          },
+          {
+            "label": "后方充填",
+            "note": "沿采空带布置充填管和砂门。料浆经上阶段沿脉巷与条带支管送达，从低侧向高侧分区充填。",
+            "phase": "fill"
+          },
+          {
+            "label": "推进与充填循环",
+            "note": "工作面移至下一条带，上一轮充填体留在采空区内。",
+            "phase": "fill"
+          },
+          {
+            "label": "采毕充填",
+            "note": "最后一条带出矿后补填，各轮充填带连成整体。",
+            "phase": "fill"
+          }
+        ],
+        "stepCount": 7,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          },
+          {
+            "id": "fill",
+            "name": "充填作业",
+            "color": "#75866A"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.5
+        }
+      }
+    },
+    {
+      "slug": "upward-horizontal-slice",
+      "category": "backfill",
+      "order": 2,
+      "name": "上向水平分层充填法",
+      "nameEn": "Upward Horizontal Slice Backfilling",
+      "status": "complete",
+      "summary": "从矿房底部向上分层回采，每采完一层即充填，充填体形成后续分层的作业平台。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "充填体",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "设置上部充填天井、放矿溜井、穿脉巷和人行滤水井。"
+          },
+          {
+            "label": "拉底",
+            "note": "在矿房底部先拉底，打开首层作业空间。"
+          },
+          {
+            "label": "首层落矿与出矿",
+            "note": "由首层作业面出矿，矿石由放矿溜井下放。"
+          },
+          {
+            "label": "首层充填",
+            "note": "由上部充填巷经充填天井送入料浆。水从人行滤水井排出，充填体表面铺设作业底板。"
+          },
+          {
+            "label": "第二层上采",
+            "note": "以硬化充填体为作业底板，向上一层回采。"
+          },
+          {
+            "label": "第二层充填",
+            "note": "充填体升至第二层，顺路接高出矿和人行设施。"
+          },
+          {
+            "label": "顶层回采",
+            "note": "按同一循环回采本示例的顶层，顶柱留设。"
+          },
+          {
+            "label": "接顶充填",
+            "note": "最后一层出矿后充填接顶，保留独立的外围井巷。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "F-9",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "设置上部充填天井、放矿溜井、穿脉巷和人行滤水井。",
+            "phase": "prep"
+          },
+          {
+            "label": "拉底",
+            "note": "在矿房底部先拉底，打开首层作业空间。",
+            "phase": "cut"
+          },
+          {
+            "label": "首层落矿与出矿",
+            "note": "由首层作业面出矿，矿石由放矿溜井下放。",
+            "phase": "stope"
+          },
+          {
+            "label": "首层充填",
+            "note": "由上部充填巷经充填天井送入料浆。水从人行滤水井排出，充填体表面铺设作业底板。",
+            "phase": "fill"
+          },
+          {
+            "label": "第二层上采",
+            "note": "以硬化充填体为作业底板，向上一层回采。",
+            "phase": "stope"
+          },
+          {
+            "label": "第二层充填",
+            "note": "充填体升至第二层，顺路接高出矿和人行设施。",
+            "phase": "fill"
+          },
+          {
+            "label": "顶层回采",
+            "note": "按同一循环回采本示例的顶层，顶柱留设。",
+            "phase": "stope"
+          },
+          {
+            "label": "接顶充填",
+            "note": "最后一层出矿后充填接顶，保留独立的外围井巷。",
+            "phase": "fill"
+          }
+        ],
+        "stepCount": 9,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          },
+          {
+            "id": "fill",
+            "name": "充填作业",
+            "color": "#75866A"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.625
+        }
+      }
+    },
+    {
+      "slug": "downward-slice",
+      "category": "backfill",
+      "order": 3,
+      "name": "下向分层充填法",
+      "nameEn": "Downward Slice Backfilling",
+      "status": "complete",
+      "summary": "自上而下分层回采，充填体作为下一分层的顶板，适用于矿岩不稳固的矿体。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "充填体",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "建立分层联络和中央溜矿井。充填干线经专用井下放，分层支管在切割巷近顶敷设。"
+          },
+          {
+            "label": "上层切割",
+            "note": "先在最高分层开切割平巷，再从切割侧展布回采进路。"
+          },
+          {
+            "label": "上层回采",
+            "note": "上层分区回采，矿石经分层巷道进入溜井。"
+          },
+          {
+            "label": "构筑假顶并充填",
+            "note": "在上层底部铺设钢筋混凝土底板，设置挡墙，接顶充填并待其形成支承。"
+          },
+          {
+            "label": "下层回采",
+            "note": "在上层人工假顶保护下分区回采下一分层。中央溜井上段随工作面下降而退出。"
+          },
+          {
+            "label": "下层充填",
+            "note": "完成该层混凝土底板及充填后，才能进入更低一层。"
+          },
+          {
+            "label": "底层回采",
+            "note": "在既有人工假顶下回采本示例最低分层。"
+          },
+          {
+            "label": "接顶充填",
+            "note": "最低分层出矿后充填接顶，保留外围通道。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "B-3",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "建立分层联络和中央溜矿井。充填干线经专用井下放，分层支管在切割巷近顶敷设。",
+            "phase": "prep"
+          },
+          {
+            "label": "上层切割",
+            "note": "先在最高分层开切割平巷，再从切割侧展布回采进路。",
+            "phase": "cut"
+          },
+          {
+            "label": "上层回采",
+            "note": "上层分区回采，矿石经分层巷道进入溜井。",
+            "phase": "stope"
+          },
+          {
+            "label": "构筑假顶并充填",
+            "note": "在上层底部铺设钢筋混凝土底板，设置挡墙，接顶充填并待其形成支承。",
+            "phase": "fill"
+          },
+          {
+            "label": "下层回采",
+            "note": "在上层人工假顶保护下分区回采下一分层。中央溜井上段随工作面下降而退出。",
+            "phase": "stope"
+          },
+          {
+            "label": "下层充填",
+            "note": "完成该层混凝土底板及充填后，才能进入更低一层。",
+            "phase": "fill"
+          },
+          {
+            "label": "底层回采",
+            "note": "在既有人工假顶下回采本示例最低分层。",
+            "phase": "stope"
+          },
+          {
+            "label": "接顶充填",
+            "note": "最低分层出矿后充填接顶，保留外围通道。",
+            "phase": "fill"
+          }
+        ],
+        "stepCount": 9,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          },
+          {
+            "id": "fill",
+            "name": "充填作业",
+            "color": "#75866A"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.625
+        }
+      }
+    },
+    {
+      "slug": "sublevel-backfill",
+      "category": "backfill",
+      "order": 4,
+      "name": "分段充填采矿法",
+      "nameEn": "Sublevel Backfilling",
+      "status": "complete",
+      "summary": "以分段为单位回采并充填，兼顾分层充填的适应性与分段采矿的效率。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "充填体",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "采准斜坡道接通分段钻凿和装运巷，底层装运巷接入矿石溜井。"
+          },
+          {
+            "label": "分段切割",
+            "note": "用侧向切割槽连通本分段的钻凿和装矿空间。"
+          },
+          {
+            "label": "首分段回采",
+            "note": "从切割槽逐排落矿，由该分段装运横巷出矿。"
+          },
+          {
+            "label": "首分段出净",
+            "note": "完成首分段回采，从独立底部装运横巷清运末批松散矿石。"
+          },
+          {
+            "label": "封堵与充填",
+            "note": "出净后封堵出矿支路。供料管沿上部凿岩联络巷敷设，经独立充填孔进入采空区，整体充填并养护。"
+          },
+          {
+            "label": "下一分段回采",
+            "note": "首分段充填体稳定后，在上方独立分段重新切割、回采、出矿。"
+          },
+          {
+            "label": "第二分段出净",
+            "note": "继续回采至分段边界并清运末批矿石，形成独立采空区。"
+          },
+          {
+            "label": "第二分段充填",
+            "note": "封堵第二采场出矿口并整体充填，保持外围运输网络连通。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "B-4",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "采准斜坡道接通分段钻凿和装运巷，底层装运巷接入矿石溜井。",
+            "phase": "prep"
+          },
+          {
+            "label": "分段切割",
+            "note": "用侧向切割槽连通本分段的钻凿和装矿空间。",
+            "phase": "cut"
+          },
+          {
+            "label": "首分段回采",
+            "note": "从切割槽逐排落矿，由该分段装运横巷出矿。",
+            "phase": "stope"
+          },
+          {
+            "label": "首分段出净",
+            "note": "完成首分段回采，从独立底部装运横巷清运末批松散矿石。",
+            "phase": "stope"
+          },
+          {
+            "label": "封堵与充填",
+            "note": "出净后封堵出矿支路。供料管沿上部凿岩联络巷敷设，经独立充填孔进入采空区，整体充填并养护。",
+            "phase": "fill"
+          },
+          {
+            "label": "下一分段回采",
+            "note": "首分段充填体稳定后，在上方独立分段重新切割、回采、出矿。",
+            "phase": "stope"
+          },
+          {
+            "label": "第二分段出净",
+            "note": "继续回采至分段边界并清运末批矿石，形成独立采空区。",
+            "phase": "stope"
+          },
+          {
+            "label": "第二分段充填",
+            "note": "封堵第二采场出矿口并整体充填，保持外围运输网络连通。",
+            "phase": "fill"
+          }
+        ],
+        "stepCount": 9,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          },
+          {
+            "id": "fill",
+            "name": "充填作业",
+            "color": "#75866A"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.75
+        }
+      }
+    },
+    {
+      "slug": "single-layer-caving",
+      "category": "caving",
+      "order": 1,
+      "name": "单层崩落法",
+      "nameEn": "Single Layer Caving",
+      "status": "complete",
+      "summary": "单层回采后强制或自然崩落顶板岩层，以崩落围岩充填采空区。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "布置高侧安全通道、低侧装矿巷和放矿溜井。"
+          },
+          {
+            "label": "切割",
+            "note": "从低侧切割巷掘进矿块一侧的切割上山，贯穿矿层。沿低侧巷分布的斜溜井接到底板装车联络。"
+          },
+          {
+            "label": "长壁推进",
+            "note": "沿走向推进、支护及出矿；工作带后方是已采薄层空间。"
+          },
+          {
+            "label": "回撤放顶",
+            "note": "撤除后部支护使顶板围岩占据采空区，当前工作带仍保留支护。"
+          },
+          {
+            "label": "推进与放顶循环",
+            "note": "继续沿走向回采，出矿经未被崩落体封闭的低侧通道进行。"
+          },
+          {
+            "label": "采毕放顶",
+            "note": "完成最后一条带的出矿并退出采场，后续放顶收尾。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "C-1",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "布置高侧安全通道、低侧装矿巷和放矿溜井。",
+            "phase": "prep"
+          },
+          {
+            "label": "切割",
+            "note": "从低侧切割巷掘进矿块一侧的切割上山，贯穿矿层。沿低侧巷分布的斜溜井接到底板装车联络。",
+            "phase": "cut"
+          },
+          {
+            "label": "长壁推进",
+            "note": "沿走向推进、支护及出矿；工作带后方是已采薄层空间。",
+            "phase": "stope"
+          },
+          {
+            "label": "回撤放顶",
+            "note": "撤除后部支护使顶板围岩占据采空区，当前工作带仍保留支护。",
+            "phase": "post"
+          },
+          {
+            "label": "推进与放顶循环",
+            "note": "继续沿走向回采，出矿经未被崩落体封闭的低侧通道进行。",
+            "phase": "stope"
+          },
+          {
+            "label": "采毕放顶",
+            "note": "完成最后一条带的出矿并退出采场，后续放顶收尾。",
+            "phase": "post"
+          }
+        ],
+        "stepCount": 7,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          },
+          {
+            "id": "post",
+            "name": "采场处理",
+            "color": "#8D7563"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.8333333333333334
+        }
+      }
+    },
+    {
+      "slug": "sublevel-caving-bottom-pillar",
+      "category": "caving",
+      "order": 2,
+      "name": "有底柱分段崩落法",
+      "nameEn": "Sublevel Caving with Bottom Pillar",
+      "status": "complete",
+      "summary": "分段回采并保留底柱，出矿结构布置在底柱内，矿石经底部集中放出。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "各分段分别设凿岩巷、电耙巷和底柱内的斗颈，并接入溜井与阶段运输。"
+          },
+          {
+            "label": "堑沟与小补偿空间",
+            "note": "施工堑沟及切割天井，形成上分段的首采切割空间。"
+          },
+          {
+            "label": "崩落上分段",
+            "note": "上分段首采区域形成松散矿堆，矿石开始向专用底部结构移动。"
+          },
+          {
+            "label": "上分段放矿",
+            "note": "在覆岩下由漏斗经电耙巷及溜井出矿，上部覆盖岩逐步下移。"
+          },
+          {
+            "label": "下分段切割",
+            "note": "上分段放矿后启用下分段的切割天井，并扩出堑沟与小补偿空间。"
+          },
+          {
+            "label": "下分段回采",
+            "note": "下分段在覆岩下回采，矿石经自己的漏斗、斗颈和电耙巷进入溜井。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "C-2",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "各分段分别设凿岩巷、电耙巷和底柱内的斗颈，并接入溜井与阶段运输。",
+            "phase": "prep"
+          },
+          {
+            "label": "堑沟与小补偿空间",
+            "note": "施工堑沟及切割天井，形成上分段的首采切割空间。",
+            "phase": "cut"
+          },
+          {
+            "label": "崩落上分段",
+            "note": "上分段首采区域形成松散矿堆，矿石开始向专用底部结构移动。",
+            "phase": "stope"
+          },
+          {
+            "label": "上分段放矿",
+            "note": "在覆岩下由漏斗经电耙巷及溜井出矿，上部覆盖岩逐步下移。",
+            "phase": "stope"
+          },
+          {
+            "label": "下分段切割",
+            "note": "上分段放矿后启用下分段的切割天井，并扩出堑沟与小补偿空间。",
+            "phase": "cut"
+          },
+          {
+            "label": "下分段回采",
+            "note": "下分段在覆岩下回采，矿石经自己的漏斗、斗颈和电耙巷进入溜井。",
+            "phase": "stope"
+          }
+        ],
+        "stepCount": 7,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.6666666666666666
+        }
+      }
+    },
+    {
+      "slug": "sublevel-caving-no-pillar",
+      "category": "caving",
+      "order": 3,
+      "name": "无底柱分段崩落法",
+      "nameEn": "Non-pillar Sublevel Caving",
+      "status": "complete",
+      "summary": "取消底柱，各分段以凿岩巷与出矿进路直接出矿，结构简单、机械化程度高。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "俯视",
+            "az": 0,
+            "el": 84,
+            "variant": "iso"
+          },
+          {
+            "id": "zoom",
+            "label": "细部进路端",
+            "az": 28,
+            "el": 10,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "updated": "2026-11-25",
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "从脉外分段运输平巷掘进多条平行回采进路，相邻分段进路在平面错列。"
+          },
+          {
+            "label": "端部切割",
+            "note": "在远端用切割平巷和切割天井形成初始自由面。"
+          },
+          {
+            "label": "上分段退采",
+            "note": "上分段自切割端逐排向运输侧退采，从同一进路端部装运。下分段先完成自身端部切割。"
+          },
+          {
+            "label": "下分段跟进",
+            "note": "下分段在上分段领先的条件下接续退采，形成错开的回采前缘。"
+          },
+          {
+            "label": "出矿线后移",
+            "note": "出矿点随前缘后退，沿同一进路到运输平巷和溜井。"
+          }
+        ],
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "C-19",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "从脉外分段运输平巷掘进多条平行回采进路，相邻分段进路在平面错列。",
+            "phase": "prep"
+          },
+          {
+            "label": "端部切割",
+            "note": "在远端用切割平巷和切割天井形成初始自由面。",
+            "phase": "cut"
+          },
+          {
+            "label": "上分段退采",
+            "note": "上分段自切割端逐排向运输侧退采，从同一进路端部装运。下分段先完成自身端部切割。",
+            "phase": "stope"
+          },
+          {
+            "label": "下分段跟进",
+            "note": "下分段在上分段领先的条件下接续退采，形成错开的回采前缘。",
+            "phase": "stope"
+          },
+          {
+            "label": "出矿线后移",
+            "note": "出矿点随前缘后退，沿同一进路到运输平巷和溜井。",
+            "phase": "stope"
+          }
+        ],
+        "stepCount": 6,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.8
+        }
+      }
+    },
+    {
+      "slug": "stage-forced-caving",
+      "category": "caving",
+      "order": 4,
+      "name": "阶段强制崩落法",
+      "nameEn": "Forced Stage Caving",
+      "status": "complete",
+      "summary": "以阶段为单位用大爆破强制崩落矿石，在覆盖岩下集中放出。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "阶段底部设漏斗、电耙巷及矿石溜井，侧部天井连接各凿岩硐室。"
+          },
+          {
+            "label": "形成补偿空间",
+            "note": "在待崩矿段下方拉出自由空间，并和漏斗上口连通。"
+          },
+          {
+            "label": "全高强制落矿",
+            "note": "人工落矿后，此次回采的全阶段矿柱状体转为松散矿堆。"
+          },
+          {
+            "label": "底部放矿",
+            "note": "底部成排放矿口协同出矿，覆盖围岩与矿石的界面随之下移。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "C-4",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "阶段底部设漏斗、电耙巷及矿石溜井，侧部天井连接各凿岩硐室。",
+            "phase": "prep"
+          },
+          {
+            "label": "形成补偿空间",
+            "note": "在待崩矿段下方拉出自由空间，并和漏斗上口连通。",
+            "phase": "cut"
+          },
+          {
+            "label": "全高强制落矿",
+            "note": "人工落矿后，此次回采的全阶段矿柱状体转为松散矿堆。",
+            "phase": "stope"
+          },
+          {
+            "label": "底部放矿",
+            "note": "底部成排放矿口协同出矿，覆盖围岩与矿石的界面随之下移。",
+            "phase": "stope"
+          }
+        ],
+        "stepCount": 5,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 1
+        }
+      }
+    },
+    {
+      "slug": "stage-natural-caving",
+      "category": "caving",
+      "order": 5,
+      "name": "阶段自然崩落法",
+      "nameEn": "Natural Stage Caving",
+      "status": "complete",
+      "summary": "利用矿体自身节理与应力条件使矿石自然崩落，在底部集中出矿。",
+      "updated": "2026-11-21",
+      "model": {
+        "status": "ready",
+        "source": "procedural",
+        "presets": [
+          {
+            "id": "iso",
+            "label": "等轴测",
+            "az": 34,
+            "el": 26,
+            "variant": "iso"
+          },
+          {
+            "id": "long",
+            "label": "纵剖",
+            "az": 0,
+            "el": 8,
+            "variant": "long"
+          },
+          {
+            "id": "cross",
+            "label": "横剖",
+            "az": 90,
+            "el": 8,
+            "variant": "cross"
+          },
+          {
+            "id": "zoom",
+            "label": "细部",
+            "az": 28,
+            "el": 12,
+            "variant": "iso",
+            "focus": "细部"
+          }
+        ],
+        "layers": [
+          "矿体",
+          "巷道",
+          "井筒",
+          "采场空区",
+          "矿柱",
+          "崩落体",
+          "切割工程",
+          "围岩"
+        ],
+        "stages": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。"
+          },
+          {
+            "label": "采准",
+            "note": "布置底部出矿系统，以及矿块周边的切帮与观察通道。"
+          },
+          {
+            "label": "拉底与切帮",
+            "note": "由矿块中部向两侧扩大底部拉底区域，露出矿体底面。"
+          },
+          {
+            "label": "开始自然冒落",
+            "note": "受重力及原岩应力作用，拉底上方首先冒落；矿石从底部结构放出。"
+          },
+          {
+            "label": "崩落前缘上移",
+            "note": "持续控制放矿，使崩落前缘向上和两侧发展，上部原生矿体仍可见。"
+          },
+          {
+            "label": "贯通覆岩、持续出矿",
+            "note": "崩落前缘抵达覆岩，继续从底部放矿，覆岩在高处逐步进入矿块。"
+          }
+        ],
+        "updated": "2026-11-25",
+        "layersOff": [
+          "围岩"
+        ],
+        "engineCode": "C-5",
+        "steps": [
+          {
+            "label": "开拓",
+            "note": "主井和阶段运输巷组成矿块的主通道，回风井与上部通道建立独立回风出口。各采场从阶段主通道接入。",
+            "phase": "dev"
+          },
+          {
+            "label": "采准",
+            "note": "布置底部出矿系统，以及矿块周边的切帮与观察通道。",
+            "phase": "prep"
+          },
+          {
+            "label": "拉底与切帮",
+            "note": "由矿块中部向两侧扩大底部拉底区域，露出矿体底面。",
+            "phase": "cut"
+          },
+          {
+            "label": "开始自然冒落",
+            "note": "受重力及原岩应力作用，拉底上方首先冒落；矿石从底部结构放出。",
+            "phase": "stope"
+          },
+          {
+            "label": "崩落前缘上移",
+            "note": "持续控制放矿，使崩落前缘向上和两侧发展，上部原生矿体仍可见。",
+            "phase": "stope"
+          },
+          {
+            "label": "贯通覆岩、持续出矿",
+            "note": "崩落前缘抵达覆岩，继续从底部放矿，覆岩在高处逐步进入矿块。",
+            "phase": "stope"
+          }
+        ],
+        "stepCount": 6,
+        "phases": [
+          {
+            "id": "dev",
+            "name": "开拓工程",
+            "color": "#967154"
+          },
+          {
+            "id": "prep",
+            "name": "采准工程",
+            "color": "#A08064"
+          },
+          {
+            "id": "cut",
+            "name": "切割工程",
+            "color": "#A6531F"
+          },
+          {
+            "id": "stope",
+            "name": "回采与出矿",
+            "color": "#B46D42"
+          }
+        ],
+        "stepDuration": 3.4,
+        "defaults": {
+          "cut": 0,
+          "progress": 0.8
+        }
+      }
+    }
+  ]
+}

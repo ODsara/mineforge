@@ -1,0 +1,288 @@
+---
+/**
+ * 方法详情页
+ * 有 MDX 正文的条目走三栏文章模板；没有正文的条目回落到骨架页，保证 15 条链接全部可用。
+ * 元数据一律以 methods.json 为准，MDX 只提供正文。
+ */
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ArticleLayout from "../../../layouts/ArticleLayout.astro";
+import Breadcrumb from "../../../components/global/Breadcrumb.astro";
+import BigNumbers from "../../../components/content/BigNumbers.astro";
+import ProcessFlow from "../../../components/content/ProcessFlow.astro";
+import Plate from "../../../components/content/Plate.astro";
+import {
+  methods,
+  methodHref,
+  parentMethod,
+  siblingsOf,
+  categoryBySlug,
+  variantsOf,
+  figures,
+} from "../../../lib/taxonomy";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("methods");
+  const bySlug = new Map(entries.map((entry) => [entry.id, entry]));
+
+  return methods.map((method) => ({
+    params: { category: method.category, slug: method.slug },
+    props: { method, entry: bySlug.get(method.slug) ?? null },
+  }));
+}
+
+const { method, entry } = Astro.props as {
+  method: (typeof methods)[number];
+  entry: Awaited<ReturnType<typeof getCollection>>[number] | null;
+};
+
+const category = categoryBySlug(method.category);
+const parent = parentMethod(method);
+const variants = variantsOf(method.slug);
+const siblings = siblingsOf(method);
+
+const rendered = entry ? await render(entry) : null;
+const Content = rendered?.Content ?? null;
+const headings = rendered?.headings ?? [];
+
+const skeletonSections = [
+  "基本信息",
+  "知识简介",
+  "基本原理",
+  "适用条件",
+  "采准与切割工程",
+  "回采工艺",
+  "主要工程结构",
+  "三维工程模型",
+  "优缺点分析",
+  "典型工程案例",
+  "工程示意图",
+  "相关知识",
+  "参考文献与资料来源",
+];
+
+const breadcrumb = [
+  { label: "首页", href: "/" },
+  { label: "采矿方法", href: "/methods/" },
+  { label: category?.name ?? "方法", href: `/methods/${method.category}/` },
+  { label: method.name },
+];
+
+/** 已接入程序化三维模型 → 首屏给交互入口横幅；否则给一幅代表工程图作早期视觉主体 */
+const readyModel = method.model?.status === "ready";
+const methodFigures = figures.filter((f) => f.method === method.slug);
+const sigFigure = methodFigures.find((f) => f.kind === "render") ?? methodFigures[0] ?? null;
+---
+
+{
+  Content ? (
+    <ArticleLayout
+      title={method.name}
+      nameEn={method.nameEn}
+      summary={method.summary}
+      description={method.summary}
+      categoryName={category?.name}
+      categoryHref={`/methods/${method.category}/`}
+      sourceLevel={entry?.data.sourceLevel}
+      headings={headings}
+      family={[...siblings, method]
+        .sort((a, b) => a.order - b.order)
+        .map((item) => ({
+          name: item.name,
+          href: methodHref(item),
+          order: item.order,
+          active: item.slug === method.slug,
+        }))}
+      breadcrumb={breadcrumb}
+    >
+      <Fragment slot="hero">
+        {/* 概览面板：参数 + 工序链合为一个整体，不再散落小盒 */}
+        <section class="overflow-hidden rounded-card border border-line bg-surface" aria-label="方法概览">
+          <div class="flex items-center justify-between gap-3 border-b border-line-soft px-5 py-3">
+            <p class="mf-sec"><span class="mf-sec__no">概览</span>30 秒速览</p>
+            <span class="font-mono text-[11px] text-ink-4">{method.nameEn}</span>
+          </div>
+          <div class="px-5 py-5">
+            {method.headline && (
+              <BigNumbers slug={method.slug} picks={method.headline} cols={2} />
+            )}
+            <ProcessFlow headings={headings} />
+          </div>
+        </section>
+
+        {/* 早期视觉主体：已接入模型给交互入口，否则给代表工程图 */}
+        {readyModel ? (
+          <a
+            href="#mf-model"
+            class="mf-lift group mt-5 flex items-center gap-4 overflow-hidden rounded-card border p-4"
+            style="border-color:var(--color-stage-line);background:var(--color-stage)"
+          >
+            {sigFigure && (
+              <span class="hidden h-16 w-24 shrink-0 overflow-hidden rounded-button sm:block" style="background:var(--color-stage-2)">
+                <img src={sigFigure.src} alt="" class="h-full w-full object-contain p-1" loading="lazy" decoding="async" />
+              </span>
+            )}
+            <span class="min-w-0 flex-1">
+              <span class="block font-mono text-[11px] tracking-[0.12em]" style="color:var(--color-accent)">三维工序演示</span>
+              <span class="mt-1 block text-[14.5px] font-medium" style="color:var(--color-stage-ink)">旋转、切换剖面，跟随回采工序</span>
+            </span>
+            <span class="mf-arrow shrink-0" style="color:var(--color-stage-ink)">
+              <svg width="18" height="18" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 3v8M3.5 7.5 7 11l3.5-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+          </a>
+        ) : (
+          sigFigure && (
+            <div class="mt-5" data-reveal="media">
+              <Plate
+                src={sigFigure.src}
+                width={sigFigure.width}
+                height={sigFigure.height}
+                alt={`${method.name}工程示意图：${sigFigure.caption}`}
+                figureNo={sigFigure.figureNo}
+                title={sigFigure.title.split("·")[0].trim()}
+                source={sigFigure.source}
+                meta={sigFigure.kind === "render" ? "三维渲染" : "剖面"}
+              />
+            </div>
+          )
+        )}
+      </Fragment>
+      <Content />
+    </ArticleLayout>
+  ) : (
+    <BaseLayout title={method.name} description={method.summary} activePath="/methods/">
+      <div class="mf-container pt-6">
+        <Breadcrumb items={breadcrumb} />
+      </div>
+
+      <article class="mf-container py-10 md:py-14">
+        <div class="grid gap-10 lg:grid-cols-12 lg:gap-14">
+          <div class="lg:col-span-8">
+            <header class="border-b border-line pb-8">
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <span class="font-mono text-[11px] tracking-widest text-ink-4">
+                  {category?.nameEn}
+                </span>
+              </div>
+              <h1 class="mt-3 text-[30px] leading-tight font-semibold md:text-[36px]">
+                {method.name}
+              </h1>
+              <p class="mt-2 font-mono text-[12px] tracking-wide text-ink-4">
+                {method.nameEn}
+              </p>
+              <p class="mf-measure mt-5 text-[15px] leading-8 text-ink-2">
+                {method.summary}
+              </p>
+
+              {parent && (
+                <div class="mt-6 rounded-card border border-accent/35 bg-accent-soft px-4 py-3">
+                  <p class="text-[12.5px] leading-6 text-accent-strong">
+                    本方法是
+                    <a href={methodHref(parent)} class="underline underline-offset-4">
+                      {parent.name}
+                    </a>
+                    的变体{method.variantNote ? `：${method.variantNote}` : "。"}
+                  </p>
+                </div>
+              )}
+            </header>
+
+            <section class="mt-10" aria-labelledby="sec-outline">
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 id="sec-outline" class="text-[17px] font-semibold">
+                  正文结构
+                </h2>
+                
+              </div>
+
+              <ol class="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2">
+                {skeletonSections.map((section, index) => (
+                  <li class="flex items-baseline gap-3 border-b border-line-soft py-2 text-[13px]">
+                    <span class="font-mono text-[10.5px] text-ink-4">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span class="text-ink-2">{section}</span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          </div>
+
+          <aside class="lg:col-span-4">
+            <div class="space-y-8 lg:sticky lg:top-24">
+              <section aria-labelledby="sec-siblings">
+                <h2 id="sec-siblings" class="text-[11px] tracking-[0.08em] text-ink-4">
+                  同族方法
+                </h2>
+                <ul class="mt-3 space-y-0.5">
+                  {siblings.map((item) => (
+                    <li>
+                      <a
+                        href={methodHref(item)}
+                        class="flex items-baseline justify-between gap-2 border-l-2 border-line-soft py-1.5 pl-3 text-[13px] text-ink-2 transition-colors duration-100 hover:border-accent hover:text-accent"
+                      >
+                        <span>{item.name}</span>
+                        <span class="font-mono text-[10.5px] text-ink-4">
+                          {String(item.order).padStart(2, "0")}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              {variants.length > 0 && (
+                <section aria-labelledby="sec-variants">
+                  <h2 id="sec-variants" class="text-[11px] tracking-[0.08em] text-ink-4">
+                    本方法的变体
+                  </h2>
+                  <ul class="mt-3 space-y-2">
+                    {variants.map((item) => (
+                      <li>
+                        <a
+                          href={methodHref(item)}
+                          class="block rounded-button border border-line bg-surface px-3 py-2 text-[12.5px] text-ink-2 transition-colors duration-100 hover:border-accent/35 hover:text-accent"
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              <section aria-labelledby="sec-meta">
+                <h2 id="sec-meta" class="text-[11px] tracking-[0.08em] text-ink-4">
+                  条目信息
+                </h2>
+                <dl class="mt-3 space-y-2 text-[12.5px]">
+                  <div class="flex justify-between gap-3 border-b border-line-soft pb-2">
+                    <dt class="text-ink-4">所属大类</dt>
+                    <dd>
+                      <a href={`/methods/${method.category}/`} class="text-ink-2 hover:text-accent">
+                        {category?.name}
+                      </a>
+                    </dd>
+                  </div>
+                  <div class="flex justify-between gap-3 border-b border-line-soft pb-2">
+                    <dt class="text-ink-4">方法关系</dt>
+                    <dd class="text-ink-2">{parent ? "变体" : "标准方法"}</dd>
+                  </div>
+                  <div class="flex justify-between gap-3 border-b border-line-soft pb-2">
+                    <dt class="text-ink-4">最后更新</dt>
+                    <dd class="font-mono text-ink-2">{method.updated ?? "—"}</dd>
+                  </div>
+                  <div class="flex justify-between gap-3">
+                    <dt class="text-ink-4">正文状态</dt>
+                    <dd>
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </BaseLayout>
+  )
+}

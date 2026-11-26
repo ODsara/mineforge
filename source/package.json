@@ -1,0 +1,38 @@
+{
+  "name": "mineforge-web",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "predev": "node scripts/extract-method-sections.mjs",
+    "start": "astro dev",
+    "build": "astro build",
+    "prebuild": "node scripts/extract-method-sections.mjs",
+    "sections": "node scripts/extract-method-sections.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "audit": "node scripts/audit.mjs",
+    "shots": "node scripts/shots.mjs",
+    "test:search": "node scripts/test-search.mjs",
+    "test:anchors": "node scripts/check-search-anchors.mjs",
+    "test": "node --test \"src/lib/models/*.test.ts\""
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.14",
+    "astro": "^5.0.0",
+    "gsap": "^3.15.1",
+    "katex": "^0.16.47",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/node": "^26.6.6",
+    "@types/three": "^0.187.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.6.0"
+  }
+}

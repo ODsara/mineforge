@@ -1,0 +1,1025 @@
+{
+  "meta": {
+    "schema": "mineforge.knowledge.method.v1",
+    "record_id": "MF-M-0001",
+    "topic": "分段凿岩阶段矿房法",
+    "compiled_on": "2026-11-14",
+    "compiler": "MineForge 专业资料研究员",
+    "language": "zh-CN",
+    "review_status": "修订稿：已用教材原文核对；9 项待核实中 Q1/Q3 已解决、Q2 部分解决，Q4-Q9 未解决",
+    "unresolved_items": [
+      "Q4",
+      "Q5",
+      "Q6",
+      "Q7",
+      "Q8",
+      "Q9"
+    ],
+    "primary_source": "R0 采矿学（第2版）第11章，p277-306"
+  },
+  "identity": {
+    "name_zh": "分段凿岩阶段矿房法",
+    "aliases_zh": [
+      "分段落矿阶段矿房法",
+      "分段凿岩阶段空场法"
+    ],
+    "name_en": "Sublevel Drilling Stage Stoping",
+    "abbreviation": null,
+    "one_sentence": "在矿房内沿阶段高度布置分段凿岩巷道，自各分段巷道向上钻凿扇形中深孔，以切割槽为自由面分次爆破，崩落矿石靠自重落至矿房底部集中放出的空场采矿法。",
+    "classification_path": [
+      "采矿方法",
+      "空场采矿法",
+      "阶段矿房法",
+      "垂直深孔崩矿方案",
+      "分段凿岩阶段矿房法"
+    ],
+    "core_feature": "分段仅提供凿岩作业空间，不独立出矿；矿房为单一回采单元"
+  },
+  "terminology_discrimination": {
+    "criterion": "分段是否独立出矿",
+    "rule": "分段独立出矿 → 分段矿房法；分段只凿岩、全部矿石落至阶段底部集中出矿 → 分段凿岩阶段矿房法",
+    "methods": [
+      {
+        "name_zh": "阶段矿房法",
+        "name_en": "Stage stoping / Block stoping",
+        "sublevel_role": "无分段（水平深孔方案）",
+        "mining_unit": "整个矿房",
+        "draw_point": "矿房底部",
+        "typical_sublevel_height_m": null
+      },
+      {
+        "name_zh": "分段凿岩阶段矿房法",
+        "name_en": "Sublevel Drilling Stage Stoping",
+        "sublevel_role": "仅凿岩作业空间",
+        "mining_unit": "整个矿房",
+        "draw_point": "矿房底部集中出矿",
+        "typical_sublevel_height_m": "10-15"
+      },
+      {
+        "name_zh": "阶段凿岩阶段矿房法（VCR 法）",
+        "name_en": "Vertical Crater Retreat",
+        "sublevel_role": "无分段，顶柱下凿岩硐室",
+        "mining_unit": "整个矿房",
+        "draw_point": "矿房底部",
+        "typical_sublevel_height_m": null
+      },
+      {
+        "name_zh": "分段矿房法",
+        "name_en": "Sublevel stoping (narrow sense)",
+        "aliases_zh": [
+          "分阶段矿房法"
+        ],
+        "sublevel_role": "每个分段为独立回采单元",
+        "mining_unit": "每个分段即一个矿房",
+        "draw_point": "各分段自有出矿巷道",
+        "typical_sublevel_height_m": "15-30"
+      }
+    ],
+    "evidence": [
+      "R1 将「分段凿岩的阶段矿房采矿法」列为阶段矿房法的垂直深孔亚型",
+      "R3 描述的分段矿房法采用下盘斜坡道+溜井+装矿巷道+铲运机，与阶段矿房法结构不同",
+      "R6 在同一比选中并列「分段矿房法」「分段凿岩阶段矿房法」「分段凿岩并段出矿分段矿房法」三种方案"
+    ],
+    "translation_note": "英文 sublevel stoping 在结构上更接近国内的分段凿岩阶段矿房法（分段 20-30 m、仅作凿岩分层、阶段底部集中出矿），不可仅凭 sublevel 直译为「分段矿房法」"
+  },
+  "applicability": {
+    "orebody": {
+      "dip": "急倾斜为宜；国际长孔空场法经验 >45-50°，最佳 60-90°（R8）",
+      "thickness": "中厚至厚；厚度小于 15-20 m 时矿块沿走向布置，更厚时垂直走向布置（R2）",
+      "shape": "形状较规则、边界清楚",
+      "grade": "较均匀，单次爆破量大、选择性差"
+    },
+    "rock": {
+      "ore": "稳固",
+      "wall_rock": "中等稳固以上",
+      "exposure": "采空区在服务期内能维持较大暴露面积",
+      "ucs_reference": ">40 MPa（R8 国际口径，仅作参考）"
+    },
+    "technical": [
+      "具备上向中深孔凿岩设备（YGZ-90 类）",
+      "具备底部结构施工能力",
+      "阶段集中出矿的运输与通风系统"
+    ],
+    "not_applicable": "矿岩不稳固且地应力高的深部矿体（参见大新锰矿 2019 年坍塌）"
+  },
+  "structures": [
+    {
+      "id": "S1",
+      "category": "采矿方法结构",
+      "name": "矿房（空场）",
+      "location": "两间柱之间、顶柱与底柱之间",
+      "function": "回采空间",
+      "modeling": "必需"
+    },
+    {
+      "id": "S2",
+      "category": "采矿方法结构",
+      "name": "间柱",
+      "location": "矿房两侧，垂直",
+      "function": "支撑采空区、分隔矿房",
+      "modeling": "必需"
+    },
+    {
+      "id": "S3",
+      "category": "采矿方法结构",
+      "name": "顶柱",
+      "location": "矿房顶部",
+      "function": "隔离上阶段、承受上覆荷载",
+      "modeling": "必需"
+    },
+    {
+      "id": "S4",
+      "category": "采矿方法结构",
+      "name": "底柱",
+      "location": "矿房底部",
+      "function": "承接受矿、容纳底部结构",
+      "modeling": "必需"
+    },
+    {
+      "id": "S5",
+      "category": "采矿方法结构",
+      "name": "未采矿体",
+      "location": "采场外围",
+      "function": "边界条件",
+      "modeling": "必需"
+    },
+    {
+      "id": "S6",
+      "category": "采矿方法结构",
+      "name": "上下盘围岩",
+      "location": "矿体两侧",
+      "function": "边界条件、暴露面",
+      "modeling": "必需（可剖切）"
+    },
+    {
+      "id": "D1",
+      "category": "采准工程",
+      "name": "阶段运输平巷",
+      "location": "下盘围岩内，沿走向",
+      "function": "阶段运输干线",
+      "modeling": "必需"
+    },
+    {
+      "id": "D2",
+      "category": "采准工程",
+      "name": "横巷（穿脉）",
+      "location": "间柱内，垂直走向",
+      "function": "由阶段平巷进入矿体",
+      "modeling": "必需"
+    },
+    {
+      "id": "D3",
+      "category": "采准工程",
+      "name": "通风人行天井",
+      "location": "矿体厚度中央，贯通上下阶段",
+      "function": "通风、人行、安全出口",
+      "modeling": "必需"
+    },
+    {
+      "id": "D4",
+      "category": "采准工程",
+      "name": "分段凿岩巷道",
+      "location": "各分段水平，沿走向，矿体（近下盘）内",
+      "function": "凿岩作业空间（方法标志性结构）",
+      "modeling": "必需"
+    },
+    {
+      "id": "D5",
+      "category": "采准工程",
+      "name": "拉底平巷",
+      "location": "矿房底部（拉底水平），沿走向",
+      "function": "拉底与扩漏斗的起点",
+      "modeling": "必需（现有模型缺失）"
+    },
+    {
+      "id": "D6",
+      "category": "采准工程",
+      "name": "矿石溜井",
+      "location": "下盘或矿房端部，垂直",
+      "function": "放矿至阶段平巷",
+      "modeling": "必需"
+    },
+    {
+      "id": "D7",
+      "category": "采准工程",
+      "name": "电耙巷道",
+      "location": "底柱内，沿走向，位于漏斗穿下方",
+      "function": "集矿、耙运",
+      "modeling": "必需（电耙方案）"
+    },
+    {
+      "id": "D8",
+      "category": "采准工程",
+      "name": "漏斗穿",
+      "location": "电耙道向上至漏斗颈",
+      "function": "放矿通道",
+      "modeling": "必需"
+    },
+    {
+      "id": "D9",
+      "category": "采准工程",
+      "name": "漏斗颈与喇叭口",
+      "location": "拉底水平以下",
+      "function": "受矿、放矿",
+      "modeling": "必需"
+    },
+    {
+      "id": "D10",
+      "category": "切割工程",
+      "name": "切割天井",
+      "location": "矿房中央，自拉底平巷向上",
+      "function": "形成切割槽的初始自由面",
+      "modeling": "必需（现有模型缺失）"
+    },
+    {
+      "id": "D11",
+      "category": "切割工程",
+      "name": "切割槽",
+      "location": "矿房中央，垂直贯通矿房全高",
+      "function": "爆破初始自由面与补偿空间",
+      "modeling": "必需"
+    },
+    {
+      "id": "D12",
+      "category": "切割工程",
+      "name": "拉底空间",
+      "location": "矿房底部",
+      "function": "初始受矿空间",
+      "modeling": "可简化"
+    },
+    {
+      "id": "D13",
+      "category": "通风",
+      "name": "回风天井与上阶段回风平巷",
+      "location": "上阶段",
+      "function": "污风排出",
+      "modeling": "可简化（用风流箭头）"
+    }
+  ],
+  "process": [
+    {
+      "step": 1,
+      "phase": "采准",
+      "actions": [
+        "下盘掘阶段运输平巷",
+        "间柱内掘横巷通达矿体",
+        "矿体厚度中央掘通风人行天井贯通上下阶段",
+        "自天井掘拉底平巷与各分段凿岩巷道",
+        "自阶段平巷掘矿石溜井与电耙巷道",
+        "电耙道每隔 5-7 m 掘漏斗穿与漏斗颈"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "切割",
+      "actions": [
+        "矿房中央自拉底平巷掘切割天井",
+        "拉底平巷两侧浅眼扩帮至矿体全厚形成拉底空间",
+        "漏斗颈上部扩成喇叭口",
+        "切割天井扩大成贯通全高的切割槽"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "回采落矿",
+      "actions": [
+        "分段凿岩巷道内钻凿上向扇形中深孔",
+        "以切割槽为自由面分次爆破，每次 1-5 排",
+        "上下分段保持垂直工作面，上分段超前 1-2 个爆破步距"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "出矿",
+      "actions": [
+        "崩落矿石自重经漏斗",
+        "进入电耙道",
+        "电耙耙至溜井",
+        "阶段平巷装车"
+      ],
+      "note": "常配合留矿支撑：每次只放约 70% 矿石，余量支撑空区（R4）"
+    },
+    {
+      "step": 5,
+      "phase": "拉底与扩漏斗推进",
+      "actions": [
+        "随回采工作面前进逐步完成",
+        "超前回采工作面 1-2 排漏斗"
+      ]
+    },
+    {
+      "step": 6,
+      "phase": "矿柱回采",
+      "actions": [
+        "回采间柱、顶柱",
+        "须由原设计单位或专业研究机构论证（GB 16423-2020 6.3.2.4）",
+        "回采前与回采过程中设应力应变监测"
+      ]
+    },
+    {
+      "step": 7,
+      "phase": "采空区处理",
+      "actions": [
+        "充填、隔离或强制崩落围岩（GB 16423-2020 6.3.1.15）"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "name": "阶段高度",
+      "value": "50-70",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "取决于围岩允许暴露面积；采空区逐渐暴露，故可取较大值",
+      "note": "国外一些矿山有增加趋势"
+    },
+    {
+      "name": "分段高度",
+      "value": "8-15",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "YGZ-90 型中深孔凿岩机",
+      "note": "决定于凿岩设备能力，不是自由选择"
+    },
+    {
+      "name": "矿房长度",
+      "value": "40-60",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "按围岩稳固性与矿石允许暴露面积确定",
+      "note": "大新锰矿实测 60-70 m，超出上限（Q4）"
+    },
+    {
+      "name": "矿房宽度（垂直走向布置）",
+      "value": "15-20",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "垂直走向布置",
+      "note": "p294 另给出 8-20 m，教材内部不一致（Q8）"
+    },
+    {
+      "name": "矿房宽度（沿走向布置）",
+      "value": "等于矿体水平厚度",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "沿走向布置",
+      "note": null
+    },
+    {
+      "name": "间柱宽度（沿走向）",
+      "value": "8-12",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "矿房沿走向布置",
+      "note": "图11-24 标注为 7-10 m，与正文略有出入（Q9）"
+    },
+    {
+      "name": "间柱宽度（垂直走向）",
+      "value": "10-14",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "矿房垂直走向布置",
+      "note": null
+    },
+    {
+      "name": "顶柱厚度",
+      "value": "6-10",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "按矿石稳固性确定",
+      "note": null
+    },
+    {
+      "name": "底柱高度",
+      "value": "7-13",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "采用电耙道底部结构",
+      "note": null
+    },
+    {
+      "name": "矿房沿走向布置界线",
+      "value": "<15；极稳固时 <20",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p292",
+      "condition": "按矿体厚度",
+      "note": "与 R2 的「小于15或20m」一致"
+    },
+    {
+      "name": "中深孔最小抵抗线",
+      "value": "1.5-1.8",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p294",
+      "condition": "上向中深孔",
+      "note": "深孔时为 3 m"
+    },
+    {
+      "name": "单次爆破排数",
+      "value": "3-5",
+      "unit": "排",
+      "value_type": "教材值",
+      "source": "R0 p294",
+      "condition": "全部炮孔打完后分次爆破",
+      "note": "大新锰矿实践为 2-3 排"
+    },
+    {
+      "name": "上下分段关系",
+      "value": "垂直工作面，或上分段超前一排炮孔",
+      "unit": "—",
+      "value_type": "教材值",
+      "source": "R0 p294",
+      "condition": null,
+      "note": null
+    },
+    {
+      "name": "切割槽宽度（浅孔拉槽）",
+      "value": "2.5-3",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p293",
+      "condition": "浅孔拉槽法（借留矿法上采）",
+      "note": "规格易保证，效率低、劳动强度大"
+    },
+    {
+      "name": "切割槽宽度（水平深孔拉槽）",
+      "value": "8-10",
+      "unit": "m",
+      "value_type": "教材值",
+      "source": "R0 p294",
+      "condition": "水平深孔拉槽法",
+      "note": "夹制性小，易保证质量"
+    },
+    {
+      "name": "拉底与辟漏超前距离",
+      "value": "1-2 排漏斗",
+      "unit": "—",
+      "value_type": "教材值",
+      "source": "R0 p293",
+      "condition": "随回采工作面推进",
+      "note": null
+    },
+    {
+      "name": "电耙绞车功率",
+      "value": "30 或 55",
+      "unit": "kW",
+      "value_type": "教材值",
+      "source": "R0 p294",
+      "condition": "电耙出矿",
+      "note": "耙斗容积 0.3 或 0.5 m³"
+    },
+    {
+      "name": "矿柱矿量比重",
+      "value": "35-60",
+      "unit": "%",
+      "value_type": "教材值",
+      "source": "R0 p303",
+      "condition": "阶段矿房法整体",
+      "note": "教材称其为「严重缺点」"
+    },
+    {
+      "name": "大爆破回采矿柱损失率",
+      "value": "40-60",
+      "unit": "%",
+      "value_type": "教材值",
+      "source": "R0 p303",
+      "condition": "用大爆破回采矿柱",
+      "note": null
+    },
+    {
+      "name": "矿块生产能力",
+      "value": "105-200",
+      "unit": "t/d",
+      "value_type": "实测值",
+      "source": "R0 p303 表11-6",
+      "condition": "金岭/大庙/河北铜矿",
+      "note": "参考指标 140-180"
+    },
+    {
+      "name": "工作面工效",
+      "value": "15-44",
+      "unit": "t/工班",
+      "value_type": "实测值",
+      "source": "R0 p303 表11-6",
+      "condition": "同上三矿",
+      "note": "参考指标 20-30"
+    },
+    {
+      "name": "矿石损失率",
+      "value": "18.5-25",
+      "unit": "%",
+      "value_type": "实测值",
+      "source": "R0 p303 表11-6",
+      "condition": "同上三矿",
+      "note": "参考指标 10-15，实际普遍偏高"
+    },
+    {
+      "name": "矿石贫化率",
+      "value": "12.3-20",
+      "unit": "%",
+      "value_type": "实测值",
+      "source": "R0 p303 表11-6",
+      "condition": "同上三矿",
+      "note": "参考指标 7-15"
+    },
+    {
+      "name": "炸药消耗量",
+      "value": "0.29-0.47",
+      "unit": "kg/t",
+      "value_type": "实测值",
+      "source": "R0 p303 表11-6",
+      "condition": "同上三矿",
+      "note": null
+    },
+    {
+      "name": "坑木消耗量",
+      "value": "0.2-1.0",
+      "unit": "m³/kt",
+      "value_type": "实测值",
+      "source": "R0 p303 表11-6",
+      "condition": "同上三矿",
+      "note": null
+    },
+    {
+      "name": "阶段高度",
+      "value": "50-60",
+      "unit": "m",
+      "value_type": "实测值",
+      "source": "R4",
+      "condition": "大新锰矿南部矿段",
+      "note": null
+    },
+    {
+      "name": "矿房长度",
+      "value": "60-70",
+      "unit": "m",
+      "value_type": "实测值",
+      "source": "R4",
+      "condition": "大新锰矿",
+      "note": "超出教材 40-60 m"
+    },
+    {
+      "name": "分段数量与高度",
+      "value": "3 个 / 15 m",
+      "unit": "个 / m",
+      "value_type": "实测值",
+      "source": "R4",
+      "condition": "大新锰矿",
+      "note": "落在教材 8-15 m 区间上限"
+    },
+    {
+      "name": "顶柱 / 间柱 / 底部结构",
+      "value": "6 / 7 / 13.5",
+      "unit": "m",
+      "value_type": "实测值",
+      "source": "R4",
+      "condition": "大新锰矿",
+      "note": "间柱 7 m 低于教材 8-12 m"
+    },
+    {
+      "name": "炮孔直径",
+      "value": "60-65",
+      "unit": "mm",
+      "value_type": "实测值",
+      "source": "R4",
+      "condition": "垂直扇形中深孔",
+      "note": null
+    },
+    {
+      "name": "每次放矿比例",
+      "value": "70",
+      "unit": "%",
+      "value_type": "实测值",
+      "source": "R4",
+      "condition": "留矿支撑工艺",
+      "note": "教材未述，属实践补充"
+    },
+    {
+      "name": "分段间隔（国际对照）",
+      "value": "20-30",
+      "unit": "m",
+      "value_type": "国际实践值",
+      "source": "R9/R11",
+      "condition": "长孔空场法，大直径深孔台车",
+      "note": "CSA 曾增至 40 m 导致地压破坏，后降为 35 m"
+    }
+  ],
+  "case_studies": [
+    {
+      "id": "C1",
+      "name": "大新锰矿（广西崇左，南方锰业集团）",
+      "source": "R4",
+      "value_type": "实测值",
+      "geology": "沉积型碳酸锰矿；矿层平均总厚约 10 m；平均倾角 >80°；矿石密度 3.13 t/m³；矿石 f=8-15；围岩 f=6-10；松散系数 1.5；自然安息角 50°",
+      "scale": "南部矿段 60 万 t/a 地采工程，2008 年筹建，2015 年达产",
+      "structure": "阶段高 50-60 m；矿房长 60-70 m；3 个分段、分段高 15 m；顶柱 6 m；间柱 7 m；底部结构厚 13.5 m",
+      "process": "自上而下单侧推进；上分段超前下分段 1-2 个爆破步距；YGZ-90 钻垂直扇形中深孔 φ60-65 mm；最小抵抗线 1.7 m；孔距 1.7-1.8 m；硝铵炸药；导爆管雷管起爆；每次 2-3 排",
+      "draw": "每次放 70%，30 kW 电耙耙至溜井，振动放矿机装车",
+      "pillar": "顶底柱不回采；间柱后期视稳定性部分回采；空区封闭、废石充填或强制崩落顶板",
+      "failure": "2019-10 +280 m 中段 26-28# 采空区周边规模性坍塌，波及 +220/+280/+340/+380 m 四个中段；上下空区对应关系明确；邻近空区采后 6-12 个月内跟随式塌陷；距塌陷采场 50 m 采准巷道严重片帮失效；2021-02 被广西应急管理厅挂牌督办",
+      "lesson": "方法的适用边界随深度衰减，浅部稳定运行十余年不等于深部仍适用",
+      "representativeness": "强（大规模生产矿山、参数完整、有失效过程与整改），但不得作为成功范例引用"
+    },
+    {
+      "id": "C2",
+      "name": "寿王坟铜矿（河北）",
+      "source": "R2",
+      "value_type": "实测值（1980 年代中期）",
+      "indicators": {
+        "矿房生产能力": "300-400 t/d（单位待核实）",
+        "采准比": "5.2 m/kt",
+        "YQ-100 潜孔钻台效": "155-200 t/台班",
+        "55 kW 电耙台效": "147 t/台班",
+        "矿石损失率": "6.8%-19.9%",
+        "矿石贫化率": "12.2%-19.1%",
+        "回采工人劳动生产率": "51-83 t/人·班"
+      },
+      "representativeness": "中（数据约 40 年前，设备与管理水平已变化，引用须标注年份）"
+    }
+  ],
+  "standards": [
+    {
+      "code": "GB 16423-2020",
+      "name": "金属非金属矿山安全规程",
+      "clause": "6.3.1.6",
+      "text": "应严格保持矿柱（含顶柱、底柱和间柱等）的尺寸、形状和直立度；应有专人检查和管理，确保矿柱的稳定性。"
+    },
+    {
+      "code": "GB 16423-2020",
+      "name": "金属非金属矿山安全规程",
+      "clause": "6.3.1.15",
+      "text": "采用空场法采矿的矿山，应采取充填、隔离或强制崩落围岩的措施，及时处理采空区。"
+    },
+    {
+      "code": "GB 16423-2020",
+      "name": "金属非金属矿山安全规程",
+      "clause": "6.3.2.3",
+      "text": "采用分段空场法和阶段空场法采矿，应遵守下列规定：采场顶柱内除可开掘回采、运输、充填和通风巷道外，不得开掘其他巷道；上下中段的矿房和矿柱应相对应；人员不应进入采空区。"
+    },
+    {
+      "code": "GB 16423-2020",
+      "name": "金属非金属矿山安全规程",
+      "clause": "6.3.2.4",
+      "text": "空场法回采矿柱应遵守下列规定：应由原设计单位或专业研究机构研究论证；回采顶柱和间柱前应先检查运输巷道的稳定情况，运输巷道不稳定时采取加固措施；回采前和回采过程中应设有岩体应力和应变监测设施，实时监测矿岩稳定情况；所有顶柱和间柱的回采准备工作应在矿房回采结束前完成；与矿柱回采无关的人员，未经矿山企业主要负责人批准不应进入未充填矿房顶柱内的巷道和矿柱回采区内；大量崩落矿柱时，应采取措施保证爆破冲击波和地震波影响范围内的巷道、设备及设施的安全；未达到预期崩落效果的应进行补充崩落设计后再次爆破；编制专门的应急预案。"
+    }
+  ],
+  "pros_cons": {
+    "pros": [
+      "回采强度大、劳动生产率高、采矿成本低、坑木消耗少、回采作业安全（教材原文归纳）",
+      "矿块生产能力 105~200 t/d，适合大规模集中生产",
+      "中深孔凿岩单位成本低于浅孔",
+      "人员不进入采空区，凿岩/爆破/出矿分区作业",
+      "电耙道可利用贯穿风流，通风优于留矿法",
+      "坑木消耗极低（0.2~1.0 m³/kt），采场本身不需支护"
+    ],
+    "cons": [
+      "矿柱矿量比重大，达 35%~60%（教材原文）",
+      "大爆破回采矿柱损失率高达 40%~60%（教材原文）",
+      "采准工程量大、采准时间长，是相对 VCR 法的主要劣势",
+      "对矿岩稳固性依赖强，空场失稳后果为区域性",
+      "深部地应力增大后适应性显著下降（大新锰矿案例）",
+      "底部结构工程量大，电耙道损坏后修复困难"
+    ],
+    "comparisons": [
+      {
+        "target": "浅孔留矿法",
+        "delta": "效率高、通风好、不需在留矿堆上作业；但采准工程量大、矿柱多"
+      },
+      {
+        "target": "VCR 法",
+        "delta": "孔深较浅、偏斜可控、边界控制好；但采准量大、不能一次崩全阶段"
+      },
+      {
+        "target": "分段矿房法",
+        "delta": "出矿集中、底部结构单一；但分段不能独立组织生产，灵活性差"
+      }
+    ]
+  },
+  "existing_model_spec": {
+    "source_file": "F:/作品实践大赛/分段矿房法模型/mine_lib.py",
+    "declared_name": "分段凿岩阶段矿房法",
+    "coordinate_system": "X 走向；Y 垂直走向水平（+Y 上盘）；Z 铅垂向上",
+    "parameters": {
+      "dip_deg": 72,
+      "ore_true_thickness_m": 30,
+      "block_length_m": 50,
+      "stage_height_m": 50,
+      "rib_pillar_width_m": 6,
+      "crown_pillar_m": 6,
+      "sill_pillar_m": 6,
+      "sublevel_levels_m": [
+        8,
+        18,
+        28,
+        38
+      ],
+      "sublevel_interval_m": 10,
+      "drift_section_m": "2.4 × 2.4",
+      "funnel_spacing_m": 6,
+      "funnel_count": 5
+    },
+    "deviations": [
+      {
+        "item": "阶段高度",
+        "model": "50 m",
+        "textbook": "50-70 m",
+        "level": "合规",
+        "suggestion": "保留"
+      },
+      {
+        "item": "矿块长度",
+        "model": "50 m",
+        "textbook": "矿房长 40-60 m",
+        "level": "合规",
+        "suggestion": "保留"
+      },
+      {
+        "item": "分段高度",
+        "model": "10 m",
+        "textbook": "8-15 m",
+        "level": "合规",
+        "suggestion": "保留（此前误判为偏低，已更正）"
+      },
+      {
+        "item": "顶柱厚度",
+        "model": "6 m",
+        "textbook": "6-10 m",
+        "level": "合规（下限）",
+        "suggestion": "保留"
+      },
+      {
+        "item": "间柱宽度",
+        "model": "6 m",
+        "textbook": "8-12 m",
+        "level": "低于下限",
+        "suggestion": "改 8 m，或标注为示意值"
+      },
+      {
+        "item": "底柱高度",
+        "model": "6 m",
+        "textbook": "7-13 m",
+        "level": "低于下限",
+        "suggestion": "改 8 m（需容纳漏斗穿+电耙道两层）"
+      },
+      {
+        "item": "拉底巷道",
+        "model": "缺失",
+        "textbook": "必需（图11-24 构件2）",
+        "level": "缺项",
+        "suggestion": "补建"
+      },
+      {
+        "item": "切割天井",
+        "model": "缺失",
+        "textbook": "必需（图11-24 构件6）",
+        "level": "缺项",
+        "suggestion": "补建"
+      },
+      {
+        "item": "回风天井",
+        "model": "缺失",
+        "textbook": "可简化（图11-27）",
+        "level": "缺项",
+        "suggestion": "以风流箭头代替"
+      }
+    ],
+    "traceability_issue": "代码注释「参照教材 11.6.1」经核对真实准确，即《采矿学》第2版 11.6.1 分段凿岩阶段矿房法 p292-295；但未写明书名版次，建议补全",
+    "textbook_figure_11_24": "1-阶段运输巷道；2-拉底巷道；3-分段凿岩巷道；4-通风人行天井；5-漏斗颈；6-切割天井；7-溜井"
+  },
+  "open_questions": [
+    {
+      "id": "Q1",
+      "question": "模型注释「教材 11.6.1」指哪本教材",
+      "status": "已解决",
+      "answer": "《采矿学》第2版 11.6.1 分段凿岩阶段矿房法，p292-295。模型引用真实准确"
+    },
+    {
+      "id": "Q2",
+      "question": "科普条目的原始教材出处",
+      "status": "部分解决",
+      "answer": "R1 体系与教材一致但数值有出入（分段高、底柱、矿房宽度），判定非该版直接摘录，降为二级来源"
+    },
+    {
+      "id": "Q3",
+      "question": "「分段凿岩」中「分段」的语义",
+      "status": "已解决",
+      "answer": "教材以「各分段采下的矿石分别从各分段的出矿巷道运出」界定分段矿房法；本方法为「崩落矿石藉自重落到矿房底部放出」"
+    },
+    {
+      "id": "Q4",
+      "question": "大新锰矿矿房长度 60-70 m 超出教材 40-60 m 的原因",
+      "status": "未解决",
+      "impact": "参数边界判断",
+      "action": "查矿山设计资料"
+    },
+    {
+      "id": "Q5",
+      "question": "国内是否有无轨化分段凿岩阶段矿房法公开案例",
+      "status": "未解决",
+      "impact": "案例覆盖",
+      "action": "检索 1980-1990 年代无轨设备引进期文献"
+    },
+    {
+      "id": "Q6",
+      "question": "寿王坟铜矿「300-400L/d」单位确认",
+      "status": "未解决",
+      "impact": "指标引用",
+      "action": "查原文；该值与教材表11-6 的 105-200 t/d 差距较大，存疑"
+    },
+    {
+      "id": "Q7",
+      "question": "电耙道底部结构与堑沟底部结构的适用分界",
+      "status": "未解决",
+      "impact": "结构类型完整性",
+      "action": "堑沟方案属 11.5 分段矿房法，需另起条目"
+    },
+    {
+      "id": "Q8",
+      "question": "教材 p292（15-20 m）与 p294（8-20 m）对垂直走向布置矿房宽度给出两个区间",
+      "status": "未解决",
+      "impact": "参数引用",
+      "action": "与《金属矿床地下开采》第3版比对"
+    },
+    {
+      "id": "Q9",
+      "question": "图11-24 标注间柱 7-10 m 与正文 8-12 m 不一致",
+      "status": "未解决",
+      "impact": "参数引用",
+      "action": "以正文为准，图注存疑"
+    }
+  ],
+  "references": [
+    {
+      "id": "R0",
+      "type": "教材",
+      "title": "采矿学（第2版）",
+      "authors": [
+        "王青",
+        "任凤玉"
+      ],
+      "publisher": "冶金工业出版社",
+      "year": 2011,
+      "isbn": "9787502454906",
+      "pages": "277-306",
+      "chapter": "第11章 空场采矿法",
+      "tier": 0,
+      "caveat": "教材值为教学典型值，非规范值或实测值"
+    },
+    {
+      "id": "R1",
+      "type": "科普条目",
+      "title": "阶段矿房采矿法",
+      "publisher": "科普中国",
+      "year": null,
+      "url": "https://www.kepuchina.cn/article/articleinfo?business_type=100&classify=0&ar_id=362889",
+      "tier": 2
+    },
+    {
+      "id": "R2",
+      "type": "科普条目",
+      "title": "分段落矿阶段矿房采矿法",
+      "publisher": "科普中国",
+      "year": null,
+      "url": "https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=240417",
+      "tier": 2
+    },
+    {
+      "id": "R3",
+      "type": "科普条目",
+      "title": "分段矿房采矿法",
+      "publisher": "科普中国",
+      "year": null,
+      "url": "https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=240437",
+      "tier": 2
+    },
+    {
+      "id": "R4",
+      "type": "期刊论文",
+      "title": "协同开采过程灾害防治新思路及应用实践",
+      "authors": [
+        "陈庆发",
+        "甘泉",
+        "张继",
+        "商昱",
+        "段志伟",
+        "肖体群"
+      ],
+      "journal": "矿产保护与利用",
+      "year": 2025,
+      "volume": 45,
+      "issue": 4,
+      "pages": "1-8",
+      "doi": "10.13779/j.cnki.issn1001-0076.2025.08.009",
+      "tier": 1
+    },
+    {
+      "id": "R5",
+      "type": "期刊论文",
+      "title": "分段矿房法不同分段高度稳定性的FLAC3D数值模拟分析研究",
+      "authors": [
+        "丁文俊",
+        "周宗红",
+        "侯廷凯"
+      ],
+      "journal": "有色金属（中英文）",
+      "year": 2021,
+      "volume": 11,
+      "issue": 8,
+      "pages": "113-121,133",
+      "tier": 1,
+      "caveat": "研究对象为分段矿房法，结论不可跨方法套用"
+    },
+    {
+      "id": "R6",
+      "type": "学位论文",
+      "title": "德保铜矿复杂中厚矿体安全高效开采技术研究",
+      "authors": [
+        "陈竞文"
+      ],
+      "advisor": "吴仲雄",
+      "school": "广西大学",
+      "year": 2012,
+      "degree": "硕士",
+      "tier": 1
+    },
+    {
+      "id": "R7",
+      "type": "国家标准",
+      "code": "GB 16423-2020",
+      "title": "金属非金属矿山安全规程",
+      "effective": "2021-09-01",
+      "tier": 1
+    },
+    {
+      "id": "R8",
+      "type": "高校公开课",
+      "title": "Underground Mining of Metalliferous Deposits, Lecture 49: Sublevel Stoping",
+      "authors": [
+        "Bhibhuti Bhushan Mandal",
+        "Kaushik Dey"
+      ],
+      "institution": "IIT Kharagpur (NPTEL)",
+      "url": "http://nitttrc.edu.in/nptel/courses/video/123105006/lec49.pdf",
+      "tier": 1,
+      "caveat": "教学口径，非工程依据"
+    },
+    {
+      "id": "R9",
+      "type": "技术报告",
+      "title": "Report for Metals Acquisition Corp. (CSA Mine)",
+      "publisher": "Metals Acquisition Corp.",
+      "year": 2022,
+      "url": "https://sec.gov/Archives/edgar/data/1853021/000110465922067126/tm2217160d1_ex96-1.htm",
+      "tier": 2
+    },
+    {
+      "id": "R10",
+      "type": "行业媒体",
+      "title": "Bulk Mining at Kidd Creek",
+      "publisher": "The Northern Miner",
+      "url": "https://www.northernminer.com/news/mbulk-mining-at-kidd-creek/1000173024",
+      "tier": 3
+    },
+    {
+      "id": "R11",
+      "type": "储量报告",
+      "title": "Aeris Resources Limited — Tritton Deposit Mineral Resource and Ore Reserve Estimate",
+      "publisher": "Aeris Resources Limited",
+      "year": 2020,
+      "tier": 2
+    },
+    {
+      "id": "R12",
+      "type": "设计文件",
+      "title": "白龙山萤石矿矿山地质环境保护与土地复垦方案",
+      "tier": 2,
+      "caveat": "设计推荐值，嗣后充填方案"
+    },
+    {
+      "id": "R13",
+      "type": "设计文件",
+      "title": "磨山矿区矿山地质环境保护与土地复垦方案",
+      "year": 2024,
+      "tier": 2,
+      "caveat": "设计推荐值，嗣后充填方案"
+    },
+    {
+      "id": "R14",
+      "type": "百科",
+      "title": "阶段凿岩阶段矿房法",
+      "publisher": "百度百科",
+      "tier": 3,
+      "caveat": "仅术语旁证，不作参数依据"
+    }
+  ]
+}

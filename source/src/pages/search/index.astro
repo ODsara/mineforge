@@ -1,0 +1,371 @@
+---
+/**
+ * 搜索页
+ * 构建期把全站条目导出为静态索引，浏览器端做过滤与分组。
+ * 不依赖服务端、不引入搜索库，副作用是只能检索标题/摘要/术语，不能检索正文全文。
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import { searchIndex, searchGroups } from "../../lib/search";
+import { methods } from "../../lib/taxonomy";
+
+const typeCount = searchGroups.reduce((acc, group) => {
+  acc[group] = searchIndex.filter((d) => d.g === group).length;
+  return acc;
+}, {} as Record<string, number>);
+
+const hot = methods.filter((m) => m.status === "complete").slice(0, 1);
+---
+
+<BaseLayout
+  title="搜索"
+  description="检索 MineForge 中的采矿方法、知识方向、工程技术专题、专业术语与文献资料。"
+  activePath="/search/"
+>
+  <PageHero
+    eyebrow="检索"
+    title="搜索知识库"
+    description={`当前索引收录 ${searchIndex.length} 个条目：方法正文小节、参数与公式、规范条文、术语、文献与图解。输入方法名、专业术语、参数名或关键词即可过滤。`}
+  />
+
+  <section class="mf-container py-10 md:py-14">
+    <div class="max-w-[880px]">
+      <form role="search">
+        <label for="search-input" class="sr-only">关键词</label>
+        <div class="flex items-stretch gap-2">
+          <div class="relative flex-1">
+            <svg
+              class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-ink-4"
+              width="15"
+              height="15"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.3"></circle>
+              <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+      ></path>
+            </svg>
+            <input
+              id="search-input"
+              name="q"
+              type="search"
+              autocomplete="off"
+              placeholder="例如：阶段矿房法、拉底、分段高度、6.3.3、矿柱"
+              class="h-11 w-full rounded-card border border-line bg-bg pr-3 pl-9 text-[14px] text-ink placeholder:text-ink-4 focus:border-accent focus:outline-none"
+            />
+          </div>
+          <button
+            type="button"
+            id="search-clear"
+            class="mf-press h-11 shrink-0 rounded-button border border-line px-4 text-[13px] text-ink-3 transition-colors duration-100 hover:border-line-strong hover:text-ink"
+          >
+            清空
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-5 flex flex-wrap items-center gap-1.5" role="group" aria-label="按类型过滤">
+        <button
+          type="button"
+          data-filter="全部"
+          aria-pressed="true"
+          class="mf-press filter-chip rounded-button border border-line px-2.5 py-1 text-[12px] text-ink-3 transition-colors duration-100 hover:border-line-strong hover:text-ink aria-pressed:border-accent aria-pressed:bg-accent-soft aria-pressed:text-accent"
+        >
+          全部
+          <span class="ml-1 font-mono text-[10.5px] text-ink-4">{searchIndex.length}</span>
+        </button>
+        {
+          searchGroups.map((group) => (
+            <button
+              type="button"
+              data-filter={group}
+              aria-pressed="false"
+              class="mf-press filter-chip rounded-button border border-line px-2.5 py-1 text-[12px] text-ink-3 transition-colors duration-100 hover:border-line-strong hover:text-ink aria-pressed:border-accent aria-pressed:bg-accent-soft aria-pressed:text-accent"
+            >
+              {group}
+              <span class="ml-1 font-mono text-[10.5px] text-ink-4">{typeCount[group]}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <p
+        id="search-summary"
+        class="mt-6 border-t border-line pt-4 text-[12.5px] text-ink-3"
+        aria-live="polite"
+        role="status"
+      >
+        输入关键词开始检索。
+      </p>
+
+      <div id="search-results" class="mt-2"></div>
+
+      <div id="search-empty" class="mf-feedback-in mt-4 hidden rounded-card border border-line bg-surface px-5 py-6">
+        <p class="text-[13.5px] text-ink">没有匹配的条目。</p>
+        <p class="mt-2 text-[12px] leading-6 text-ink-4">
+          索引覆盖方法正文小节、参数与公式、规范条文、术语与文献，不检索正文全文。可以换个说法再试：
+          方法名用全称、术语用教材表述、规范用编号或条号。
+        </p>
+        <ul class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[12px]">
+          <li><a href="/methods/" class="text-accent hover:text-accent-strong">浏览采矿方法 →</a></li>
+          <li><a href="/knowledge/" class="text-accent hover:text-accent-strong">浏览知识体系 →</a></li>
+          <li><a href="/resources/glossary/" class="text-accent hover:text-accent-strong">浏览术语库 →</a></li>
+        </ul>
+      </div>
+
+      {
+        hot.length > 0 && (
+          <p class="mt-8 text-[12px] text-ink-4">
+            推荐入口：
+            <a href={`/methods/${hot[0].category}/${hot[0].slug}/`} class="text-accent hover:text-accent-strong">
+              {hot[0].name}
+            </a>
+            <span class="mx-1.5">·</span>
+            <a href="/resources/standards/" class="text-accent hover:text-accent-strong">规范条文</a>
+            <span class="mx-1.5">·</span>
+            <a href="/resources/formulas/" class="text-accent hover:text-accent-strong">参数库</a>
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <script id="search-index" type="application/json" is:inline set:html={JSON.stringify(searchIndex)} />
+
+  <script>
+    interface Doc { t: string; s?: string; d?: string; k?: string; g: string; h: string }
+
+    const indexEl = document.getElementById("search-index");
+    const parsed: Doc[] = indexEl ? JSON.parse(indexEl.textContent || "[]") : [];
+    const docs: Doc[] = parsed.filter((d) => d && d.t && d.h);
+    const input = document.getElementById("search-input") as HTMLInputElement | null;
+    const form = input?.closest("form") ?? null;
+    const resultsEl = document.getElementById("search-results") as HTMLElement | null;
+    const summaryEl = document.getElementById("search-summary") as HTMLElement | null;
+    const emptyEl = document.getElementById("search-empty") as HTMLElement | null;
+    const clearBtn = document.getElementById("search-clear") as HTMLButtonElement | null;
+    const chips = Array.from(document.querySelectorAll<HTMLElement>("[data-filter]"));
+
+    const groupOrder = chips.flatMap((chip) =>
+      chip.dataset.filter && chip.dataset.filter !== "全部" ? [chip.dataset.filter] : []
+    );
+
+    /** 单次最多渲染的结果数：索引扩到近 800 条后，宽泛关键词不再把整页铺满 */
+    const MAX_RESULTS = 80;
+
+    let activeGroup = "全部";
+
+    const tokens = (q: string): string[] =>
+      q
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    const score = (doc: Doc, ts: string[]): number => {
+      // 索引里可能出现缺标题的历史条目，统一按空串处理，避免整页检索崩掉
+      const title = (doc.t || "").toLowerCase();
+      const sub = (doc.s || "").toLowerCase();
+      const desc = (doc.d || "").toLowerCase();
+      const keys = (doc.k || "").toLowerCase();
+      let total = 0;
+      for (const tk of ts) {
+        let s = 0;
+        if (title === tk) s = 100;
+        else if (title.startsWith(tk)) s = 80;
+        else if (title.includes(tk)) s = 60;
+        else if (keys.includes(tk)) s = 40;
+        else if (sub.includes(tk)) s = 30;
+        else if (desc.includes(tk)) s = 20;
+        if (!s) return 0;
+        total += s;
+      }
+      return total;
+    };
+
+    /** 用文本节点拼高亮，避免把用户输入直接塞进 innerHTML */
+    const appendHighlighted = (parent: HTMLElement, text: string, ts: string[]): void => {
+      if (!text) return;
+      const lower = text.toLowerCase();
+      let cursor = 0;
+      const marks: [number, number][] = [];
+      for (const tk of ts) {
+        let from = lower.indexOf(tk, cursor);
+        while (from !== -1) {
+          marks.push([from, from + tk.length]);
+          from = lower.indexOf(tk, from + tk.length);
+        }
+      }
+      if (marks.length === 0) {
+        parent.appendChild(document.createTextNode(text));
+        return;
+      }
+      marks.sort((a, b) => a[0] - b[0]);
+      const merged: [number, number][] = [];
+      for (const m of marks) {
+        const last = merged[merged.length - 1];
+        if (last && m[0] <= last[1]) last[1] = Math.max(last[1], m[1]);
+        else merged.push([m[0], m[1]]);
+      }
+      let pos = 0;
+      for (const [start, end] of merged) {
+        if (start > pos) parent.appendChild(document.createTextNode(text.slice(pos, start)));
+        const mark = document.createElement("mark");
+        mark.className = "bg-accent-soft text-accent";
+        mark.textContent = text.slice(start, end);
+        parent.appendChild(mark);
+        pos = end;
+      }
+      if (pos < text.length) parent.appendChild(document.createTextNode(text.slice(pos)));
+    };
+
+    const row = (doc: Doc, ts: string[]): HTMLAnchorElement => {
+      const a = document.createElement("a");
+      a.href = doc.h;
+      a.className =
+        "group grid gap-x-6 gap-y-1 border-b border-line-soft py-3.5 transition-colors duration-100 hover:bg-surface md:grid-cols-12";
+
+      const head = document.createElement("div");
+      head.className = "md:col-span-5";
+      const title = document.createElement("span");
+      title.className = "text-[13.5px] text-ink group-hover:text-accent";
+      appendHighlighted(title, doc.t, ts);
+      head.appendChild(title);
+      if (doc.s) {
+        const sub = document.createElement("span");
+        sub.className = "mt-0.5 block font-mono text-[11px] leading-4 text-ink-3";
+        appendHighlighted(sub, doc.s, ts);
+        head.appendChild(sub);
+      }
+      a.appendChild(head);
+
+      if (doc.d) {
+        const desc = document.createElement("p");
+        desc.className = "text-[12.5px] leading-6 text-ink-3 md:col-span-7";
+        appendHighlighted(desc, doc.d, ts);
+        a.appendChild(desc);
+      }
+
+      return a;
+    };
+
+    const render = (): void => {
+      if (!input || !resultsEl || !summaryEl || !emptyEl) return;
+      const q = input.value;
+      const ts = tokens(q);
+      const pool = activeGroup === "全部" ? docs : docs.filter((d) => d.g === activeGroup);
+
+      resultsEl.textContent = "";
+
+      if (ts.length === 0) {
+        summaryEl.textContent =
+          activeGroup === "全部"
+            ? `输入关键词开始检索，当前索引 ${docs.length} 个条目。`
+            : `已筛选「${activeGroup}」，共 ${pool.length} 个条目。输入关键词继续缩小范围。`;
+        emptyEl.classList.add("hidden");
+        return;
+      }
+
+      const hits = pool
+        .map((doc) => ({ doc, s: score(doc, ts) }))
+        .filter((h) => h.s > 0)
+        .sort((a, b) => b.s - a.s || (a.doc.t || "").length - (b.doc.t || "").length);
+
+      const shown = hits.slice(0, MAX_RESULTS);
+      const truncated = hits.length > shown.length;
+
+      summaryEl.textContent = `「${q.trim()}」命中 ${hits.length} 条${
+        activeGroup === "全部" ? "" : `（限${activeGroup}）`
+      }${truncated ? `，先显示相关度最高的 ${shown.length} 条，可补充关键词缩小范围` : "，按相关度排列"}。`;
+      emptyEl.classList.toggle("hidden", hits.length > 0);
+
+      const byGroup = new Map<string, Doc[]>();
+      for (const hit of shown) {
+        if (!byGroup.has(hit.doc.g)) byGroup.set(hit.doc.g, []);
+        byGroup.get(hit.doc.g)!.push(hit.doc);
+      }
+
+      const order = groupOrder.filter((g) => byGroup.has(g));
+      for (const group of order) {
+        const section = document.createElement("section");
+        section.className = "mt-6 mf-feedback-in";
+        const heading = document.createElement("div");
+        heading.className = "flex items-baseline justify-between border-b border-line pb-2";
+        const h2 = document.createElement("h2");
+        h2.className = "text-[13px] font-medium text-ink";
+        h2.textContent = group;
+        const n = document.createElement("span");
+        n.className = "font-mono text-[11px] text-ink-3";
+        n.textContent = String(byGroup.get(group)!.length);
+        heading.append(h2, n);
+        section.appendChild(heading);
+        for (const doc of byGroup.get(group)!) section.appendChild(row(doc, ts));
+        resultsEl.appendChild(section);
+      }
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        activeGroup = chip.dataset.filter || "全部";
+        chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+        render();
+      });
+    });
+
+    /** 把当前关键词写回 URL，供刷新 / 再次进入本页时经 initial q 恢复结果 */
+    const syncUrl = (): void => {
+      if (!input) return;
+      const url = new URL(window.location.href);
+      if (input.value.trim()) url.searchParams.set("q", input.value.trim());
+      else url.searchParams.delete("q");
+      history.replaceState(null, "", url);
+    };
+
+    input?.addEventListener("input", (event) => {
+      // 拼音/日文等输入法的合成中途不渲染，避免拿未上屏的字母串出结果；
+      // 上屏后的最终文本由 compositionend 负责触发一次渲染。
+      if (event instanceof InputEvent && event.isComposing) return;
+      syncUrl();
+      render();
+    });
+
+    input?.addEventListener("compositionend", () => {
+      // Chrome 在按回车上屏候选词时只发一次 isComposing=true 的 input 事件，
+      // 之后没有第二次 input——不在这里补一次 render，中文关键词就会「提交了却不显示」。
+      syncUrl();
+      render();
+    });
+
+    form?.addEventListener("submit", (event) => {
+      // 按回车提交：静态站没有服务端可查，就地拦截并强制按当前值渲染一次，
+      // 覆盖粘贴、自动填充等不产生 input 事件的输入路径。
+      event.preventDefault();
+      syncUrl();
+      render();
+    });
+
+    clearBtn?.addEventListener("click", () => {
+      if (!input) return;
+      input.value = "";
+      activeGroup = "全部";
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.filter === "全部")));
+      syncUrl();
+      render();
+      input.focus();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const target = event.target;
+      const typing = target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName);
+      if (event.key === "/" && !typing) {
+        event.preventDefault();
+        input?.focus();
+      }
+    });
+
+    const initial = new URLSearchParams(window.location.search).get("q");
+    if (initial && input) input.value = initial;
+    render();
+  </script>
+</BaseLayout>

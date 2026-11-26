@@ -1,0 +1,46 @@
+---
+/** 知识分类树：左侧栏导航，当前方向高亮。数据仅来自 taxonomy.json */
+import { domains, domainHref, type Domain } from "../../lib/taxonomy";
+
+interface Props {
+  current?: string;
+  class?: string;
+}
+
+const { current, class: className = "" } = Astro.props;
+
+const isCurrent = (domain: Domain) => domain.slug === current;
+---
+
+<nav aria-label="知识分类树" class:list={["text-[13px]", className]}>
+  <p class="mb-3 text-[11px] tracking-[0.08em] text-ink-4">知识分类</p>
+
+  <ul class="space-y-0.5">
+    {
+      domains.map((domain) => (
+        <li>
+          <a
+            href={domainHref(domain)}
+            aria-current={isCurrent(domain) ? "page" : undefined}
+            class:list={[
+              "group flex items-baseline gap-2.5 border-l-2 py-2 pl-3 pr-2 transition-colors duration-100",
+              isCurrent(domain)
+                ? "border-accent bg-accent-soft text-accent"
+                : "border-line-soft text-ink-2 hover:border-line-strong hover:text-ink",
+            ]}
+          >
+            <span
+              class:list={[
+                "font-mono text-[10.5px]",
+                isCurrent(domain) ? "text-accent" : "text-ink-4",
+              ]}
+            >
+              {String(domain.order).padStart(2, "0")}
+            </span>
+            <span class="leading-6">{domain.name}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

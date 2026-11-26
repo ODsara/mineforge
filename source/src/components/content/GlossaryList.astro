@@ -1,0 +1,44 @@
+---
+/** 术语库列表：按「方法 / 采场结构 / 采准工程 / 底部结构 / 切割工程 / 工序」分组 */
+import { glossary, glossaryGroups } from "../../lib/resources";
+
+const groups = glossaryGroups
+  .map((group) => ({ group, items: glossary.filter((g) => g.group === group) }))
+  .filter((g) => g.items.length > 0);
+---
+
+<div class="space-y-10">
+  {
+    groups.map(({ group, items }) => (
+      <section>
+        <div class="flex items-baseline gap-3 border-b border-line pb-2">
+          <h2 class="text-[14px] font-medium text-ink">{group}</h2>
+          <span class="font-mono text-[11px] text-ink-4">{items.length}</span>
+        </div>
+        <dl class="divide-y divide-line-soft">
+          {items.map((item) => (
+            <div id={`term-${glossary.indexOf(item)}`} class="grid scroll-mt-24 gap-x-8 gap-y-1.5 py-4 md:grid-cols-12">
+              <dt class="md:col-span-3">
+                <span class="text-[14px] font-medium text-ink">{item.term}</span>
+                <span class="mt-0.5 block font-mono text-[10.5px] leading-4 text-ink-4">
+                  {item.termEn}
+                </span>
+              </dt>
+              <dd class="md:col-span-9">
+                <p class="text-[13.5px] leading-7 text-ink-2">{item.definition}</p>
+                <p class="mt-1.5 flex flex-wrap items-center gap-2 text-[11px] text-ink-4">
+                  <span>来源：{item.source}</span>
+                  {!item.verified && (
+                    <span class="rounded-card border border-line px-1.5 py-0.5 text-[10.5px]">
+                      释义待术语标准核对
+                    </span>
+                  )}
+                </p>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    ))
+  }
+</div>

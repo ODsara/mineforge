@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import { methods, figures } from "../../lib/taxonomy";
+
+const guide = [
+  { href: "/knowledge/development/", title: "认识井下空间", detail: "从开拓剖面找到主井、各中段、采场和回风井。" },
+  { href: "/methods/", title: "比较三类采矿方法", detail: "结合工程图和三维演示，比较空场法、充填法和崩落法如何回采、出矿和处理采空区。" },
+  { href: "/engineering/", title: "理解整座矿山的运行", detail: "沿着开拓、采准、回采到运输的工序，了解通风、安全与设计的作用。" },
+];
+---
+
+<BaseLayout
+  title="关于"
+  description="MineForge 金属矿床地下开采教学网站的学习指南、图解说明和参考资料。"
+  activePath="/about/"
+>
+  <PageHero
+    title="关于 MineForge"
+    description={`面向采矿工程学习者的地下开采教学网站。通过 ${methods.length} 种采矿方法的三维工序演示和 ${figures.length} 幅方法图解，理解采场结构、回采顺序与出矿路径。`}
+  />
+
+  <div class="mf-container max-w-4xl py-12 md:py-16">
+    <section id="roadmap" class="scroll-mt-24" aria-labelledby="sec-guide">
+      <h2 id="sec-guide" class="text-[22px] font-semibold">学习指南</h2>
+      <ol class="mt-5 divide-y divide-line border-y border-line">
+        {guide.map((step) => (
+          <li class="py-4">
+            <a class="mf-goto text-[15px]" href={step.href}>{step.title}</a>
+            <p class="mt-1 text-[13px] leading-6 text-ink-2">{step.detail}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="principles" class="mt-12 scroll-mt-24" aria-labelledby="sec-principles">
+      <h2 id="sec-principles" class="text-[22px] font-semibold">图解与参考资料</h2>
+      <div class="mf-prose mt-5">
+        <p>采矿方法主要参考王青、任凤玉主编的《采矿学》（第 2 版）。方法页列出所用章、节和页码，参数表标明教材值、矿山实测值或国际案例值。</p>
+        <p>工程图解为非比例示意图。读图时先区分矿体与围岩，再用图例识别采空区、充填体和崩落矿岩，最后顺着箭头检查回采方向与出矿路径。工程设计请采用现场测量、勘察资料和现行标准。</p>
+        <p>三维演示适合观察同一采场随工序发生的变化。可旋转、缩放或切换剖面，再回到平面图或剖面图核对关键构件的位置。</p>
+      </div>
+      <div class="mt-5 flex flex-wrap gap-x-6 gap-y-3">
+        <a class="mf-goto" href="/resources/drawings/">工程图解</a>
+        <a class="mf-goto" href="/resources/standards/">标准与规范</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

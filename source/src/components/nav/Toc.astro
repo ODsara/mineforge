@@ -1,0 +1,92 @@
+---
+/**
+ * 文章目录
+ * 标题由 Astro 渲染 Markdown 时自动产出（headings），不手工维护。
+ * 高亮指向阅读焦点线之前的最后一个标题。
+ */
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  /** 2 = 只列二级标题（右栏窄，放三级会过长） */
+  maxDepth?: 2 | 3;
+  class?: string;
+}
+
+const { headings, maxDepth = 2, class: className = "" } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || (maxDepth === 3 && h.depth === 3));
+---
+
+{
+  items.length > 0 && (
+    <nav aria-label="本文目录" class:list={["text-[12.5px]", className]}>
+      <p class="mb-2.5 text-[11px] tracking-[0.08em] text-ink-4">本文目录</p>
+      <ul class="space-y-px border-l border-line" data-toc>
+        {items.map((item) => (
+          <li>
+            <a
+              href={`#${item.slug}`}
+              data-toc-link={item.slug}
+              data-depth={item.depth}
+              class:list={[
+                "block border-l-2 border-transparent py-1 leading-5 transition-colors duration-100",
+                item.depth === 3 ? "pl-6 text-ink-4" : "pl-3 text-ink-3",
+                "hover:text-ink",
+              ]}
+            >
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"));
+  const ids = [...new Set(links.flatMap((link) => link.dataset.tocLink ?? []))];
+  const targets = ids.map((id) => document.getElementById(id)).filter((target) => target !== null);
+
+  if (targets.length > 0) {
+    let activeId = "";
+    let frame = 0;
+
+    function update() {
+      frame = 0;
+      const focusLine = Math.max(105, window.innerHeight * 0.23);
+      let current: HTMLElement | undefined;
+      for (const target of targets) {
+        if (target.getBoundingClientRect().top > focusLine) break;
+        current = target;
+      }
+      const id = current?.id ?? "";
+      if (id === activeId) return;
+      activeId = id;
+      for (const link of links) {
+        const active = link.dataset.tocLink === id;
+        link.classList.toggle("text-accent", active);
+        link.classList.toggle("border-accent", active);
+        link.classList.toggle("bg-accent-soft", active);
+        link.classList.toggle("text-ink-3", !active && link.dataset.depth !== "3");
+        link.classList.toggle("text-ink-4", !active && link.dataset.depth === "3");
+        if (active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      }
+    }
+
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(update);
+    }
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    window.addEventListener("hashchange", schedule);
+    document.addEventListener("toggle", schedule, true);
+    schedule();
+  }
+</script>

@@ -1,0 +1,72 @@
+---
+/**
+ * 一级入口卡
+ *
+ * 与旧版「目录树」的分工：
+ * 旧版把 15 个方法名 + 21 条链接平铺在首页，等于把 sitemap 搬上来；
+ * 这里每张卡只回答三件事——这一栏装什么、有多少、里面大致分几类。
+ * 分类用不可点的文本标签呈现，要真的跳转走卡片本身。
+ *
+ * 整卡可点由 h3 内的 ::after 铺满实现，所以卡内不能再放其它交互元素
+ * （会挡住点击）。需要多入口时应当拆成多张卡，而不是在卡里再挂链接。
+ */
+interface Props {
+  index: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  count: string;
+  items?: string[];
+}
+
+const { index, title, subtitle, href, count, items = [] } = Astro.props;
+---
+
+<div class="mf-card relative flex flex-col rounded-card border border-line bg-surface p-5 md:p-6">
+  <div class="flex items-baseline justify-between gap-3">
+    <span class="font-mono text-[11px] tracking-[0.16em] text-accent">{index}</span>
+    <span class="font-mono text-[11px] text-ink-4">{count}</span>
+  </div>
+
+  <h3 class="mf-card-title mt-3.5 text-[18px] leading-snug">
+    <a
+      href={href}
+      class="rounded-sm after:absolute after:inset-0 after:rounded-card after:content-[''] focus-visible:outline-offset-4"
+    >
+      {title}
+    </a>
+  </h3>
+
+  <p class="mt-2.5 text-[12.5px] leading-6 text-ink-2">{subtitle}</p>
+
+  {
+    items.length > 0 && (
+      <ul class="mt-4 flex flex-wrap gap-x-1.5 gap-y-1.5">
+        {items.map((item) => (
+          <li class="rounded-full border border-line-soft bg-bg px-2 py-[3px] text-[11px] text-ink-3">
+            {item}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <span class="mt-auto flex items-center gap-1.5 pt-5 text-[12px] text-accent">
+    进入
+    <svg
+      class="mf-arrow"
+      width="13"
+      height="13"
+      viewBox="0 0 14 14"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M3 7h8M7.5 3.5 11 7l-3.5 3.5"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+  </span>
+</div>

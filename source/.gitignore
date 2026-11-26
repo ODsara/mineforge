@@ -1,0 +1,27 @@
+# Astro
+dist/
+.astro/
+node_modules/
+
+# 日志与缓存
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vite/
+
+# 编辑器 / 系统
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# 环境变量
+.env
+.env.production
+
+# 自检产物（截图与报告）
+.audit/
+
+# 设计审查会话工作文件（本地保留，不入库）
+.design/
+.design-dev.log

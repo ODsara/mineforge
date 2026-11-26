@@ -1,0 +1,281 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/layout/PageHero.astro";
+import Breadcrumb from "../../components/global/Breadcrumb.astro";
+import SubNav from "../../components/nav/SubNav.astro";
+import FigureCard from "../../components/cards/FigureCard.astro";
+import {
+  engineeringTopics,
+  engineeringHref,
+  domainsBySlugs,
+  methodsBySlugs,
+  figuresByIds,
+  methodHref,
+  type EngineeringTopic,
+} from "../../lib/taxonomy";
+import { clausesOf } from "../../lib/resources";
+
+export function getStaticPaths() {
+  return engineeringTopics.map((topic) => ({
+    params: { topic: topic.slug },
+    props: { topic },
+  }));
+}
+
+const { topic } = Astro.props as { topic: EngineeringTopic };
+
+const relatedDomains = domainsBySlugs(topic.relatedDomains);
+const relatedMethods = methodsBySlugs(topic.relatedMethods);
+const relatedFigures = figuresByIds(topic.relatedFigures);
+const relatedClauses = relatedMethods.flatMap((m) =>
+  clausesOf("GB 16423-2020").filter((c) => c.methodSlug === m.slug)
+);
+const others = engineeringTopics.filter((t) => t.slug !== topic.slug);
+const isSpan = !["development", "preparation-cutting", "stoping", "haulage"].includes(
+  topic.slug
+);
+
+const navItems = [
+  { label: "全部专题", href: "/engineering/" },
+  ...engineeringTopics.map((t) => ({
+    label: t.name,
+    href: engineeringHref(t.slug),
+    active: t.slug === topic.slug,
+  })),
+];
+---
+
+<BaseLayout
+  title={topic.name}
+  description={`${topic.name}：${topic.summary} 收录 ${topic.scope.length} 个内容条目。`}
+  activePath="/engineering/"
+>
+  <div class="mf-container pt-6">
+    <Breadcrumb
+      items={[
+        { label: "首页", href: "/" },
+        { label: "工程技术", href: "/engineering/" },
+        { label: topic.name },
+      ]}
+    />
+  </div>
+
+  <PageHero
+    eyebrow={isSpan ? "工程技术 · 贯穿全过程" : `工程技术 · 工序 ${String(topic.order).padStart(2, "0")}`}
+    title={topic.name}
+    description={topic.summary}
+  >
+    <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-[12.5px]">
+      <div>
+        <dt class="text-ink-4">收录条目</dt>
+        <dd class="mt-1 font-mono text-[14px] text-ink">{topic.scope.length} 项</dd>
+      </div>
+      <div>
+        <dt class="text-ink-4">关联方向</dt>
+        <dd class="mt-1 font-mono text-[14px] text-ink">{relatedDomains.length} 个</dd>
+      </div>
+      <div>
+        <dt class="text-ink-4">关联方法</dt>
+        <dd class="mt-1 font-mono text-[14px] text-ink">{relatedMethods.length} 项</dd>
+      </div>
+    </dl>
+  </PageHero>
+
+  <div class="border-b border-line bg-bg md:sticky md:top-16 md:z-30">
+    <div class="mf-container">
+      <SubNav label="工程技术专题" items={navItems} />
+    </div>
+  </div>
+
+  <div class="mf-container py-10 md:py-14">
+    <div class="grid gap-x-12 gap-y-12 xl:grid-cols-12">
+      <article class="xl:col-span-8">
+        <section>
+          <h2 class="text-[19px] font-semibold tracking-[-0.01em] md:text-[21px]">工序定位</h2>
+          <p class="mf-measure mt-3 text-[14.5px] leading-8 text-ink-2">{topic.intro}</p>
+        </section>
+
+        <section class="mt-12 border-t border-line pt-10">
+          <div class="flex flex-wrap items-baseline justify-between gap-3">
+            <h2 class="text-[19px] font-semibold tracking-[-0.01em] md:text-[21px]">工序与技术要点</h2>
+            <span class="text-[11.5px] text-ink-4">{topic.scope.length} 项 · 逐条展开</span>
+          </div>
+
+          <p class="mt-2 text-[12.5px] leading-6 text-ink-4">
+            每条先说明工序任务与布置原则，再给出设计、施工或安全校核要点。
+          </p>
+
+          <ol class="mt-6 divide-y divide-line border-y border-line">
+            {
+              topic.scope.map((item, i) => (
+                <li id={`${topic.slug}-${i + 1}`} class="grid grid-cols-[2.25rem_1fr] items-baseline gap-x-2 scroll-mt-28 py-5">
+                  <span class="font-mono text-[11px] text-ink-4">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-[14px] text-ink">
+                      {item.label}
+                      <span class="ml-2 text-[12px] font-normal text-ink-4">{item.note}</span>
+                    </p>
+                    {
+                      item.body && item.body.length > 0 && (
+                        <div class="mt-2.5 space-y-2">
+                          {item.body.map((paragraph) => (
+                            <p class="text-[13.5px] leading-7 text-ink-2">{paragraph}</p>
+                          ))}
+                        </div>
+                      )
+                    }
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+
+          <p class="mt-4 text-[12px] leading-6 text-ink-4">
+            正文中的原则性表述用于建立工序框架；具体尺寸、设备型号和设计取值，须按矿山条件、教材原文与现行规范逐项核定，不能直接照搬。
+          </p>
+        </section>
+
+        {
+          relatedMethods.length > 0 && (
+            <section class="mt-12 border-t border-line pt-10">
+              <h2 class="text-[19px] font-semibold tracking-[-0.01em] md:text-[21px]">
+                对照采矿方法
+              </h2>
+              <p class="mt-2 text-[13px] leading-6 text-ink-3">
+                打开方法页，对照采场图或三维演示，观察同一道工序在不同采矿方法中的布置。
+              </p>
+              <ul class="mt-5 divide-y divide-line border-y border-line">
+                {relatedMethods.map((method) => (
+                  <li>
+                    <a
+                      href={methodHref(method)}
+                      class="group flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3.5"
+                    >
+                      <span class="text-[14px] text-ink transition-colors duration-100 group-hover:text-accent">
+                        {method.name}
+                      </span>
+                      <span class="flex items-center gap-3">
+                        <span class="font-mono text-[11px] text-ink-4">{method.nameEn}</span>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          relatedFigures.length > 0 && (
+            <section class="mt-12 border-t border-line pt-10">
+              <h2 class="text-[19px] font-semibold tracking-[-0.01em] md:text-[21px]">
+                相关工程图解
+              </h2>
+              <div class="mt-5 grid gap-5">
+                {relatedFigures.map((figure) => (
+                  <FigureCard figure={figure} />
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        <section class="mt-12 border-t border-line pt-10">
+          <h2 class="text-[19px] font-semibold tracking-[-0.01em] md:text-[21px]">
+            与知识体系的分工
+          </h2>
+          <p class="mf-measure mt-3 text-[14px] leading-7 text-ink-2">{topic.xrefNote}</p>
+          {
+            relatedDomains.length > 0 && (
+              <ul class="mt-5 flex flex-wrap gap-2">
+                {relatedDomains.map((domain) => (
+                  <li>
+                    <a
+                      href={`/knowledge/${domain.slug}/`}
+                      class="inline-flex items-center gap-1.5 rounded-button border border-line px-2.5 py-1 text-[12px] text-ink-2 transition-colors duration-100 hover:border-accent hover:text-accent"
+                    >
+                      {domain.name}
+                      <span class="font-mono text-[10.5px] text-ink-4">→</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+        </section>
+
+      </article>
+
+      <aside class="xl:col-span-4">
+        <div class="xl:sticky xl:top-32">
+          <section class="border-t border-line pt-4">
+            <h2 class="font-mono text-[10.5px] tracking-widest text-ink-4">专题信息</h2>
+            <dl class="mt-3 space-y-2.5 text-[12.5px]">
+              <div class="flex items-baseline justify-between gap-4">
+                <dt class="text-ink-4">编号</dt>
+                <dd class="font-mono text-ink-2">
+                  {isSpan ? "SPAN" : String(topic.order).padStart(2, "0")}
+                </dd>
+              </div>
+              <div class="flex items-baseline justify-between gap-4">
+                <dt class="text-ink-4">所属层</dt>
+                <dd class="text-ink-2">{isSpan ? "贯穿全过程" : "顺序工序"}</dd>
+              </div>
+              <div class="flex items-baseline justify-between gap-4">
+                <dt class="text-ink-4">内容条目</dt>
+                <dd class="font-mono text-ink-2">{topic.scope.length}</dd>
+              </div>
+            </dl>
+          </section>
+
+          {
+            relatedClauses.length > 0 && (
+              <section class="mt-8 border-t border-line pt-4">
+                <h2 class="font-mono text-[10.5px] tracking-widest text-ink-4">相关条文摘录</h2>
+                <ul class="mt-3 space-y-3">
+                  {relatedClauses.slice(0, 3).map((clause) => (
+                    <li class="text-[12px] leading-6 text-ink-3">
+                      <span class="font-mono text-[10.5px] text-accent">
+                        {clause.code} {clause.clause}
+                      </span>
+                      <p class="mt-0.5 line-clamp-3">{clause.text}</p>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="/resources/standards/"
+                  class="mt-3 inline-block text-[11.5px] text-accent transition-colors duration-100 hover:text-accent-strong"
+                >
+                  查看全部条文摘录 →
+                </a>
+              </section>
+            )
+          }
+
+          <section class="mt-8 border-t border-line pt-4">
+            <h2 class="font-mono text-[10.5px] tracking-widest text-ink-4">其它专题</h2>
+            <ul class="mt-3 space-y-1">
+              {
+                others.map((item) => (
+                  <li>
+                    <a
+                      href={engineeringHref(item.slug)}
+                      class="flex items-baseline justify-between gap-3 border-l-2 border-line-soft py-1.5 pl-3 text-[12.5px] text-ink-3 transition-colors duration-100 hover:border-accent hover:text-accent"
+                    >
+                      <span>{item.name}</span>
+                      <span class="font-mono text-[10.5px] text-ink-4">
+                        {String(item.order).padStart(2, "0")}
+                      </span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

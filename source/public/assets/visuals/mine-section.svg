@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" role="img" aria-labelledby="title desc">
+  <title id="title">地下矿山开拓系统剖面</title>
+  <desc id="desc">主井连接三个中段，采场通过中段联络巷接入运输系统，回风井连接回风巷并通至地表。示意图非按比例。</desc>
+  <defs>
+    <pattern id="rock" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#e4e9e4"/>
+      <path d="M2 4h4m4 8h4" stroke="#b2bcb6"/>
+    </pattern>
+    <pattern id="ore" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#ecd3ab"/>
+      <path d="M0 10 10 0" stroke="#ad7638"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="480" fill="#faf8f0"/>
+  <g font-family="'Microsoft YaHei','PingFang SC',sans-serif" fill="#263844" font-size="19">
+    <path d="M45 114H246L328 102H555L651 114H855V414H45Z" fill="url(#rock)" stroke="#61737c" stroke-width="2"/>
+    <path d="M488 115H574L706 413H608Z" fill="url(#ore)" stroke="#a4713f" stroke-width="2"/>
+    <g fill="#fffdf7" stroke="#455c65" stroke-width="2">
+      <path d="M149 114H172V383H149Z"/>
+      <path d="M739 114H759V200H739Z"/>
+      <path d="M172 184H739V200H172Z"/>
+      <path d="M172 264H613V280H172Z"/>
+      <path d="M172 357H670V373H172Z"/>
+      <path d="M566 200H589L613 264H586Z" fill="#c5e0d4"/>
+    </g>
+    <path d="M128 114l32-44 32 44M143 94h33" fill="none" stroke="#455c65" stroke-width="2"/>
+    <text x="51" y="96">地表</text>
+    <text x="208" y="148">主井</text>
+    <path d="M201 143H172" stroke="#61737c"/>
+    <text x="778" y="152">回风井</text>
+    <path d="M771 148H759" stroke="#61737c"/>
+    <text x="286" y="176">上中段回风巷</text>
+    <text x="282" y="257">中段运输巷</text>
+    <text x="286" y="350">下中段运输巷</text>
+    <text x="651" y="245">采场</text>
+    <path d="M642 239H601" stroke="#61737c"/>
+    <text x="735" y="394">矿体</text>
+    <path d="M725 389H695" stroke="#61737c"/>
+    <text x="48" y="452" fill="#61737c">系统剖面示意 · 非按比例</text>
+  </g>
+</svg>

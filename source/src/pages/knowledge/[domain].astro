@@ -1,0 +1,213 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumb from "../../components/global/Breadcrumb.astro";
+import KnowledgeTree from "../../components/nav/KnowledgeTree.astro";
+import {
+  domains,
+  domainHref,
+  engineeringHref,
+  relatedDomains,
+  relatedEngineering,
+} from "../../lib/taxonomy";
+
+export function getStaticPaths() {
+  return domains
+    .filter((domain) => domain.slug !== "underground-mining")
+    .map((domain) => ({
+      params: { domain: domain.slug },
+      props: { domain },
+    }));
+}
+
+const { domain } = Astro.props as { domain: (typeof domains)[number] };
+
+const related = relatedDomains(domain);
+const engineering = relatedEngineering(domain);
+
+const VISUALS: Record<string, { src: string; caption: string; height: number }> = {
+  development: {
+    src: "/assets/visuals/mine-section.svg",
+    caption: "沿主井找到各中段，观察采场如何通过巷道接入运输和回风系统。",
+    height: 480,
+  },
+  "open-pit": {
+    src: "/assets/visuals/domain-open-pit.svg",
+    caption: "从地表读到坑底，区分台阶坡面、平台与总体边坡线。",
+    height: 390,
+  },
+};
+const visual = VISUALS[domain.slug];
+---
+
+<BaseLayout title={domain.name} description={domain.summary} activePath="/knowledge/">
+  <div class="mf-container pt-6">
+    <Breadcrumb
+      items={[
+        { label: "首页", href: "/" },
+        { label: "知识体系", href: "/knowledge/" },
+        { label: domain.name },
+      ]}
+    />
+  </div>
+
+  <section class="mf-container pb-12 pt-7 md:pb-14">
+    <div class="grid items-end gap-9 lg:grid-cols-12 lg:gap-12">
+      <div class:list={["lg:col-span-4", !visual && "lg:col-span-8"]}>
+        <p class="mf-eyebrow mf-rise">{domain.nameEn}</p>
+
+        <h1
+          class="mf-rise mt-4 text-[38px] leading-[1.06] tracking-[-0.02em] md:text-[46px]"
+          style="--d:60ms"
+        >
+          {domain.name}
+        </h1>
+
+        <p
+          class="mf-rise mt-5 max-w-[30em] text-[14.5px] leading-[1.85] text-ink-2"
+          style="--d:120ms"
+        >
+          {domain.summary}
+        </p>
+
+        <div
+          class="mf-rise mt-6 flex flex-wrap items-center gap-x-5 gap-y-2"
+          style="--d:180ms"
+        >
+          <span class="text-[12px] text-ink-4">
+            {domain.topics.length} 个知识要点
+            {engineering.length > 0 && ` · ${engineering.length} 个对应工程专题`}
+          </span>
+        </div>
+      </div>
+
+      {visual && (
+        <div class="mf-plate-in lg:col-span-8" style="--d:140ms">
+          <figure class="overflow-hidden rounded-stage border border-line bg-surface">
+            <img
+              src={visual.src}
+              alt={`${domain.name}专题视觉：${visual.caption}`}
+              width="900"
+              height={visual.height}
+              class="h-auto w-full"
+              decoding="async"
+            />
+            <figcaption class="border-t border-line px-4 py-3 text-[12.5px] leading-6 text-ink-3">{visual.caption}</figcaption>
+          </figure>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <div class="border-t border-line">
+    <div class="mf-container grid gap-10 py-12 lg:grid-cols-12 lg:gap-14 md:py-14">
+      <aside class="lg:col-span-3">
+        <div class="lg:sticky lg:top-24">
+          <KnowledgeTree current={domain.slug} />
+        </div>
+      </aside>
+
+      <div class="lg:col-span-9">
+        <section aria-labelledby="sec-topics">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h2 id="sec-topics" class="text-[20px] leading-snug">知识要点</h2>
+            <span class="font-mono text-[11px] text-ink-4">
+              {domain.topics.length} 项
+            </span>
+          </div>
+
+          <ul class="mt-6 grid gap-x-9 gap-y-8 sm:grid-cols-2">
+            {
+              domain.topics.map((topic, index) => (
+                <li id={`${domain.slug}-${index + 1}`} class="scroll-mt-28 border-t border-line pt-4">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <span class="font-mono text-[11px] tracking-[0.14em] text-accent">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+
+                  <h3 class="mt-2.5 text-[16px] leading-snug">
+                    {topic.href ? (
+                      <a
+                        href={topic.href}
+                        class="text-ink underline decoration-line-strong decoration-1 underline-offset-4 transition-colors duration-100 hover:text-accent hover:decoration-accent"
+                      >
+                        {topic.label}
+                      </a>
+                    ) : (
+                      <span class="text-ink">{topic.label}</span>
+                    )}
+                  </h3>
+
+                  {
+                    topic.body && topic.body.length > 0 && (
+                      <div class="mt-2.5 space-y-2">
+                        {topic.body.map((paragraph) => (
+                          <p class="text-[13px] leading-7 text-ink-2">{paragraph}</p>
+                        ))}
+                      </div>
+                    )
+                  }
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        {
+          engineering.length > 0 && (
+            <section class="mt-14" aria-labelledby="sec-engineering">
+              <h2 id="sec-engineering" class="text-[20px] leading-snug">
+                对应的工程专题
+              </h2>
+              <p class="mt-2 text-[12.5px] leading-6 text-ink-3">
+                结合下列专题，了解这些知识在井下生产中的应用。
+              </p>
+
+              <ul class="mt-6 divide-y divide-line border-y border-line">
+                {engineering.map((topic) => (
+                  <li>
+                    <a
+                      href={engineeringHref(topic.slug)}
+                      class="group flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3.5"
+                    >
+                      <span class="text-[14px] text-ink transition-colors duration-100 group-hover:text-accent">
+                        {topic.name}
+                      </span>
+                      <span class="text-[12px] text-ink-4">{topic.summary}</span>
+                      <span class="ml-auto text-[12px] text-accent">进入 →</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          related.length > 0 && (
+            <section class="mt-14" aria-labelledby="sec-related">
+              <h2 id="sec-related" class="text-[20px] leading-snug">
+                相关知识方向
+              </h2>
+              <ul class="mt-5 flex flex-wrap gap-x-2.5 gap-y-2">
+                {related.map((item) => (
+                  <li>
+                    <a
+                      href={domainHref(item)}
+                      class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-[12.5px] text-ink-2 transition-colors duration-100 hover:border-accent/40 hover:text-accent"
+                    >
+                      <span class="font-mono text-[10.5px] text-ink-4">
+                        {String(item.order).padStart(2, "0")}
+                      </span>
+                      {item.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>

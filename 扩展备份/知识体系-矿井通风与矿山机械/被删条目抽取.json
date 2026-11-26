@@ -1,0 +1,103 @@
+{
+  "domains": [
+    {
+      "slug": "ventilation-safety",
+      "order": 4,
+      "name": "矿井通风与安全",
+      "nameEn": "Mine Ventilation & Safety",
+      "summary": "涵盖矿井通风系统、风量计算与安全管理，是井下作业环境保障与事故防治的基础，也是采矿方法选择必须校核的约束条件。",
+      "status": "complete",
+      "href": "/knowledge/ventilation-safety/",
+      "topics": [
+        {
+          "label": "通风系统与网络",
+          "href": "/engineering/ventilation/"
+        },
+        {
+          "label": "风量计算",
+          "href": "/engineering/ventilation/"
+        },
+        {
+          "label": "局部通风",
+          "href": "/engineering/ventilation/#ventilation-4"
+        },
+        {
+          "label": "粉尘与有害气体",
+          "href": "/engineering/safety/"
+        },
+        {
+          "label": "安全规程与要求",
+          "href": "/engineering/safety/"
+        }
+      ],
+      "related": [
+        "underground-mining"
+      ]
+    },
+    {
+      "slug": "machinery-transport",
+      "order": 5,
+      "name": "矿山机械与运输",
+      "nameEn": "Mining Machinery & Haulage",
+      "summary": "凿岩、装载、运输与提升设备的选型与配套，直接影响采矿方法的机械化程度、生产能力与作业安全。",
+      "status": "complete",
+      "href": "/knowledge/machinery-transport/",
+      "topics": [
+        {
+          "label": "凿岩设备",
+          "href": "/engineering/haulage/"
+        },
+        {
+          "label": "装载与铲运",
+          "href": "/engineering/haulage/"
+        },
+        {
+          "label": "井下运输",
+          "href": "/engineering/haulage/"
+        },
+        {
+          "label": "矿井提升",
+          "href": "/engineering/development/#development-6"
+        },
+        {
+          "label": "设备配套",
+          "href": "/engineering/haulage/#haulage-3"
+        }
+      ],
+      "related": [
+        "underground-mining"
+      ]
+    }
+  ],
+  "learningPathStepsReferencing": [
+    {
+      "step": "第三步",
+      "domainsBefore": [
+        "ventilation-safety",
+        "machinery-transport",
+        "design-digital"
+      ]
+    }
+  ],
+  "engineeringRelatedDomainsBefore": [
+    {
+      "topic": "ventilation",
+      "relatedDomains": [
+        "ventilation-safety"
+      ]
+    },
+    {
+      "topic": "haulage",
+      "relatedDomains": [
+        "machinery-transport",
+        "development"
+      ]
+    },
+    {
+      "topic": "safety",
+      "relatedDomains": [
+        "ventilation-safety"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+---
+/** 精选条目行：标题 + 摘要 + 右侧元信息，用行式列表替代卡片堆叠 */
+import StatusDot from "../content/StatusDot.astro";
+import type { ContentStatus } from "../../lib/taxonomy";
+
+interface Props {
+  index: number;
+  title: string;
+  summary: string;
+  category: string;
+  status: ContentStatus;
+  date?: string;
+  href: string;
+}
+
+const { index, title, summary, category, status, date, href } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group grid grid-cols-1 gap-2 border-t border-line-soft py-5 transition-colors duration-100 md:grid-cols-12 md:items-baseline md:gap-6"
+>
+  <span class="font-mono text-[11px] tracking-wider text-ink-4 md:col-span-1">
+    {String(index).padStart(2, "0")}
+  </span>
+
+  <div class="md:col-span-8">
+    <h3
+      class="text-[15px] leading-6 font-medium text-ink transition-colors duration-100 group-hover:text-accent"
+    >
+      {title}
+    </h3>
+    <p class="mt-1.5 line-clamp-2 text-[13px] leading-6 text-ink-3">{summary}</p>
+  </div>
+
+  <div class="flex items-center gap-3 text-[11.5px] text-ink-4 md:col-span-3 md:justify-end">
+    <span>{category}</span>
+    <span class="text-line-strong" aria-hidden="true">|</span>
+    <StatusDot status={status} />
+    {date && <span class="font-mono">{date}</span>}
+  </div>
+</a>

@@ -1,0 +1,5 @@
+# 依赖与构建中间产物不入库（site/ 即最终可离线运行的静态站）
+source/node_modules/
+source/.astro/
+source/dist/
+*.log

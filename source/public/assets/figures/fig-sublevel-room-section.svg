@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+<title id="title">分段矿房法 · 垂直走向剖面</title>
+<desc id="desc">每个分段的矿房具有独立的出矿通道。矿石经本分段堑沟和装运巷道，进入该分段的运输系统。</desc>
+<defs>
+<pattern id="ore" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#efd9b2"/><path d="M-6 6L6-6M0 12L12 0M6 18L18 6" stroke="#b37d43" stroke-width="1"/></pattern>
+<pattern id="rock" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="#e1e5e2"/><path d="M0 7h7m4 8h7" stroke="#a4afac" stroke-width="1"/></pattern>
+<pattern id="rubble" width="22" height="20" patternUnits="userSpaceOnUse"><rect width="22" height="20" fill="#e7bc88"/><path d="M3 4l4-2 3 5-5 4ZM13 13l5-2 2 5-5 2Z" fill="none" stroke="#966041" stroke-width="1"/></pattern>
+<pattern id="waste" width="27" height="24" patternUnits="userSpaceOnUse"><rect width="27" height="24" fill="#b9c4c6"/><path d="M2 3l6-1 4 6-5 5-4-3ZM15 15l6-4 4 5-3 5-6-1Z" fill="none" stroke="#6d7e83" stroke-width="1.2"/></pattern>
+<pattern id="fill" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#b8d9ce"/><circle cx="4" cy="4" r="1.5" fill="#598b84"/><circle cx="11" cy="11" r="1.5" fill="#598b84"/></pattern>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 10 8"><path d="M0 0L9 4 0 8Z" fill="#166369"/></marker>
+</defs>
+<g font-family="'Noto Sans CJK SC','Microsoft YaHei','PingFang SC',sans-serif">
+<rect x="0" y="0" width="1400" height="820" fill="#faf8f0" stroke="none" stroke-width="2"/>
+<text x="57" y="78" text-anchor="start" fill="#263844" font-size="42" font-weight="700">分段矿房法</text>
+<text x="1343" y="72" text-anchor="end" fill="#61737c" font-size="25" font-weight="500">垂直走向剖面</text>
+<path d="M57 105 L1343 105" fill="none" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M952 135 L952 678" fill="none" stroke="#b5bfba" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="80" y="162" width="810" height="480" fill="url(#rock)" stroke="#61737c" stroke-width="2"/>
+<path d="M235 162H594L796 630H437Z" fill="url(#ore)" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M292 227 L566 227 L620 360 L478 360 L449 334 L344 334Z" fill="#fffdf7" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M454 318 L584 286 L620 360 L478 360 L449 334Z" fill="url(#rubble)" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="289" y="316" width="59" height="23" fill="#fffdf7" stroke="#61737c" stroke-width="2"/>
+<path d="M332 315 L369.8 230.0" fill="none" stroke="#9e4e18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<path d="M332 315 L396.6 248.1" fill="none" stroke="#9e4e18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<path d="M332 315 L415.6 274.2" fill="none" stroke="#9e4e18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<path d="M497 360 H826 V391 H517 Z" fill="#fffdf7" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M565 343 L594 375 H810" fill="none" stroke="#166369" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M390 444 L664 444 L718 577 L576 577 L547 551 L442 551Z" fill="#fffdf7" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M552 535 L682 503 L718 577 L576 577 L547 551Z" fill="url(#rubble)" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="387" y="533" width="59" height="23" fill="#fffdf7" stroke="#61737c" stroke-width="2"/>
+<path d="M430 532 L467.8 447.0" fill="none" stroke="#9e4e18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<path d="M430 532 L494.6 465.1" fill="none" stroke="#9e4e18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<path d="M430 532 L513.6 491.2" fill="none" stroke="#9e4e18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<path d="M595 577 H826 V608 H615 Z" fill="#fffdf7" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M663 560 L692 592 H810" fill="none" stroke="#166369" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<circle cx="306" cy="322" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="306" y="328" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">1</text>
+<circle cx="362" cy="240" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="362" y="246" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">2</text>
+<circle cx="554" cy="325" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="554" y="331" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">3</text>
+<circle cx="754" cy="592" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="754" y="598" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">4</text>
+<circle cx="587" cy="414" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="587" y="420" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">5</text>
+<circle cx="992" cy="179" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="185" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">1</text>
+<text x="1020" y="185" text-anchor="start" fill="#263844" font-size="25" font-weight="700">凿岩平巷</text>
+<text x="1020" y="216" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">靠上盘布置</text>
+<circle cx="992" cy="265" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="271" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">2</text>
+<text x="1020" y="271" text-anchor="start" fill="#263844" font-size="25" font-weight="700">分段矿房</text>
+<text x="1020" y="302" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">各分段独立组织回采</text>
+<circle cx="992" cy="351" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="357" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">3</text>
+<text x="1020" y="357" text-anchor="start" fill="#263844" font-size="25" font-weight="700">堑沟</text>
+<text x="1020" y="388" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">汇集本分段崩落矿石</text>
+<circle cx="992" cy="437" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="443" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">4</text>
+<text x="1020" y="443" text-anchor="start" fill="#263844" font-size="25" font-weight="700">装运巷道</text>
+<text x="1020" y="474" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">各分段有独立出矿通道</text>
+<circle cx="992" cy="523" r="16" fill="#263844" stroke="#fffdf7" stroke-width="2"/>
+<text x="992" y="529" text-anchor="middle" fill="#fffdf7" font-size="16" font-weight="700">5</text>
+<text x="1020" y="529" text-anchor="start" fill="#263844" font-size="25" font-weight="700">斜顶柱</text>
+<text x="1020" y="560" text-anchor="start" fill="#61737c" font-size="20" font-weight="500">隔开上下分段矿房</text>
+<path d="M57 705 L1343 705" fill="none" stroke="#61737c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="62" y="733" width="31" height="21" fill="url(#ore)" stroke="#61737c" stroke-width="2"/>
+<text x="103" y="751" text-anchor="start" fill="#263844" font-size="20" font-weight="500">原矿与矿柱</text>
+<rect x="233" y="733" width="31" height="21" fill="url(#rubble)" stroke="#61737c" stroke-width="2"/>
+<text x="274" y="751" text-anchor="start" fill="#263844" font-size="20" font-weight="500">崩落矿石</text>
+<rect x="383" y="733" width="31" height="21" fill="url(#rock)" stroke="#61737c" stroke-width="2"/>
+<text x="424" y="751" text-anchor="start" fill="#263844" font-size="20" font-weight="500">围岩</text>
+<text x="1343" y="751" text-anchor="end" fill="#61737c" font-size="21" font-weight="500">示意 · 非比例</text>
+</g>
+</svg>

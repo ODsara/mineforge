@@ -1,0 +1,199 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DrawingCarousel from "../components/content/DrawingCarousel.astro";
+import {
+  domains,
+  methods,
+  methodCategories,
+  methodsOfCategory,
+  engineeringTopics,
+} from "../lib/taxonomy";
+
+const entries = [
+  {
+    title: "采矿方法",
+    href: "/methods/",
+    count: `${methods.length} 项`,
+    desc: "比较空场法、充填法和崩落法，结合图解与三维模型认识采场结构、适用条件和回采顺序。",
+  },
+  {
+    title: "工程技术",
+    href: "/engineering/",
+    count: `${engineeringTopics.length} 个专题`,
+    desc: "跟着矿石的路径学习开拓、采准切割、回采与运输，并理解通风、安全和设计的作用。",
+  },
+  {
+    title: "知识体系",
+    href: "/knowledge/",
+    count: `${domains.length} 个方向`,
+    desc: "从矿体和井巷的空间关系入门，再学习采矿方法和井下生产系统。",
+  },
+];
+---
+
+<BaseLayout activePath="/">
+  <section class="border-b border-line" aria-labelledby="home-title">
+    <div class="mf-container home-hero grid items-center">
+      <header class="home-hero-copy">
+        <h1 id="home-title" class="mf-enter home-hero-title font-semibold">MineForge</h1>
+        <p style="--mf-delay:60ms" class="mf-enter mt-4 font-serif text-[25px] leading-snug text-navy md:text-[34px]">地下开采教学</p>
+
+        <p style="--mf-delay:100ms" class="mf-enter mt-5 max-w-[28em] text-[14px] leading-7 text-ink-2 md:text-[16px] lg:mx-auto">
+          初次学习可先从 <a href="/knowledge/development/" class="underline underline-offset-4">地下矿山开拓剖面</a> 认识井筒、巷道与采场。
+        </p>
+
+        <div style="--mf-delay:140ms" class="mf-enter mt-7 flex flex-wrap gap-3 md:mt-8 lg:justify-center">
+          <a href="/knowledge/#sec-path" class="home-hero-action home-hero-action-primary mf-press">查看学习路径</a>
+          <a href="/resources/drawings/" class="home-hero-action mf-press">浏览工程图集</a>
+        </div>
+      </header>
+    </div>
+  </section>
+
+  <section id="home-drawings" class="home-drawings-section scroll-mt-16 border-b border-line" aria-label="工程图纸展示">
+    <div class="mf-container home-drawings">
+      <DrawingCarousel />
+    </div>
+  </section>
+
+  <section aria-label="知识库入口" class="border-b border-line">
+    <div class="mf-container py-16 md:py-24">
+      <ul data-reveal="stagger">
+        {
+          entries.map((entry) => (
+            <li class="border-t border-line first:border-t-0">
+              <a
+                href={entry.href}
+                class="mf-lift group -mx-4 grid gap-x-6 gap-y-2 px-4 py-7 hover:bg-surface md:grid-cols-[minmax(0,1fr)_auto] md:items-baseline md:py-8"
+              >
+                <span class="min-w-0">
+                  <span class="mf-card-title block text-[22px] leading-snug font-semibold transition-colors duration-150 group-hover:text-accent md:text-[26px]">
+                    {entry.title}
+                  </span>
+                  <span class="mt-1.5 block max-w-[46em] text-[13px] leading-6 text-ink-3">
+                    {entry.desc}
+                  </span>
+                  {entry.href === "/methods/" && (
+                    <span class="mt-3 flex flex-wrap gap-x-5 gap-y-1">
+                      {methodCategories.map((c) => (
+                        <span class="font-mono text-[11px] text-ink-4">
+                          {c.name}
+                          <span class="ml-1 text-ink-3">{methodsOfCategory(c.slug).length}</span>
+                        </span>
+                      ))}
+                    </span>
+                  )}
+                </span>
+
+                <span class="flex items-baseline gap-3 md:flex-col md:items-end md:gap-1">
+                  <span class="font-mono text-[12px] text-ink-4">{entry.count}</span>
+                  <svg
+                    class="mf-arrow text-ink-4 transition-colors duration-150 group-hover:text-accent"
+                    width="15"
+                    height="15"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="border-t border-line">
+    <div class="mf-container flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-8 md:py-10">
+      <p class="max-w-[46em] text-[12.5px] leading-6 text-ink-3">
+        在资料中心查术语、公式与参数，也可按图号查找工程图解、教材和文献。
+      </p>
+      <a href="/resources/" class="mf-goto">资料中心</a>
+    </div>
+  </section>
+</BaseLayout>
+
+
+<style>
+  .home-hero {
+    max-width: var(--mf-container-wide);
+    padding-block: 2.5rem 3rem;
+  }
+
+  .home-drawings-section {
+    background: linear-gradient(to bottom, var(--color-bg), var(--color-surface) 36%);
+  }
+
+  .home-drawings {
+    display: grid;
+    align-items: center;
+    max-width: var(--mf-container-wide);
+    padding-block: 2.5rem 3rem;
+  }
+
+  .home-hero-copy {
+    min-width: 0;
+  }
+
+  .home-hero-title {
+    font-size: clamp(3rem, 6.55vw, 6.25rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+
+  .home-hero-action {
+    display: inline-flex;
+    min-height: 2.875rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 999px;
+    padding: 0.65rem 1.15rem;
+    color: var(--color-ink);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .home-hero-action:hover {
+    background: var(--color-panel);
+  }
+
+  .home-hero-action-primary {
+    border-color: var(--color-navy);
+    background: var(--color-navy);
+    color: var(--color-on-navy);
+  }
+
+  .home-hero-action-primary:hover {
+    background: var(--color-ink);
+  }
+
+  @media (min-width: 64rem) {
+    .home-hero,
+    .home-drawings {
+      min-height: min(49rem, calc(100svh - 4rem));
+      justify-content: center;
+    }
+
+    .home-hero {
+      grid-template-columns: minmax(0, 44.5rem);
+    }
+
+    .home-hero-copy {
+      text-align: center;
+    }
+
+    .home-drawings {
+      grid-template-columns: minmax(0, 64rem);
+      padding-block: clamp(2rem, 5svh, 4rem);
+    }
+
+    .home-drawings > :global([data-drawing-carousel]) {
+      width: clamp(30rem, calc((100svh - 10.5rem) * 1.7), 100%);
+      justify-self: center;
+    }
+  }
+</style>

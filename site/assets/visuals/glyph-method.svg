@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" width="480" height="280" role="img" aria-hidden="true">
+  <defs>
+    <pattern id="gmGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#EDEAE1" stroke-width="0.6"/>
+    </pattern>
+    <pattern id="gmHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#9a6b15" stroke-width="1" opacity="0.45"/>
+    </pattern>
+  </defs>
+  <rect width="480" height="280" fill="#FFFEFA"/>
+  <rect width="480" height="280" fill="url(#gmGrid)"/>
+  <g stroke="#E4E0D5" stroke-width="0.8" opacity="0.85">
+    <path d="M40 104H440"/>
+    <path d="M40 180H440"/>
+  </g>
+  <path d="M40 66H440" stroke="#152a45" stroke-width="2"/>
+  <path d="M40 218H440" stroke="#152a45" stroke-width="2"/>
+  <rect x="62" y="66" width="112" height="152" fill="url(#gmHatch)" stroke="#9a6b15" stroke-width="1.5"/>
+  <rect x="174" y="66" width="42" height="152" fill="#152a45" opacity="0.16"/>
+  <rect x="216" y="66" width="112" height="152" fill="url(#gmHatch)" stroke="#9a6b15" stroke-width="1.5"/>
+  <rect x="328" y="66" width="42" height="152" fill="#152a45" opacity="0.16"/>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="390" viewBox="0 0 900 390" role="img" aria-labelledby="title desc">
+  <title id="title">露天开采台阶剖面</title>
+  <desc id="desc">左右台阶边坡由地表下达坑底。水平短段为台阶平台，虚线示出总体边坡角的参考线。示意图非按比例。</desc>
+  <defs>
+    <pattern id="rock" width="14" height="14" patternUnits="userSpaceOnUse">
+      <rect width="14" height="14" fill="#e5ebe6"/>
+      <path d="M2 4h4m4 7h4" stroke="#aebbb5"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="390" fill="#faf8f0"/>
+  <g font-family="'Microsoft YaHei','PingFang SC',sans-serif" font-size="19" fill="#263844">
+    <path d="M45 113H162l39 43h34l39 43h34l39 43h34l39 43h60l39-43h34l39-43h34l39-43h34l39-43h117v217H45Z" fill="url(#rock)" stroke="#455c65" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M162 113L420 285" fill="none" stroke="#976332" stroke-width="2" stroke-dasharray="7 5"/>
+    <g fill="none" stroke="#61737c" stroke-width="1.5">
+      <path d="M93 99v14"/>
+      <path d="M643 108 615 191v8"/>
+      <path d="M148 232H271L298 204"/>
+      <path d="M479 309H450v-24"/>
+    </g>
+    <text x="70" y="93">地表</text>
+    <text x="615" y="99">台阶平台</text>
+    <text x="62" y="238">总体边坡线</text>
+    <text x="487" y="315">坑底</text>
+    <text x="48" y="365" fill="#61737c">台阶剖面示意 · 非按比例</text>
+  </g>
+</svg>
